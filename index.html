@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PiauL - Histoire de l'Informatique</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="PiauL logo.png" type="image/png">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="PiauL logo Noir.png" alt="Logo PiauL">
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="Gallerie.html">Galerie</a></li>
+                <li><a href="A propos.html">À propos</a></li>
+                <li><a href="Contact.html">Contact</a></li>
+            </ul>
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <h1>Bienvenue chez PiauL</h1>
+            <p>Découvrez l'histoire fascinante de l'informatique, des premiers concepts aux technologies modernes qui façonnent notre monde aujourd'hui.</p>
+            <button class="cta-button"><a href="A propos.html">En savoir plus</a></button>
+        </section>
+        
+        <section id="introduction" class="products">
+            <h2>L'évolution de l'informatique en vidéo</h2>
+            <div class="product-list">
+                <div class="product-item">
+                    <iframe src="https://www.youtube.com/embed/4APvCcFRkxc" allowfullscreen></iframe>
+                    <h3>Du transistor aux ordinateurs Apple</h3>
+                    <p>L'évolution des composants électroniques et leur impact sur l'informatique moderne</p>
+                </div>
+                <div class="product-item">
+                    <iframe src="https://www.youtube.com/embed/B1QD9FgCOrc" allowfullscreen></iframe>
+                    <h3>L'histoire en 3 minutes</h3>
+                    <p>Un résumé concis des moments les plus importants dans l'histoire de l'informatique</p>
+                </div>
+                <div class="product-item">
+                    <iframe src="https://www.youtube.com/embed/rwRDN5bqjK4" allowfullscreen></iframe>
+                    <h3>L'évolution des ordinateurs</h3>
+                    <p>De l'ENIAC aux smartphones: comment l'ordinateur a révolutionné notre quotidien</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 PiauL. Tous droits réservés.</p>
+            <ul class="social-links">
+                <li><a href="https://www.facebook.com" target="_blank">Facebook</a></li>
+                <li><a href="https://www.twitter.com" target="_blank">Twitter</a></li>
+                <li><a href="https://www.instagram.com" target="_blank">Instagram</a></li>
+            </ul>
+        </div>
+    </footer>
+    
+    <script>
+        // Simple navigation toggle for mobile
+        document.querySelector('.burger').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
