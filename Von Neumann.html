@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>À propos - PiauL</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="PiauL logo.png" type="image/png">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <button class="cta-button"><a href="index.html"><img src="PiauL logo Noir.png" alt="Logo PiauL"></a></button>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="Gallerie.html">Galerie</a></li>
+                <li><a href="A propos.html">À propos</a></li>
+                <li><a href="Contact.html">Contact</a></li>
+            </ul>
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <h1>Architecture von Neumann</h1>
+            <p>La structure fondamentale des ordinateurs modernes</p>
+        </section>
+        <section class="contact">
+            <p>L’architecture de von Neumann, proposée en 1945 par le mathématicien John von Neumann, constitue la base fondamentale des ordinateurs modernes. Cette architecture repose sur une idée révolutionnaire : stocker les instructions du programme et les données dans une même mémoire. Elle se compose de cinq éléments principaux : l’unité de traitement (avec l’unité de contrôle et l’unité arithmétique et logique), la mémoire, les dispositifs d’entrée et de sortie, et le bus qui relie l’ensemble. Ce modèle permet à un ordinateur d’exécuter une série d’instructions de manière séquentielle, facilitant ainsi la programmation et l’automatisation des tâches. L’architecture de von Neumann a permis une standardisation qui reste encore aujourd’hui à la base de la majorité des ordinateurs, malgré l’évolution technologique.</p>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 PiauL. Tous droits réservés.</p>
+            <ul class="social-links">
+                <li><a href="https://www.facebook.com" target="_blank">Facebook</a></li>
+                <li><a href="https://www.twitter.com" target="_blank">Twitter</a></li>
+                <li><a href="https://www.instagram.com" target="_blank">Instagram</a></li>
+            </ul>
+        </div>
+    </footer>
+    
+    <script>
+        // Simple navigation toggle for mobile
+        document.querySelector('.burger').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

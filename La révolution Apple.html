@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>À propos - PiauL</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="PiauL logo.png" type="image/png">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <button class="cta-button"><a href="index.html"><img src="PiauL logo Noir.png" alt="Logo PiauL"></a></button>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="Gallerie.html">Galerie</a></li>
+                <li><a href="A propos.html">À propos</a></li>
+                <li><a href="Contact.html">Contact</a></li>
+            </ul>
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <h1>La révolution Apple</h1>
+            <p>Comment Apple a transformé l'informatique personnelle</p>
+        </section>
+        <section class="contact">
+            <p>La révolution Apple a profondément transformé l’informatique personnelle en rendant les ordinateurs accessibles, intuitifs et esthétiques pour le grand public. Dès 1976, avec l’Apple I, puis surtout avec l’Apple II, Steve Jobs et Steve Wozniak ont contribué à faire sortir l’ordinateur du milieu professionnel pour l’introduire dans les foyers. Mais c’est en 1984, avec le lancement du Macintosh, que la rupture devient majeure : doté d’une interface graphique conviviale, d’une souris et d’un design soigné, le Mac change la manière dont les utilisateurs interagissent avec la machine. Apple a mis l’accent sur l’expérience utilisateur, l’innovation et le design, posant les bases de l’informatique moderne. Cette approche a influencé toute l’industrie, et continue de marquer les évolutions technologiques jusqu’à aujourd’hui.</p>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 PiauL. Tous droits réservés.</p>
+            <ul class="social-links">
+                <li><a href="https://www.facebook.com" target="_blank">Facebook</a></li>
+                <li><a href="https://www.twitter.com" target="_blank">Twitter</a></li>
+                <li><a href="https://www.instagram.com" target="_blank">Instagram</a></li>
+            </ul>
+        </div>
+    </footer>
+    
+    <script>
+        // Simple navigation toggle for mobile
+        document.querySelector('.burger').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

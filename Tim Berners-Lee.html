@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>À propos - PiauL</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="PiauL logo.png" type="image/png">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <button class="cta-button"><a href="index.html"><img src="PiauL logo Noir.png" alt="Logo PiauL"></a></button>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="Gallerie.html">Galerie</a></li>
+                <li><a href="A propos.html">À propos</a></li>
+                <li><a href="Contact.html">Contact</a></li>
+            </ul>
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <h1>Tim Berners-Lee</h1>
+            <p>Inventeur du World Wide Web</p>
+        </section>
+        <section class="contact">
+            <p>Tim Berners-Lee, informaticien britannique né en 1955, est mondialement connu pour avoir inventé le World Wide Web en 1989. Travaillant au CERN, il a proposé un système hypertexte permettant de relier des documents accessibles via Internet, dans le but de faciliter le partage d’informations entre chercheurs. Il développa les technologies fondamentales du Web : le langage HTML, le protocole HTTP et le système d’adressage URL. En 1991, le tout premier site web est mis en ligne. Grâce à son invention, Internet est devenu un outil universel de communication et de diffusion de l’information. Tim Berners-Lee a choisi de ne pas breveter le Web, permettant ainsi son développement libre et rapide à l’échelle mondiale. Il est aujourd’hui reconnu comme l’un des pionniers majeurs de l’ère numérique.</p>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 PiauL. Tous droits réservés.</p>
+            <ul class="social-links">
+                <li><a href="https://www.facebook.com" target="_blank">Facebook</a></li>
+                <li><a href="https://www.twitter.com" target="_blank">Twitter</a></li>
+                <li><a href="https://www.instagram.com" target="_blank">Instagram</a></li>
+            </ul>
+        </div>
+    </footer>
+    
+    <script>
+        // Simple navigation toggle for mobile
+        document.querySelector('.burger').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

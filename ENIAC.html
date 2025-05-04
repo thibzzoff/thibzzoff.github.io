@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>À propos - PiauL</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="PiauL logo.png" type="image/png">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <button class="cta-button"><a href="index.html"><img src="PiauL logo Noir.png" alt="Logo PiauL"></a></button>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="Gallerie.html">Galerie</a></li>
+                <li><a href="A propos.html">À propos</a></li>
+                <li><a href="Contact.html">Contact</a></li>
+            </ul>
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <h1>ENIAC</h1>
+            <p>Le premier ordinateur électronique à usage général</p>
+        </section>
+        <section class="contact">
+            <p>L’ENIAC (Electronic Numerical Integrator and Computer) est reconnu comme le premier ordinateur électronique à usage général. Conçu par les ingénieurs américains John Presper Eckert et John William Mauchly, il fut achevé en 1945 à l’Université de Pennsylvanie. Contrairement aux machines précédentes, l’ENIAC utilisait des tubes à vide au lieu de composants électromécaniques, ce qui lui permettait d’effectuer des calculs à une vitesse sans précédent pour l’époque. Capable de réaliser des milliers d’opérations par seconde, il était destiné à des applications militaires, notamment le calcul des trajectoires balistiques. Bien que massif — il pesait environ 30 tonnes et occupait 140 mètres carrés — l’ENIAC a marqué un tournant majeur dans l’histoire de l’informatique, en ouvrant la voie aux ordinateurs modernes.</p>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 PiauL. Tous droits réservés.</p>
+            <ul class="social-links">
+                <li><a href="https://www.facebook.com" target="_blank">Facebook</a></li>
+                <li><a href="https://www.twitter.com" target="_blank">Twitter</a></li>
+                <li><a href="https://www.instagram.com" target="_blank">Instagram</a></li>
+            </ul>
+        </div>
+    </footer>
+    
+    <script>
+        // Simple navigation toggle for mobile
+        document.querySelector('.burger').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
