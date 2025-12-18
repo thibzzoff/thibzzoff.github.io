@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CosmoFutur - L'Exploration de Demain</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --bg-dark: #0f0518;
+            --accent-purple: #7b2cbf;
+            --accent-pink: #f72585;
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--bg-dark);
+            color: white;
+            overflow-x: hidden;
+            margin: 0;
+        }
+
+        /* Arrière-plan animé subtil */
+        .bg-gradient-orb {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at 15% 50%, #240046 0%, #0f0518 50%, #000000 100%);
+            z-index: -2;
+        }
+
+        /* Effet Glassmorphism */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px); /* Augmenté pour plus de flou */
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0));
+            backdrop-filter: blur(30px); /* Flou plus intense demandé */
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border-radius: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            text-decoration: none;
+            display: block;
+            color: inherit;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(123, 44, 191, 0.3);
+            border-color: rgba(247, 37, 133, 0.5);
+        }
+
+        /* Contraste Dynamique (Mix-Blend-Mode) */
+        /* Rend le texte sombre sur fond clair et clair sur fond sombre */
+        .dynamic-contrast {
+            mix-blend-mode: exclusion; 
+            color: white;
+        }
+
+        /* Typographie */
+        .text-glow {
+            text-shadow: 0 0 20px rgba(123, 44, 191, 0.5);
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            line-height: 0.9;
+            letter-spacing: -0.02em;
+        }
+
+        /* Animations de page */
+        .page-section {
+            display: none;
+            animation: fadeIn 0.8s cubic-bezier(0.5, 0, 0, 1) forwards;
+            padding-top: 100px; /* Espace pour la navbar */
+            min-height: 100vh;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Canvas container */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.8;
+            pointer-events: none;
+            transition: opacity 1s ease;
+        }
+        
+        /* Mode Simulation */
+        body.sim-mode #canvas-container {
+            opacity: 1;
+            z-index: 0;
+        }
+        body.sim-mode .page-section {
+            position: relative;
+            z-index: 10;
+            pointer-events: none;
+        }
+        body.sim-mode .sim-controls {
+            pointer-events: auto;
+        }
+
+        /* Bouton futuriste */
+        .btn-future {
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink));
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .btn-future::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, var(--accent-pink), var(--accent-purple));
+            z-index: -1;
+            transition: opacity 0.3s;
+            opacity: 0;
+        }
+        .btn-future:hover::before {
+            opacity: 1;
+        }
+        .btn-future:hover {
+            box-shadow: 0 0 30px rgba(247, 37, 133, 0.6);
+        }
+
+        /* Scrollbar custom */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f0518;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #7b2cbf;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-purple-500 selection:text-white">
+
+    <!-- Fond gradient fixe -->
+    <div class="bg-gradient-orb"></div>
+
+    <!-- Canvas 3D (Planète mystérieuse) -->
+    <div id="canvas-container"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 left-0 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="glass-panel rounded-full px-6 py-3 flex justify-between items-center">
+                <a href="index.html" class="nav-link text-2xl font-bold tracking-tighter flex items-center gap-2 hover:opacity-80 transition-opacity">
+                    <i data-lucide="orbit" class="text-fuchsia-400"></i>
+                    COSMO<span class="text-fuchsia-400">LAB</span>
+                </a>
+                <div class="hidden md:flex gap-8 text-sm font-semibold uppercase tracking-widest text-gray-300">
+                    <a href="missions.html" class="nav-link hover:text-white transition-colors">Missions</a>
+                    <a href="exoplanetes.html" class="nav-link hover:text-white transition-colors">Exoplanètes</a>
+                    <a href="galaxies.html" class="nav-link hover:text-white transition-colors">Galaxies</a>
+                    <a href="recherche.html" class="nav-link hover:text-white transition-colors">Recherche</a>
+                </div>
+                <a href="simulation.html" class="nav-link bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-full text-sm font-bold border border-white/20 transition-all inline-block">
+                    Lancer Simulation
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTAINER PRINCIPAL POUR LES PAGES -->
+    <main id="main-content">
+
+        <!-- ==================== PAGE D'ACCUEIL ==================== -->
+        <section id="index" class="page-section active">
+            <header class="relative min-h-[90vh] flex items-center px-6">
+                <div class="max-w-7xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    
+                    <div class="z-10">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-fuchsia-500/30 bg-fuchsia-500/10 text-fuchsia-300 text-xs font-bold uppercase tracking-wider mb-6">
+                            <span class="w-2 h-2 rounded-full bg-fuchsia-400 animate-pulse"></span>
+                            Mission Proxima b
+                        </div>
+                        
+                        <!-- Ajout de la classe dynamic-contrast pour gérer le fond lumineux -->
+                        <h1 class="hero-title font-bold mb-6 text-white dynamic-contrast">
+                            EXPLOREZ <br>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-purple-600 text-glow" style="mix-blend-mode: normal;">L'INFINI</span><br>
+                            DU COSMOS.
+                        </h1>
+                        
+                        <p class="text-lg text-gray-300 mb-8 max-w-md leading-relaxed dynamic-contrast">
+                            De la poussière d'étoiles aux trous noirs supermassifs. Plongez dans les mystères de l'univers avec notre cartographie galactique 3D.
+                        </p>
+
+                        <div class="flex flex-wrap gap-4">
+                            <a href="voyage.html" class="nav-link btn-future px-8 py-4 rounded-full font-bold text-white tracking-wide shadow-lg">
+                                VOYAGE GALACTIQUE
+                            </a>
+                            <a href="telescope.html" class="nav-link px-8 py-4 rounded-full font-bold text-white border border-white/20 hover:bg-white/10 transition-all flex items-center gap-2 group inline-flex cursor-pointer">
+                                <span>DATA TÉLESCOPE</span>
+                                <i data-lucide="telescope" class="group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Card Kepler Flottante avec Blur Augmenté -->
+                    <div class="relative hidden md:block z-10 h-96">
+                        <a href="kepler-186f.html" class="nav-link absolute top-1/2 left-10 transform -translate-y-1/2 glass-card p-6 w-80 rotate-6 border-l-4 border-l-fuchsia-500 hover:rotate-0 transition-all duration-500 cursor-pointer">
+                            <div class="flex justify-between items-start mb-8">
+                                <span class="text-xs font-mono text-gray-400">KEPLER DATA</span>
+                                <i data-lucide="globe" class="text-white/50"></i>
+                            </div>
+                            <div class="text-2xl font-bold mb-2">KEPLER-186f</div>
+                            <div class="text-sm text-gray-300 mb-8">Zone Habitable - Cygnus</div>
+                            <div class="flex justify-between items-end">
+                                <div class="text-xs text-gray-400">Distance Terre</div>
+                                <div class="text-xl font-bold text-fuchsia-300">582 AL</div>
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent pointer-events-none rounded-20"></div>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white/30 animate-bounce">
+                    <i data-lucide="chevron-down" size="32"></i>
+                </div>
+            </header>
+
+            <div class="max-w-7xl mx-auto px-6 py-20">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <a href="exoplanetes.html" class="nav-link glass-card p-8 relative group cursor-pointer overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-50 transition-opacity">
+                            <i data-lucide="rocket" size="80"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Exoplanètes</h3>
+                        <p class="text-gray-400 mb-6">Mondes lointains</p>
+                        <div class="h-[1px] w-full bg-white/10 mb-6"></div>
+                        <p class="text-sm text-gray-300 leading-relaxed mb-6">
+                            Analyse des atmosphères de planètes orbitant autour d'autres étoiles. Recherche de bio-signatures.
+                        </p>
+                        <div class="inline-flex items-center text-fuchsia-300 font-bold group-hover:text-fuchsia-200">
+                            Données <i data-lucide="arrow-right" class="ml-2 w-4 h-4"></i>
+                        </div>
+                    </a>
+
+                    <a href="trous-noirs.html" class="nav-link glass-card p-8 relative group cursor-pointer overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-50 transition-opacity">
+                            <i data-lucide="aperture" size="80"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Trous Noirs</h3>
+                        <p class="text-gray-400 mb-6">Horizon des événements</p>
+                        <div class="h-[1px] w-full bg-white/10 mb-6"></div>
+                        <p class="text-sm text-gray-300 leading-relaxed mb-6">
+                            Étude des singularités gravitationnelles. Comprendre la déformation de l'espace-temps.
+                        </p>
+                        <div class="inline-flex items-center text-fuchsia-300 font-bold group-hover:text-fuchsia-200">
+                            Simulation <i data-lucide="arrow-right" class="ml-2 w-4 h-4"></i>
+                        </div>
+                    </a>
+
+                    <a href="nebuleuses.html" class="nav-link glass-card p-8 relative group cursor-pointer overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-50 transition-opacity">
+                            <i data-lucide="sparkles" size="80"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-2">Nébuleuses</h3>
+                        <p class="text-gray-400 mb-6">Berceaux d'étoiles</p>
+                        <div class="h-[1px] w-full bg-white/10 mb-6"></div>
+                        <p class="text-sm text-gray-300 leading-relaxed mb-6">
+                            Observation des nuages de gaz interstellaires où naissent les étoiles.
+                        </p>
+                        <div class="inline-flex items-center text-fuchsia-300 font-bold group-hover:text-fuchsia-200">
+                            Galerie <i data-lucide="arrow-right" class="ml-2 w-4 h-4"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== PAGE MISSIONS ==================== -->
+        <section id="missions" class="page-section">
+            <div class="max-w-7xl mx-auto px-6">
+                <h2 class="text-5xl font-bold mb-10 dynamic-contrast">Missions <span class="text-fuchsia-400">Futurs</span></h2>
+                
+                <div class="space-y-8">
+                    <!-- Mission 1 -->
+                    <a href="artemis.html" class="nav-link glass-card p-8 flex flex-col md:flex-row gap-8 items-center group hover:bg-white/5 transition-all">
+                        <div class="w-full md:w-1/3 bg-black/30 h-48 rounded-xl flex items-center justify-center border border-white/10 group-hover:border-fuchsia-500/50 transition-colors">
+                            <i data-lucide="flag" size="48" class="text-fuchsia-500"></i>
+                        </div>
+                        <div class="w-full md:w-2/3">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="bg-green-500/20 text-green-400 px-3 py-1 rounded text-xs font-bold">CONFIRMÉE</span>
+                                <span class="text-gray-400 text-sm">Lancement : 2028</span>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-2">Artemis V - Base Lunaire</h3>
+                            <p class="text-gray-300 mb-4">Établissement de la première station permanente au pôle sud lunaire.</p>
+                            <span class="text-sm font-bold text-fuchsia-400 uppercase tracking-widest group-hover:text-white transition-colors">Détails techniques +</span>
+                        </div>
+                    </a>
+
+                    <!-- Mission 2 -->
+                    <a href="mars-ares.html" class="nav-link glass-card p-8 flex flex-col md:flex-row gap-8 items-center group hover:bg-white/5 transition-all">
+                        <div class="w-full md:w-1/3 bg-black/30 h-48 rounded-xl flex items-center justify-center border border-white/10 group-hover:border-blue-500/50 transition-colors">
+                            <i data-lucide="rocket" size="48" class="text-blue-500"></i>
+                        </div>
+                        <div class="w-full md:w-2/3">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="bg-yellow-500/20 text-yellow-400 px-3 py-1 rounded text-xs font-bold">EN DÉVELOPPEMENT</span>
+                                <span class="text-gray-400 text-sm">Lancement : 2035</span>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-2">Mars Ares Programme</h3>
+                            <p class="text-gray-300 mb-4">Premier vol habité vers la planète rouge. Propulsion nucléaire thermique.</p>
+                            <span class="text-sm font-bold text-fuchsia-400 uppercase tracking-widest group-hover:text-white transition-colors">Voir l'équipage +</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== PAGE EXOPLANÈTES ==================== -->
+        <section id="exoplanetes" class="page-section">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <span class="text-fuchsia-400 font-bold tracking-widest text-sm uppercase">Catalogue Stellaire</span>
+                    <h2 class="text-5xl font-bold mt-2 dynamic-contrast">Mondes <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500" style="mix-blend-mode: normal;">Habitables</span></h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Kepler 186f -->
+                    <a href="kepler-186f.html" class="nav-link glass-card p-6 group hover:bg-white/5 cursor-pointer">
+                        <div class="h-40 bg-gradient-to-br from-red-900 to-black rounded-xl mb-4 flex items-center justify-center relative overflow-hidden">
+                            <div class="absolute w-20 h-20 rounded-full bg-red-500 blur-xl opacity-20"></div>
+                            <i data-lucide="globe-2" size="40" class="text-red-300 relative z-10"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">Kepler-186f</h3>
+                        <p class="text-sm text-gray-400 mb-4">La cousine de la Terre</p>
+                        <div class="flex justify-between text-xs text-gray-500 border-t border-white/10 pt-4">
+                            <span>582 AL</span>
+                            <span>ESI: 0.61</span>
+                        </div>
+                    </a>
+
+                    <!-- Proxima b -->
+                    <a href="proxima-b.html" class="nav-link glass-card p-6 group hover:bg-white/5 cursor-pointer">
+                        <div class="h-40 bg-gradient-to-br from-purple-900 to-black rounded-xl mb-4 flex items-center justify-center relative overflow-hidden">
+                            <div class="absolute w-20 h-20 rounded-full bg-purple-500 blur-xl opacity-20"></div>
+                            <i data-lucide="circle-dot" size="40" class="text-purple-300 relative z-10"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">Proxima Centauri b</h3>
+                        <p class="text-sm text-gray-400 mb-4">La voisine la plus proche</p>
+                        <div class="flex justify-between text-xs text-gray-500 border-t border-white/10 pt-4">
+                            <span>4.2 AL</span>
+                            <span>ESI: 0.87</span>
+                        </div>
+                    </a>
+
+                    <!-- TRAPPIST-1e -->
+                    <a href="trappist-1e.html" class="nav-link glass-card p-6 group hover:bg-white/5 cursor-pointer">
+                        <div class="h-40 bg-gradient-to-br from-blue-900 to-black rounded-xl mb-4 flex items-center justify-center relative overflow-hidden">
+                            <div class="absolute w-20 h-20 rounded-full bg-blue-500 blur-xl opacity-20"></div>
+                            <i data-lucide="disc" size="40" class="text-blue-300 relative z-10"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">TRAPPIST-1e</h3>
+                        <p class="text-sm text-gray-400 mb-4">Système aquatique potentiel</p>
+                        <div class="flex justify-between text-xs text-gray-500 border-t border-white/10 pt-4">
+                            <span>39 AL</span>
+                            <span>ESI: 0.85</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== PAGE GALAXIES ==================== -->
+        <section id="galaxies" class="page-section">
+            <div class="max-w-7xl mx-auto px-6">
+                <h2 class="text-5xl font-bold mb-10 dynamic-contrast">Structures <span class="text-fuchsia-400">Galactiques</span></h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <a href="andromede.html" class="nav-link glass-card p-0 overflow-hidden h-80 relative group cursor-pointer block">
+                        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 z-10"></div>
+                        <div class="absolute bottom-0 left-0 p-6 z-20 group-hover:translate-y-[-10px] transition-transform">
+                            <h3 class="text-2xl font-bold">Andromède (M31)</h3>
+                            <p class="text-sm text-gray-300 mt-2">Notre voisine spirale géante. Collision prévue dans 4 milliards d'années.</p>
+                            <span class="text-fuchsia-400 text-xs font-bold mt-2 block opacity-0 group-hover:opacity-100 transition-opacity">EXPLORER ></span>
+                        </div>
+                        <div class="w-full h-full bg-purple-900/30 flex items-center justify-center">
+                            <div class="w-32 h-32 rounded-full border-4 border-purple-500/20 animate-[spin_20s_linear_infinite]"></div>
+                        </div>
+                    </a>
+                    
+                    <a href="sombrero.html" class="nav-link glass-card p-0 overflow-hidden h-80 relative group cursor-pointer block">
+                        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 z-10"></div>
+                        <div class="absolute bottom-0 left-0 p-6 z-20 group-hover:translate-y-[-10px] transition-transform">
+                            <h3 class="text-2xl font-bold">Le Sombrero (M104)</h3>
+                            <p class="text-sm text-gray-300 mt-2">Galaxie spirale vue par la tranche, célèbre pour son bulbe central brillant.</p>
+                             <span class="text-fuchsia-400 text-xs font-bold mt-2 block opacity-0 group-hover:opacity-100 transition-opacity">EXPLORER ></span>
+                        </div>
+                         <div class="w-full h-full bg-blue-900/30 flex items-center justify-center">
+                            <div class="w-48 h-10 rounded-full bg-blue-500/10 blur-md transform rotate-12"></div>
+                        </div>
+                    </a>
+
+                    <a href="tourbillon.html" class="nav-link glass-card p-0 overflow-hidden h-80 relative group cursor-pointer block">
+                        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 z-10"></div>
+                        <div class="absolute bottom-0 left-0 p-6 z-20 group-hover:translate-y-[-10px] transition-transform">
+                            <h3 class="text-2xl font-bold">Le Tourbillon (M51)</h3>
+                            <p class="text-sm text-gray-300 mt-2">Interaction gravitationnelle spectaculaire entre deux galaxies.</p>
+                             <span class="text-fuchsia-400 text-xs font-bold mt-2 block opacity-0 group-hover:opacity-100 transition-opacity">EXPLORER ></span>
+                        </div>
+                         <div class="w-full h-full bg-pink-900/30 flex items-center justify-center">
+                             <i data-lucide="tornado" size="64" class="text-pink-400/50"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== PAGE NÉBULEUSES ==================== -->
+        <section id="nebuleuses" class="page-section">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-5xl font-bold mt-2 dynamic-contrast">Berceaux <span class="text-fuchsia-400">d'Étoiles</span></h2>
+                    <p class="text-gray-400 mt-4 max-w-2xl mx-auto">Les nébuleuses sont de vastes nuages de gaz et de poussières interstellaires. C'est ici que la matière s'effondre pour donner naissance aux soleils.</p>
+                </div>
+
+                <div class="space-y-6">
+                    <a href="orion.html" class="nav-link glass-card p-8 flex items-center gap-6 group hover:bg-white/5 cursor-pointer">
+                        <div class="bg-fuchsia-500/10 p-4 rounded-full group-hover:bg-fuchsia-500/20 transition-colors">
+                            <i data-lucide="cloud" size="32" class="text-fuchsia-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold">Nébuleuse d'Orion (M42)</h3>
+                            <p class="text-gray-400 text-sm">Visible à l'œil nu, c'est la pouponnière d'étoiles la plus proche de la Terre (1344 AL).</p>
+                        </div>
+                        <div class="ml-auto text-2xl font-mono text-white/20 group-hover:text-fuchsia-400/50 transition-colors">01</div>
+                    </a>
+
+                    <a href="crabe.html" class="nav-link glass-card p-8 flex items-center gap-6 group hover:bg-white/5 cursor-pointer">
+                        <div class="bg-blue-500/10 p-4 rounded-full group-hover:bg-blue-500/20 transition-colors">
+                            <i data-lucide="zap" size="32" class="text-blue-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold">Nébuleuse du Crabe (M1)</h3>
+                            <p class="text-gray-400 text-sm">Le reste d'une supernova observée en 1054. Elle contient un pulsar tournant 30 fois par seconde.</p>
+                        </div>
+                        <div class="ml-auto text-2xl font-mono text-white/20 group-hover:text-blue-400/50 transition-colors">02</div>
+                    </a>
+
+                    <a href="piliers.html" class="nav-link glass-card p-8 flex items-center gap-6 group hover:bg-white/5 cursor-pointer">
+                        <div class="bg-green-500/10 p-4 rounded-full group-hover:bg-green-500/20 transition-colors">
+                            <i data-lucide="mountain" size="32" class="text-green-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold">Les Piliers de la Création</h3>
+                            <p class="text-gray-400 text-sm">Situés dans la nébuleuse de l'Aigle, ces colonnes de gaz sont sculptées par les vents stellaires.</p>
+                        </div>
+                        <div class="ml-auto text-2xl font-mono text-white/20 group-hover:text-green-400/50 transition-colors">03</div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+         <!-- ==================== NEW DETAIL PAGES ==================== -->
+
+        <!-- Artemis -->
+        <section id="artemis" class="page-section">
+            <div class="max-w-4xl mx-auto px-6 pt-20">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="bg-green-500/20 text-green-400 px-3 py-1 rounded text-xs font-bold">CONFIRMÉE 2028</span>
+                    <a href="missions.html" class="nav-link text-gray-400 hover:text-white text-sm flex items-center gap-1"><i data-lucide="arrow-left" size="14"></i> Retour</a>
+                </div>
+                <h1 class="text-6xl font-bold mb-6 dynamic-contrast">Artemis V</h1>
+                <p class="text-xl text-gray-300 mb-10">Le retour durable de l'humanité sur la Lune. Construction du Lunar Gateway et exploration du Pôle Sud.</p>
+                <div class="glass-card p-8">
+                    <h3 class="text-2xl font-bold mb-4">Objectifs de la Mission</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-400">
+                        <li>Atterrissage au Pôle Sud lunaire via le HLS (Starship).</li>
+                        <li>Déploiement du rover pressurisé LTV.</li>
+                        <li>Recherche de glace d'eau dans les cratères ombragés.</li>
+                        <li>Installation de la station orbitale Gateway.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mars Ares -->
+        <section id="mars-ares" class="page-section">
+            <div class="max-w-4xl mx-auto px-6 pt-20">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="bg-yellow-500/20 text-yellow-400 px-3 py-1 rounded text-xs font-bold">EN DÉVELOPPEMENT</span>
+                    <a href="missions.html" class="nav-link text-gray-400 hover:text-white text-sm flex items-center gap-1"><i data-lucide="arrow-left" size="14"></i> Retour</a>
+                </div>
+                <h1 class="text-6xl font-bold mb-6 dynamic-contrast">Programme Ares</h1>
+                <p class="text-xl text-gray-300 mb-10">L'humanité devient une espèce multi-planétaire. Le défi technique ultime du 21ème siècle.</p>
+                <div class="glass-card p-8 border-l-4 border-red-500">
+                    <h3 class="text-2xl font-bold mb-4">La Fenêtre de Tir</h3>
+                    <p class="text-gray-400 mb-4">Un alignement Terre-Mars favorable se produit tous les 26 mois. Le programme Ares vise la fenêtre de 2035 pour un transit rapide de 6 mois.</p>
+                    <div class="flex gap-4">
+                        <div class="text-center bg-white/5 p-4 rounded-lg flex-1">
+                            <div class="text-3xl font-bold text-red-400">225M km</div>
+                            <div class="text-xs text-gray-500">Distance Moyenne</div>
+                        </div>
+                        <div class="text-center bg-white/5 p-4 rounded-lg flex-1">
+                            <div class="text-3xl font-bold text-red-400">20 min</div>
+                            <div class="text-xs text-gray-500">Délai Comms</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Proxima b -->
+        <section id="proxima-b" class="page-section">
+            <div class="max-w-5xl mx-auto px-6 flex flex-col items-center text-center">
+                 <div class="flex items-center gap-4 mb-6 w-full justify-start">
+                    <a href="exoplanetes.html" class="nav-link text-gray-400 hover:text-white text-sm flex items-center gap-1"><i data-lucide="arrow-left" size="14"></i> Retour Catalogue</a>
+                </div>
+                <div class="inline-block px-4 py-1 rounded-full border border-purple-500/50 text-purple-400 text-xs font-bold mb-6">VOISINE GALACTIQUE</div>
+                <h1 class="text-6xl font-bold mb-6 dynamic-contrast">Proxima b</h1>
+                <p class="text-xl text-gray-300 max-w-2xl mb-12 dynamic-contrast">
+                    Située à seulement 4.2 années-lumière, c'est l'exoplanète la plus proche de la Terre. Elle orbite dans la zone habitable de son étoile naine rouge.
+                </p>
+                <div class="glass-card p-8 w-full text-left">
+                     <h3 class="text-2xl font-bold mb-4">Verrouillage Gravitationnel</h3>
+                     <p class="text-gray-400">Il est très probable que Proxima b présente toujours la même face à son étoile, créant un hémisphère éternellement jour et un hémisphère éternellement nuit. La vie pourrait exister dans la zone crépusculaire, le "terminateur".</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trappist 1e -->
+        <section id="trappist-1e" class="page-section">
+             <div class="max-w-5xl mx-auto px-6 flex flex-col items-center text-center">
+                 <div class="flex items-center gap-4 mb-6 w-full justify-start">
+                    <a href="exoplanetes.html" class="nav-link text-gray-400 hover:text-white text-sm flex items-center gap-1"><i data-lucide="arrow-left" size="14"></i> Retour Catalogue</a>
+                </div>
+                <div class="inline-block px-4 py-1 rounded-full border border-blue-500/50 text-blue-400 text-xs font-bold mb-6">SYSTÈME AQUATIQUE</div>
+                <h1 class="text-6xl font-bold mb-6 dynamic-contrast">TRAPPIST-1e</h1>
+                <p class="text-xl text-gray-300 max-w-2xl mb-12 dynamic-contrast">
+                    L'une des 7 planètes de taille terrestre orbitant autour de l'étoile ultra-froide TRAPPIST-1. C'est la meilleure candidate pour la présence d'océans d'eau liquide.
+                </p>
+                 <div class="glass-card p-8 w-full text-left flex gap-6 items-center">
+                    <div class="text-6xl font-bold text-blue-500/20">7</div>
+                    <div>
+                        <h3 class="text-2xl font-bold mb-2">Un ciel rempli de planètes</h3>
+                        <p class="text-gray-400">Si vous étiez sur la surface de TRAPPIST-1e, les autres planètes du système apparaîtraient dans le ciel aussi grosses, voire plus grosses, que la Lune vue depuis la Terre.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Galaxies Details (Generic Layout for simplicity but unique content) -->
+        <section id="andromede" class="page-section">
+             <div class="max-w-4xl mx-auto px-6 pt-20">
+                <a href="galaxies.html" class="nav-link text-gray-400 hover:text-white text-sm flex items-center gap-1 mb-6"><i data-lucide="arrow-left" size="14"></i> Retour Galaxies</a>
+                <h1 class="text-5xl font-bold mb-4 dynamic-contrast">Andromède (M31)</h1>
+                <div class="glass-card p-8 mb-8">
+                    <p class="text-lg text-gray-300">La plus grande galaxie du Groupe Local. Elle contient environ 1000 milliards d'étoiles, soit plus du double de la Voie Lactée. Elle fonce vers nous à 110 km/s et la collision fusionnera nos deux galaxies pour former "Milkomeda".</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="sombrero" class="page-section">
+             <div class="max-w-4xl mx-auto px-6 pt-20">
+                <a href="galaxies.html" class="nav-link text-gray-400 hover:text-white text-sm flex items-center gap-1 mb-6"><i data-lucide="arrow-left" size="14"></i> Retour Galaxies</a>
+                <h1 class="text-5xl font-bold mb-4 dynamic-contrast">Le Sombrero (M104)</h1>
+                <div class="glass-card p-8 mb-8">
+                    <p class="text-lg text-gray-300">Située à 29 millions d'années-lumière. Son noyau énorme abrite un trou noir supermassif d'un milliard de masses solaires. Son disque de poussière sombre spectaculaire lui donne l'apparence d'un chapeau mexicain.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="tourbillon" class="page-section">
+             <div class="max-w-4xl mx-auto px-6 pt-20">
+                <a href="galaxies.html" class="nav-link text-gray-400 hover:text-white text-sm flex items-center gap-1 mb-6"><i data-lucide="arrow-left" size="14"></i> Retour Galaxies</a>
+                <h1 class="text-5xl font-bold mb-4 dynamic-contrast">Le Tourbillon (M51)</h1>
+                <div class="glass-card p-8 mb-8">
+                    <p class="text-lg text-gray-300">L'archétype de la galaxie spirale de grand style. Elle est en interaction gravitationnelle avec une petite galaxie compagnon (NGC 5195), ce qui déclenche une flambée de formation d'étoiles dans ses bras spiraux.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Nebuleuses Details -->
+        <section id="orion" class="page-section">
+             <div class="max-w-4xl mx-auto px-6 pt-20">
+                <a href="nebuleuses.html" class="nav-link text-gray-400 hover:text-white text-sm flex items-center gap-1 mb-6"><i data-lucide="arrow-left" size="14"></i> Retour Nébuleuses</a>
+                <h1 class="text-5xl font-bold mb-4 dynamic-contrast">La Grande Nébuleuse d'Orion</h1>
+                <div class="glass-card p-8 mb-8">
+                    <p class="text-lg text-gray-300">Un vaste nuage de gaz et de poussière où naissent des milliers d'étoiles. En son centre, quatre étoiles massives (le Trapèze) illuminent le gaz environnant et sculptent la nébuleuse avec leurs vents stellaires puissants.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="crabe" class="page-section">
+             <div class="max-w-4xl mx-auto px-6 pt-20">
+                <a href="nebuleuses.html" class="nav-link text-gray-400 hover:text-white text-sm flex items-center gap-1 mb-6"><i data-lucide="arrow-left" size="14"></i> Retour Nébuleuses</a>
+                <h1 class="text-5xl font-bold mb-4 dynamic-contrast">Nébuleuse du Crabe</h1>
+                <div class="glass-card p-8 mb-8">
+                    <p class="text-lg text-gray-300">Le rémanent spectaculaire d'une étoile massive qui a explosé en supernova. L'explosion a été observée par des astronomes chinois en 1054 après J.C., restant visible en plein jour pendant des semaines.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="piliers" class="page-section">
+             <div class="max-w-4xl mx-auto px-6 pt-20">
+                <a href="nebuleuses.html" class="nav-link text-gray-400 hover:text-white text-sm flex items-center gap-1 mb-6"><i data-lucide="arrow-left" size="14"></i> Retour Nébuleuses</a>
+                <h1 class="text-5xl font-bold mb-4 dynamic-contrast">Les Piliers de la Création</h1>
+                <div class="glass-card p-8 mb-8">
+                    <p class="text-lg text-gray-300">Ces structures emblématiques de la Nébuleuse de l'Aigle sont des colonnes d'hydrogène froid et de poussière. De nouvelles étoiles se forment à l'intérieur, mais le rayonnement intense des étoiles voisines érode lentement ces piliers majestueux.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== PAGE RECHERCHE (Nouveau) ==================== -->
+        <section id="recherche" class="page-section">
+            <div class="max-w-4xl mx-auto px-6">
+                <h2 class="text-5xl font-bold mb-10 dynamic-contrast">Dossiers <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500" style="mix-blend-mode: normal;">Classifiés</span></h2>
+                
+                <div class="grid gap-6">
+                    <div class="glass-card p-8 border-l-4 border-green-500">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-2xl font-bold">Matière Noire</h3>
+                            <span class="bg-green-500/20 text-green-400 px-2 py-1 rounded text-xs">PRIORITÉ ALPHA</span>
+                        </div>
+                        <p class="text-gray-300 leading-relaxed">
+                            Nous savons qu'elle existe car nous observons ses effets gravitationnels, mais elle reste invisible. Nos détecteurs au Xénon liquide placés sous les Alpes cherchent la moindre interaction avec des particules WIMPs.
+                        </p>
+                        <div class="mt-4 h-1 w-full bg-white/10 rounded-full overflow-hidden">
+                            <div class="h-full bg-green-500 w-1/4 animate-pulse"></div>
+                        </div>
+                        <p class="text-right text-xs text-gray-500 mt-2">Avancement analyse: 25%</p>
+                    </div>
+
+                    <div class="glass-card p-8 border-l-4 border-blue-500">
+                         <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-2xl font-bold">Programme SETI</h3>
+                            <span class="bg-blue-500/20 text-blue-400 px-2 py-1 rounded text-xs">SURVEILLANCE ACTIVE</span>
+                        </div>
+                        <p class="text-gray-300 leading-relaxed">
+                            Le radiotélescope analyse des millions de fréquences simultanément en quête de techno-signatures. Une anomalie récente dans le secteur Kepler a attiré notre attention.
+                        </p>
+                         <div class="mt-4 flex gap-1">
+                            <div class="h-4 w-1 bg-blue-500/20"></div><div class="h-4 w-1 bg-blue-500/40"></div><div class="h-4 w-1 bg-blue-500/60"></div><div class="h-4 w-1 bg-blue-500/80"></div><div class="h-4 w-1 bg-blue-500"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== PAGE VOYAGE (Nouveau) ==================== -->
+        <section id="voyage" class="page-section">
+            <div class="max-w-5xl mx-auto px-6 flex flex-col md:flex-row gap-12 items-center">
+                <div class="w-full md:w-1/2">
+                    <h2 class="text-5xl font-bold mb-6 dynamic-contrast">Embarquement <br>Immédiat</h2>
+                    <p class="text-gray-300 mb-8 text-lg">
+                        Le voyage interstellaire n'est plus de la science-fiction. Réservez votre capsule de cryo-sommeil pour les colonies de Proxima.
+                    </p>
+                    <div class="glass-card p-6 inline-block">
+                        <div class="text-xs text-gray-400 uppercase mb-2">Prochain départ</div>
+                        <div class="text-3xl font-bold text-fuchsia-400 font-mono">14.08.2042</div>
+                        <div class="text-sm text-gray-500 mt-1">Terminal Orbital 7</div>
+                    </div>
+                </div>
+
+                <div class="w-full md:w-1/2">
+                    <form class="glass-panel p-8 rounded-2xl space-y-4">
+                        <h3 class="text-xl font-bold mb-4">Configuration de Vol</h3>
+                        <div>
+                            <label class="block text-xs uppercase text-gray-400 mb-2">Destination</label>
+                            <select class="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-fuchsia-500">
+                                <option>Proxima Centauri b</option>
+                                <option>Mars (Colonie Olympus)</option>
+                                <option>Station Europa (Jupiter)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase text-gray-400 mb-2">Classe</label>
+                            <div class="grid grid-cols-2 gap-4">
+                                <button type="button" class="border border-fuchsia-500 bg-fuchsia-500/20 p-3 rounded-lg text-sm font-bold">Standard</button>
+                                <button type="button" class="border border-white/10 hover:bg-white/5 p-3 rounded-lg text-sm text-gray-400">Cryo-Luxe</button>
+                            </div>
+                        </div>
+                        <button type="button" class="w-full btn-future py-4 rounded-lg font-bold mt-4">VÉRIFIER DISPONIBILITÉ</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== PAGE TELESCOPE (Nouveau) ==================== -->
+        <section id="telescope" class="page-section">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="flex justify-between items-end mb-8">
+                    <div>
+                        <h2 class="text-4xl font-bold dynamic-contrast">Data Télescope</h2>
+                        <p class="text-gray-400">Flux de données en temps réel du réseau Horizon.</p>
+                    </div>
+                    <div class="text-right hidden md:block">
+                        <div class="text-xs text-green-400 flex items-center gap-2 justify-end">
+                            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> SYSTEM ONLINE
+                        </div>
+                        <div class="font-mono text-white/50 text-sm">45.203° N, 07.123° E</div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Graphique 1 -->
+                    <div class="glass-card p-6 col-span-2">
+                        <h3 class="text-sm font-bold uppercase text-gray-500 mb-4 flex items-center gap-2"><i data-lucide="activity" size="16"></i> Spectrométrie Atmosphérique</h3>
+                        <div class="h-64 flex items-end gap-1 justify-between px-2">
+                             <!-- Barres de graphique générées en CSS -->
+                            <div class="w-full bg-fuchsia-500/20 h-[40%] rounded-t relative group"><div class="absolute bottom-0 w-full bg-fuchsia-500 h-1"></div></div>
+                            <div class="w-full bg-fuchsia-500/20 h-[70%] rounded-t relative group"><div class="absolute bottom-0 w-full bg-fuchsia-500 h-1"></div></div>
+                            <div class="w-full bg-fuchsia-500/20 h-[30%] rounded-t relative group"><div class="absolute bottom-0 w-full bg-fuchsia-500 h-1"></div></div>
+                            <div class="w-full bg-fuchsia-500/20 h-[85%] rounded-t relative group"><div class="absolute bottom-0 w-full bg-fuchsia-500 h-1"></div></div>
+                            <div class="w-full bg-fuchsia-500/20 h-[50%] rounded-t relative group"><div class="absolute bottom-0 w-full bg-fuchsia-500 h-1"></div></div>
+                            <div class="w-full bg-fuchsia-500/20 h-[60%] rounded-t relative group"><div class="absolute bottom-0 w-full bg-fuchsia-500 h-1"></div></div>
+                        </div>
+                        <div class="flex justify-between text-xs text-gray-500 mt-2 font-mono">
+                            <span>H2O</span><span>CO2</span><span>CH4</span><span>O2</span><span>N2</span><span>He</span>
+                        </div>
+                    </div>
+
+                    <!-- Side Panel -->
+                    <div class="space-y-6">
+                        <div class="glass-card p-6">
+                            <h3 class="text-sm font-bold uppercase text-gray-500 mb-2">Cible Actuelle</h3>
+                            <div class="text-2xl font-bold mb-1">Sector 7G</div>
+                            <p class="text-xs text-gray-400">Azimuth: 124.5° | Elev: 45.2°</p>
+                        </div>
+                        <div class="glass-card p-6">
+                             <h3 class="text-sm font-bold uppercase text-gray-500 mb-2">Signal Audio</h3>
+                             <div class="flex items-center gap-4">
+                                 <button class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20"><i data-lucide="play" size="16"></i></button>
+                                 <div class="h-8 w-full bg-black/30 rounded flex items-center px-2 overflow-hidden">
+                                     <div class="w-1 h-3 bg-green-500 mx-px"></div>
+                                     <div class="w-1 h-5 bg-green-500 mx-px"></div>
+                                     <div class="w-1 h-2 bg-green-500 mx-px"></div>
+                                     <div class="w-1 h-4 bg-green-500 mx-px"></div>
+                                     <div class="w-1 h-3 bg-green-500 mx-px"></div>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== PAGE DETAIL KEPLER ==================== -->
+        <section id="kepler-186f" class="page-section">
+            <div class="max-w-5xl mx-auto px-6 flex flex-col items-center text-center">
+                <div class="inline-block px-4 py-1 rounded-full border border-red-500/50 text-red-400 text-xs font-bold mb-6">FOCUS PLANÉTAIRE</div>
+                <h1 class="text-6xl font-bold mb-6 dynamic-contrast">KEPLER-186f</h1>
+                <p class="text-xl text-gray-300 max-w-2xl mb-12 dynamic-contrast">
+                    La première planète de taille terrestre découverte dans la zone habitable d'une autre étoile. Une étape majeure dans notre quête de vie ailleurs.
+                </p>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full mb-12">
+                    <div class="glass-panel p-4 rounded-xl">
+                        <div class="text-gray-500 text-xs uppercase mb-1">Masse</div>
+                        <div class="text-2xl font-bold">~1.1 Earths</div>
+                    </div>
+                    <div class="glass-panel p-4 rounded-xl">
+                        <div class="text-gray-500 text-xs uppercase mb-1">Période Orbitale</div>
+                        <div class="text-2xl font-bold">129.9 Jours</div>
+                    </div>
+                    <div class="glass-panel p-4 rounded-xl">
+                        <div class="text-gray-500 text-xs uppercase mb-1">Étoile</div>
+                        <div class="text-2xl font-bold">Naine M</div>
+                    </div>
+                    <div class="glass-panel p-4 rounded-xl">
+                        <div class="text-gray-500 text-xs uppercase mb-1">Découverte</div>
+                        <div class="text-2xl font-bold">2014</div>
+                    </div>
+                </div>
+
+                <div class="text-left w-full glass-card p-8">
+                    <h3 class="text-2xl font-bold mb-4">Analyse Atmosphérique</h3>
+                    <p class="text-gray-400 leading-relaxed mb-4">
+                        Bien que nous ne connaissions pas encore la composition exacte de son atmosphère, les modèles suggèrent que Kepler-186f pourrait maintenir de l'eau liquide à sa surface si elle possède une atmosphère riche en CO2. L'étoile étant plus rouge et plus froide que notre Soleil, la photosynthèse végétale y prendrait probablement des teintes rougeâtres ou noires.
+                    </p>
+                    <div class="w-full bg-gray-800 h-2 rounded-full overflow-hidden mt-4">
+                        <div class="bg-gradient-to-r from-red-500 to-orange-500 w-2/3 h-full"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 mt-2">
+                        <span>Probabilité atmosphère dense</span>
+                        <span>66%</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== PAGE SIMULATION ==================== -->
+        <section id="simulation" class="page-section">
+            <div class="fixed top-24 right-6 w-80 sim-controls z-50">
+                <div class="glass-card p-6">
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <i data-lucide="sliders" size="20"></i> Paramètres Planète
+                    </h3>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <label class="text-xs text-gray-400 uppercase font-bold block mb-2">Vitesse Rotation</label>
+                            <input type="range" id="sim-speed" min="0" max="2" step="0.1" value="0.5" class="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                        </div>
+
+                        <div>
+                            <label class="text-xs text-gray-400 uppercase font-bold block mb-2">Couleur Atmosphère</label>
+                            <div class="flex gap-2">
+                                <button onclick="changePlanetColor(0x4cc9f0)" class="w-8 h-8 rounded-full bg-[#4cc9f0] border-2 border-white hover:scale-110 transition-transform"></button>
+                                <button onclick="changePlanetColor(0xff0066)" class="w-8 h-8 rounded-full bg-[#ff0066] border border-transparent hover:scale-110 transition-transform"></button>
+                                <button onclick="changePlanetColor(0xccff00)" class="w-8 h-8 rounded-full bg-[#ccff00] border border-transparent hover:scale-110 transition-transform"></button>
+                                <button onclick="changePlanetColor(0xffffff)" class="w-8 h-8 rounded-full bg-white border border-transparent hover:scale-110 transition-transform"></button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="text-xs text-gray-400 uppercase font-bold block mb-2">Rugosité Surface</label>
+                            <input type="range" id="sim-roughness" min="0" max="1" step="0.1" value="0.4" class="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                        </div>
+                        
+                        <div class="pt-4 border-t border-white/10">
+                            <p class="text-xs text-gray-500 italic">Interagissez avec le globe 3D en temps réel.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="absolute bottom-10 left-6 max-w-md pointer-events-none">
+                <h1 class="text-4xl font-bold mb-2 text-glow dynamic-contrast">Laboratoire de Simulation</h1>
+                <p class="text-gray-300 dynamic-contrast">Modélisez les conditions planétaires en ajustant les paramètres atmosphériques et géologiques.</p>
+            </div>
+        </section>
+
+        <!-- ==================== PAGE TROUS NOIRS (Enrichi) ==================== -->
+        <section id="trous-noirs" class="page-section">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <i data-lucide="aperture" size="64" class="text-fuchsia-500 mx-auto mb-6"></i>
+                <h1 class="text-5xl font-bold mb-6 dynamic-contrast">L'Horizon des Événements</h1>
+                <p class="text-xl text-gray-300 mb-12">
+                    Là où la gravité est si forte que même la lumière ne peut s'échapper. Bienvenue au point de non-retour.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+                    <div class="glass-card p-8">
+                        <h3 class="text-2xl font-bold mb-4">Singularité</h3>
+                        <p class="text-gray-400">Le cœur du trou noir. Un point de densité infinie où les lois de la physique telles que nous les connaissons cessent d'exister. L'espace et le temps s'y confondent.</p>
+                    </div>
+                    <div class="glass-card p-8">
+                        <h3 class="text-2xl font-bold mb-4">Spaghettification</h3>
+                        <p class="text-gray-400">Si vous approchiez d'un trou noir stellaire, les forces de marée étireraient votre corps en un long filament d'atomes avant même que vous n'atteigniez l'horizon.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+         <!-- ==================== PAGES GENERIQUES (Fallback) ==================== -->
+         <section id="generic-page" class="page-section">
+            <div class="max-w-4xl mx-auto px-6 text-center pt-20">
+                <h1 class="text-4xl font-bold mb-4" id="generic-title">Page</h1>
+                <p class="text-gray-400">Contenu en cours d'indexation par la base de données centrale.</p>
+                <a href="index.html" class="nav-link mt-8 inline-block text-fuchsia-400 underline">Retour à la base</a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/10 bg-black/40 backdrop-blur-md pt-20 pb-10 px-6 mt-20 relative z-20">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-2xl font-bold tracking-tighter flex items-center gap-2">
+                <i data-lucide="orbit" class="text-gray-600"></i>
+                <span class="text-gray-400">COSMOLAB</span>
+            </div>
+            <div class="flex gap-6 text-gray-500 text-sm">
+                <a href="#" class="hover:text-white">Confidentialité</a>
+                <a href="#" class="hover:text-white">API Data</a>
+                <a href="#" class="hover:text-white">Contact</a>
+            </div>
+            <p class="text-gray-600 text-sm">© 2026 Exploration Spatiale Avancée.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts Logique -->
+    <script>
+        lucide.createIcons();
+
+        // ----------------------------------------------------
+        // SYSTEME DE ROUTING (SPA)
+        // ----------------------------------------------------
+        const pages = ['index', 'missions', 'exoplanetes', 'kepler-186f', 'simulation', 'trous-noirs', 'nebuleuses', 'galaxies', 'recherche', 'voyage', 'telescope'];
+        
+        // Configuration de la scène 3D globale
+        let globalPlanetMaterial; 
+        let globalPlanetMesh;
+        let rotationSpeed = 0.15;
+
+        function navigateTo(pageId) {
+            // Nettoyage de l'ID (enlever le .html si présent)
+            const cleanId = pageId.replace('.html', '');
+            
+            // Masquer toutes les sections
+            document.querySelectorAll('.page-section').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            // Gérer le mode simulation (pour l'UI)
+            if (cleanId === 'simulation') {
+                document.body.classList.add('sim-mode');
+            } else {
+                document.body.classList.remove('sim-mode');
+            }
+
+            // Afficher la section demandée ou une générique si elle n'existe pas
+            const targetSection = document.getElementById(cleanId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                window.scrollTo(0, 0);
+            } else {
+                // Gestion des pages qui n'ont pas de section dédiée (fallback)
+                const generic = document.getElementById('generic-page');
+                document.getElementById('generic-title').innerText = cleanId.charAt(0).toUpperCase() + cleanId.slice(1);
+                generic.classList.add('active');
+            }
+
+            // Animation Icônes
+            lucide.createIcons();
+        }
+
+        // Intercepter tous les clics sur les liens
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('.nav-link'); // Utilisation d'une classe pour cibler les liens internes
+            if (link) {
+                e.preventDefault();
+                const href = link.getAttribute('href');
+                navigateTo(href);
+                // Mettre à jour l'URL sans recharger (optionnel pour l'UX)
+                // history.pushState(null, '', href); 
+            }
+        });
+
+        // ----------------------------------------------------
+        // THREE.JS
+        // ----------------------------------------------------
+        const initThreeJS = () => {
+            const container = document.getElementById('canvas-container');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.z = 5;
+
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            // Lumières
+            const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
+            scene.add(ambientLight);
+
+            const sunLight = new THREE.PointLight(0xffffff, 2, 100);
+            sunLight.position.set(10, 10, 10);
+            scene.add(sunLight);
+            
+            const accentLight = new THREE.PointLight(0x7b2cbf, 2, 50);
+            accentLight.position.set(-5, -5, 5);
+            scene.add(accentLight);
+
+            // Planète
+            const geometry = new THREE.IcosahedronGeometry(2.5, 15);
+            
+            globalPlanetMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0x4cc9f0,
+                metalness: 0.8,
+                roughness: 0.4,
+                clearcoat: 1.0,
+                clearcoatRoughness: 0.2,
+                emissive: 0x10002b,
+                emissiveIntensity: 0.3
+            });
+
+            globalPlanetMesh = new THREE.Mesh(geometry, globalPlanetMaterial);
+            scene.add(globalPlanetMesh);
+
+            // Anneau
+            const ringGeometry = new THREE.TorusGeometry(3.5, 0.02, 16, 100);
+            const ringMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.3 });
+            const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+            ring.rotation.x = Math.PI / 2;
+            ring.rotation.y = -0.2;
+            scene.add(ring);
+
+            // Étoiles
+            const starsGeometry = new THREE.BufferGeometry();
+            const starsCount = 1000;
+            const posArray = new Float32Array(starsCount * 3);
+            for(let i = 0; i < starsCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 25;
+            }
+            starsGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            const starsMaterial = new THREE.PointsMaterial({ size: 0.02, color: 0xffffff });
+            const starsMesh = new THREE.Points(starsGeometry, starsMaterial);
+            scene.add(starsMesh);
+
+            const clock = new THREE.Clock();
+
+            function animate() {
+                requestAnimationFrame(animate);
+                const time = clock.getElapsedTime();
+
+                // Utilisation de la variable globale rotationSpeed
+                globalPlanetMesh.rotation.y += 0.01 * rotationSpeed; 
+                
+                ring.rotation.z = time * 0.05;
+                ring.rotation.x = (Math.PI / 2) + Math.sin(time * 0.2) * 0.1;
+
+                globalPlanetMesh.position.y = Math.sin(time * 0.3) * 0.1;
+                ring.position.y = globalPlanetMesh.position.y;
+                starsMesh.rotation.y = time * 0.02;
+
+                // Si on est en mode simulation, on peut faire bouger la caméra légèrement avec la souris
+                // (Code simplifié pour l'exemple)
+
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            window.addEventListener('resize', () => {
+                const width = container.clientWidth;
+                const height = container.clientHeight;
+                renderer.setSize(width, height);
+                camera.aspect = width / height;
+                camera.updateProjectionMatrix();
+            });
+        };
+
+        // ----------------------------------------------------
+        // LOGIQUE SIMULATION
+        // ----------------------------------------------------
+        window.changePlanetColor = (hex) => {
+            if(globalPlanetMaterial) {
+                globalPlanetMaterial.color.setHex(hex);
+                globalPlanetMaterial.emissive.setHex(hex); // Petit effet glow assorti
+            }
+        };
+
+        const speedInput = document.getElementById('sim-speed');
+        if(speedInput) {
+            speedInput.addEventListener('input', (e) => {
+                rotationSpeed = parseFloat(e.target.value);
+            });
+        }
+
+        const roughnessInput = document.getElementById('sim-roughness');
+        if(roughnessInput) {
+            roughnessInput.addEventListener('input', (e) => {
+                if(globalPlanetMaterial) {
+                    globalPlanetMaterial.roughness = parseFloat(e.target.value);
+                }
+            });
+        }
+
+        // Init
+        window.addEventListener('load', initThreeJS);
+    </script>
+</body>
+</html>
