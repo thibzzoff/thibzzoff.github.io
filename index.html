@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BRWN — Cold Brew Coffee</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ░░ CURSOR ░░ -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursorFollower"></div>
+
+  <!-- ░░ NAV ░░ -->
+  <nav class="nav" id="nav">
+    <a href="#" class="nav-logo">BRWN</a>
+    <ul class="nav-links">
+      <li><a href="#features">Le produit</a></li>
+      <li><a href="#testimonials">Avis</a></li>
+      <li><a href="#cta">Commander</a></li>
+    </ul>
+    <a href="#cta" class="nav-cta">Découvrir</a>
+  </nav>
+
+  <!-- ░░ HERO ░░ -->
+  <section class="hero" id="hero">
+    <div class="hero-eyebrow reveal">
+      <span class="dot"></span>
+      Cold Brew · Artisanal · Paris
+    </div>
+
+    <h1 class="hero-title">
+      <span class="line reveal" data-delay="0">Le café</span>
+      <span class="line line--italic reveal" data-delay="100">qui ne</span>
+      <span class="line reveal" data-delay="200">dort jamais.</span>
+    </h1>
+
+    <div class="hero-sub reveal" data-delay="350">
+      <p>Infusé 18 heures à froid.<br>Prêt quand tu l'es.</p>
+      <a href="#cta" class="btn-primary">Commander maintenant</a>
+    </div>
+
+    <!-- Product visual -->
+    <div class="can-wrapper reveal" data-delay="150">
+      <img src="can.png" alt="Canette BRWN Cold Brew" class="can-img" />
+    </div>
+
+    <div class="hero-scroll">
+      <span>Défiler</span>
+      <div class="scroll-line"></div>
+    </div>
+
+    <div class="hero-numbers">
+      <div class="hero-stat reveal" data-delay="400">
+        <span class="stat-n">18h</span>
+        <span class="stat-l">d'infusion</span>
+      </div>
+      <div class="hero-stat reveal" data-delay="500">
+        <span class="stat-n">0g</span>
+        <span class="stat-l">de sucre</span>
+      </div>
+      <div class="hero-stat reveal" data-delay="600">
+        <span class="stat-n">2×</span>
+        <span class="stat-l">plus de caféine</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░ MARQUEE ░░ -->
+  <div class="marquee-strip" aria-hidden="true">
+    <div class="marquee-track">
+      <span>COLD BREW</span><span>·</span>
+      <span>INFUSÉ À FROID</span><span>·</span>
+      <span>SANS SUCRE</span><span>·</span>
+      <span>ARTISANAL</span><span>·</span>
+      <span>PARIS</span><span>·</span>
+      <span>COLD BREW</span><span>·</span>
+      <span>INFUSÉ À FROID</span><span>·</span>
+      <span>SANS SUCRE</span><span>·</span>
+      <span>ARTISANAL</span><span>·</span>
+      <span>PARIS</span><span>·</span>
+    </div>
+  </div>
+
+  <!-- ░░ FEATURES ░░ -->
+  <section class="features" id="features">
+    <div class="features-header">
+      <p class="section-label reveal">— Le produit</p>
+      <h2 class="section-title reveal">Pensé pour<br><em>les exigeants.</em></h2>
+    </div>
+
+    <div class="features-grid">
+
+      <article class="feat-card reveal" data-delay="0">
+        <div class="feat-icon">
+          <svg viewBox="0 0 48 48" fill="none">
+            <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M24 14v10l6 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="feat-num">01</span>
+        <h3>18 heures d'infusion</h3>
+        <p>Pas de chaleur. Pas de précipitation. Le café s'infuse lentement dans l'eau froide pour révéler ses arômes les plus profonds.</p>
+      </article>
+
+      <article class="feat-card reveal" data-delay="100">
+        <div class="feat-icon">
+          <svg viewBox="0 0 48 48" fill="none">
+            <path d="M24 8C15.16 8 8 15.16 8 24s7.16 16 16 16 16-7.16 16-16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M32 8l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="24" y1="24" x2="24" y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="feat-num">02</span>
+        <h3>Zéro sucre ajouté</h3>
+        <p>La douceur naturelle du grain de café, rien d'autre. Aucun édulcorant, aucun additif. Juste le café dans sa forme la plus pure.</p>
+      </article>
+
+      <article class="feat-card reveal" data-delay="200">
+        <div class="feat-icon">
+          <svg viewBox="0 0 48 48" fill="none">
+            <path d="M12 36c0-6.627 5.373-12 12-12s12 5.373 12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="24" cy="18" r="6" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M36 14l3-3M12 14l-3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="feat-num">03</span>
+        <h3>2× plus de caféine</h3>
+        <p>Le processus d'infusion à froid extrait davantage de caféine naturelle. Un boost propre, sans pic ni crash.</p>
+      </article>
+
+      <article class="feat-card feat-card--wide reveal" data-delay="300">
+        <div class="feat-icon">
+          <svg viewBox="0 0 48 48" fill="none">
+            <rect x="10" y="16" width="28" height="20" rx="3" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M16 16v-4a8 8 0 0 1 16 0v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="24" cy="26" r="3" fill="currentColor"/>
+          </svg>
+        </div>
+        <span class="feat-num">04</span>
+        <h3>Grains sélectionnés à la source</h3>
+        <p>Chaque lot de BRWN est tracé jusqu'à la ferme. Nous travaillons directement avec des producteurs en Éthiopie et en Colombie pour garantir une qualité irréprochable et un commerce équitable.</p>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ░░ QUOTE BREAK ░░ -->
+  <section class="quote-section">
+    <blockquote class="big-quote reveal">
+      "Le meilleur café<br><em>ne se boit pas chaud."</em>
+    </blockquote>
+  </section>
+
+  <!-- ░░ TESTIMONIALS ░░ -->
+  <section class="testimonials" id="testimonials">
+    <div class="testi-header">
+      <p class="section-label reveal">— Ils ont testé</p>
+      <h2 class="section-title reveal">Ce qu'ils<br><em>en pensent.</em></h2>
+    </div>
+
+    <div class="testi-grid">
+
+      <div class="testi-card reveal" data-delay="0">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">« Je ne pensais pas qu'une canette pouvait remplacer mon double espresso du matin. BRWN l'a fait. »</p>
+        <div class="testi-author">
+          <div class="testi-avatar">SL</div>
+          <div>
+            <strong>Sophie L.</strong>
+            <span>Designer UX · Paris</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card reveal" data-delay="150">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">« Le goût est incroyablement lisse. Pas d'amertume, pas de sucre caché. Je suis accro depuis 3 mois. »</p>
+        <div class="testi-author">
+          <div class="testi-avatar">MK</div>
+          <div>
+            <strong>Marc K.</strong>
+            <span>Photographe · Lyon</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card reveal" data-delay="300">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">« Enfin un cold brew qui ne ressemble pas à du café réchauffé. L'infusion froide change vraiment tout. »</p>
+        <div class="testi-author">
+          <div class="testi-avatar">AR</div>
+          <div>
+            <strong>Amina R.</strong>
+            <span>Développeuse · Bordeaux</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ░░ CTA ░░ -->
+  <section class="cta-section" id="cta">
+    <div class="cta-inner">
+      <p class="section-label reveal" style="color: var(--cream-dim)">— Commander</p>
+      <h2 class="cta-title reveal">Prêt à<br><em>changer de café ?</em></h2>
+      <p class="cta-sub reveal" data-delay="100">Livraison en 48h · Pack de 12 canettes · Satisfait ou remboursé</p>
+      <div class="cta-actions reveal" data-delay="200">
+        <a href="#" class="btn-cta-main">Commander — 29,90 €</a>
+        <span class="cta-note">Le pack de 12 · soit 2,49 € / canette</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░░ FOOTER ░░ -->
+  <footer class="footer">
+    <div class="footer-top">
+      <span class="footer-logo">BRWN</span>
+      <p class="footer-tagline">Le café qui ne dort jamais.</p>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 BRWN Coffee — Projet fictif · Thibaut Martin</span>
+      <div class="footer-links">
+        <a href="#">Mentions légales</a>
+        <a href="#">Instagram</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
