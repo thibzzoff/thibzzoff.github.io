@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taoïsme — ÆTHER</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--void:#05080A;--abyss:#080E10;--deep:#0C1618;--surface:#121F22;--surface2:#182C30;--surface3:#1F3C40;--gold:#C9A84C;--gold-bright:#E8C76A;--gold-dim:#8A6E30;--gold-pale:#F5E6B8;--cream:#F0E6D0;--cream-dim:#B8A88A;--accent:#3A9B8A;--accent-dim:#206055;--accent-pale:#A0D8D0;--r:16px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--cream);font-family:'EB Garamond',Georgia,serif;font-size:18px;line-height:1.7;cursor:none;overflow-x:hidden}
+#cursor{position:fixed;top:0;left:0;z-index:9999;pointer-events:none}
+#cursor-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);transform:translate(-50%,-50%)}
+#cursor-ring{position:fixed;top:0;left:0;z-index:9998;width:36px;height:36px;border-radius:50%;border:1px solid rgba(58,155,138,0.5);transform:translate(-50%,-50%);pointer-events:none;transition:width 0.3s,height 0.3s}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--void)}::-webkit-scrollbar-thumb{background:var(--accent-dim);border-radius:2px}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");background-size:200px;opacity:0.3;mix-blend-mode:overlay}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 4vw;display:flex;align-items:center;justify-content:space-between;height:72px;background:rgba(5,8,10,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(58,155,138,0.12)}
+.nav-logo{font-family:'Cinzel',serif;font-size:20px;letter-spacing:0.2em;color:var(--gold);text-decoration:none;cursor:none;flex-shrink:0}
+.nav-back{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.25em;color:var(--cream-dim);text-decoration:none;text-transform:uppercase;cursor:none;transition:color 0.25s;flex-shrink:0}.nav-back:hover{color:var(--accent)}
+.nav-schools{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.nav-schools a{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.12em;color:var(--cream-dim);text-decoration:none;cursor:none;transition:color 0.25s;text-transform:uppercase;white-space:nowrap}
+.nav-schools a:hover,.nav-schools a.active{color:var(--accent)}
+#hero{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 6vw 80px}
+.hero-era{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.45em;color:var(--accent-dim);text-transform:uppercase;margin-bottom:24px;opacity:0;animation:fadeUp 1s 0.3s forwards}
+.hero-title{font-family:'Cinzel',serif;font-size:clamp(44px,9vw,112px);font-weight:400;letter-spacing:0.15em;line-height:0.9;color:var(--accent);text-shadow:0 0 120px rgba(58,155,138,0.2);opacity:0;animation:fadeUp 1s 0.6s forwards}
+.hero-subtitle{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(18px,2.5vw,26px);color:var(--cream-dim);margin-top:28px;max-width:680px;opacity:0;animation:fadeUp 1s 1s forwards}
+.hero-divider{width:1px;height:0;background:linear-gradient(to bottom,transparent,var(--accent-dim),transparent);margin:36px auto;animation:growLine 1.2s 1.4s forwards}
+@keyframes growLine{to{height:72px}}
+.hero-meta{display:flex;gap:48px;opacity:0;animation:fadeUp 1s 1.6s forwards;flex-wrap:wrap;justify-content:center}
+.hero-meta-item{text-align:center}
+.hero-meta-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;color:var(--accent-dim);text-transform:uppercase;margin-bottom:6px}
+.hero-meta-value{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--cream)}
+.hero-opening-quote{margin-top:56px;padding:32px 48px;border:1px solid rgba(58,155,138,0.2);background:rgba(8,14,16,0.7);backdrop-filter:blur(8px);max-width:720px;opacity:0;animation:fadeUp 1s 2s forwards;position:relative}
+.hero-opening-quote::before{content:'"';font-family:'Cormorant Garamond',serif;font-size:120px;color:rgba(58,155,138,0.06);position:absolute;top:-20px;left:20px;line-height:1}
+.oq-original{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--accent-dim);letter-spacing:0.05em;margin-bottom:12px}
+.oq-translation{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,2.5vw,24px);color:var(--cream);line-height:1.5;margin-bottom:16px}
+.oq-author{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;color:var(--accent-dim);text-transform:uppercase}
+section{position:relative;z-index:2;padding:100px 6vw}
+.section-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.5em;color:var(--accent-dim);text-transform:uppercase;margin-bottom:16px;display:block}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,52px);font-weight:300;color:var(--cream);line-height:1.1}
+.section-title em{font-style:italic;color:var(--accent)}
+.sep{display:block;width:48px;height:1px;background:var(--accent-dim);margin:32px 0}
+.prose{font-size:17px;color:var(--cream-dim);line-height:1.9;max-width:760px}.prose p{margin-bottom:1.4em}.prose strong{color:var(--cream);font-weight:500}
+#intro{background:var(--abyss)}
+.intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;max-width:1200px;margin:0 auto}
+#concepts{background:var(--void)}
+.concepts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:2px;margin-top:64px}
+.concept-card{padding:40px 36px;background:var(--deep);border:1px solid rgba(58,155,138,0.08);position:relative;overflow:hidden;transition:all 0.4s}
+.concept-card:hover{background:var(--surface);border-color:rgba(58,155,138,0.25);transform:translateY(-3px)}
+.concept-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,var(--accent),transparent);transform:scaleX(0);transition:transform 0.4s}
+.concept-card:hover::after{transform:scaleX(1)}
+.concept-chinese{font-family:'Cormorant Garamond',serif;font-size:40px;color:var(--accent);opacity:0.4;margin-bottom:8px}
+.concept-name{font-family:'Cinzel',serif;font-size:14px;letter-spacing:0.2em;color:var(--accent);text-transform:uppercase;margin-bottom:16px}
+.concept-desc{font-size:16px;color:var(--cream-dim);line-height:1.7}
+.concept-quote-block{margin-top:24px;padding:16px 20px;border-left:2px solid rgba(58,155,138,0.3);background:rgba(58,155,138,0.04)}
+.cq-orig{font-size:16px;color:var(--accent-dim);margin-bottom:6px;line-height:1.5}
+.cq-trans{font-size:15px;color:var(--cream-dim);font-style:italic;line-height:1.5}
+.cq-src{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.25em;color:var(--accent-dim);text-transform:uppercase;margin-top:8px}
+#timeline{background:var(--abyss)}
+.timeline-track{position:relative;max-width:900px;margin:64px auto 0;padding-left:60px}
+.timeline-track::before{content:'';position:absolute;left:20px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--accent-dim),transparent)}
+.tl-item{position:relative;margin-bottom:56px;opacity:0;transform:translateX(-20px);transition:all 0.6s cubic-bezier(0.23,1,0.32,1)}
+.tl-item.visible{opacity:1;transform:translateX(0)}
+.tl-dot{position:absolute;left:-48px;top:6px;width:12px;height:12px;border-radius:50%;border:2px solid var(--accent);background:var(--void);transition:background 0.3s}
+.tl-item:hover .tl-dot{background:var(--accent)}
+.tl-date{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;color:var(--accent);text-transform:uppercase;margin-bottom:8px}
+.tl-name{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--cream);margin-bottom:6px}
+.tl-role{font-family:'EB Garamond',serif;font-size:14px;color:var(--accent-dim);letter-spacing:0.05em;margin-bottom:12px}
+.tl-desc{font-size:16px;color:var(--cream-dim);line-height:1.7;max-width:640px}
+.tl-works{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.tl-work{font-family:'EB Garamond',serif;font-style:italic;font-size:13px;padding:3px 12px;border:1px solid rgba(58,155,138,0.2);color:var(--accent-dim)}
+#thinkers{background:var(--void)}
+.thinkers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:24px;margin-top:64px}
+.thinker-full{background:var(--deep);border:1px solid rgba(58,155,138,0.1);padding:36px;transition:border-color 0.4f}
+.thinker-full:hover{border-color:rgba(58,155,138,0.3)}
+.tf-header{display:flex;align-items:flex-start;gap:20px;margin-bottom:24px}
+.tf-monogram{width:64px;height:64px;flex-shrink:0;background:var(--surface2);border:1px solid rgba(58,155,138,0.2);display:flex;align-items:center;justify-content:center;font-size:32px;color:var(--accent)}
+.tf-name{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--cream);margin-bottom:4px}
+.tf-dates{font-size:13px;color:var(--accent-dim)}
+.tf-desc{font-size:16px;color:var(--cream-dim);line-height:1.7;margin-bottom:20px}
+.tf-quote{padding:16px 20px;border-left:2px solid var(--accent-dim);background:rgba(58,155,138,0.04);margin-bottom:20px}
+.tf-q-orig{font-size:18px;color:var(--accent-dim);margin-bottom:6px;line-height:1.5}
+.tf-q-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:var(--cream-dim);line-height:1.5}
+.tf-q-src{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.25em;color:var(--accent-dim);text-transform:uppercase;margin-top:8px}
+.tf-works-title{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.3em;color:var(--accent-dim);text-transform:uppercase;margin-bottom:10px}
+.tf-works{display:flex;flex-wrap:wrap;gap:6px}
+.tf-work{font-family:'EB Garamond',serif;font-style:italic;font-size:13px;padding:3px 12px;border:1px solid rgba(58,155,138,0.2);color:var(--cream-dim)}
+#comparison{background:var(--abyss)}
+.comparison-table{width:100%;border-collapse:collapse;margin-top:56px}
+.comparison-table th{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;padding:16px 24px;text-align:left;border-bottom:1px solid rgba(58,155,138,0.2);color:var(--accent)}
+.comparison-table th:first-child{color:var(--cream-dim)}
+.comparison-table td{padding:20px 24px;border-bottom:1px solid rgba(58,155,138,0.06);font-size:15px;color:var(--cream-dim);vertical-align:top;line-height:1.6}
+.comparison-table td:first-child{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent-dim);white-space:nowrap}
+.comparison-table tr:hover td{background:rgba(58,155,138,0.03)}
+.ct-highlight{color:var(--accent);font-style:italic}
+#readings{background:var(--void)}
+.readings-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px}
+.reading-group h3{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent-dim);margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid rgba(58,155,138,0.15)}
+.reading-list{display:flex;flex-direction:column;gap:20px}
+.reading-item{padding:20px;background:var(--deep);border:1px solid rgba(58,155,138,0.08);transition:border-color 0.3s}
+.reading-item:hover{border-color:rgba(58,155,138,0.25)}
+.r-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--cream);margin-bottom:4px}
+.r-author{font-size:13px;color:var(--accent-dim);margin-bottom:8px}
+.r-desc{font-size:14px;color:var(--cream-dim);line-height:1.5}
+#school-nav{background:var(--abyss);padding:80px 6vw}
+.school-nav-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;max-width:1200px;margin:0 auto}
+.school-nav-card{padding:28px;background:var(--deep);border:1px solid rgba(201,168,76,0.08);text-decoration:none;cursor:none;transition:all 0.4s;display:block}
+.school-nav-card:hover{background:var(--surface);border-color:rgba(201,168,76,0.2);transform:translateY(-3px)}
+.snc-label{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:8px}
+.snc-name{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--cream)}
+footer{position:relative;z-index:2;background:var(--void);border-top:1px solid rgba(58,155,138,0.08);padding:40px 6vw;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+footer p{font-size:14px;color:rgba(176,155,123,0.4)}
+footer a{color:var(--gold);text-decoration:none;font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.15em;cursor:none}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.7s,transform 0.7s}
+.reveal.visible{opacity:1;transform:translateY(0)}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}from{opacity:0;transform:translateY(18px)}}
+@media(max-width:1100px){.school-nav-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.intro-grid,.readings-grid{grid-template-columns:1fr}}
+@media(max-width:600px){.school-nav-grid{grid-template-columns:1fr}.nav-schools{display:none}}
+</style>
+</head>
+<body>
+<div id="cursor"><div id="cursor-dot"></div></div>
+<div id="cursor-ring"></div>
+<nav>
+  <a href="aether-philosophie.html" class="nav-logo">Æ</a>
+  <div class="nav-schools">
+    <a href="stoicisme.html">Stoïcisme</a>
+    <a href="epicurisme.html">Épicurisme</a>
+    <a href="existentialisme.html">Existentialisme</a>
+    <a href="idealisme.html">Idéalisme</a>
+    <a href="nietzscheisme.html">Nietzschéisme</a>
+    <a href="taoisme.html" class="active">Taoïsme</a>
+    <a href="phenomenologie.html">Phénoménologie</a>
+    <a href="rationalisme.html">Rationalisme</a>
+  </div>
+  <a href="aether-philosophie.html" class="nav-back">← Accueil</a>
+</nav>
+
+<section id="hero">
+  <p class="hero-era">VIe siècle av. J.-C. — Présent</p>
+  <h1 class="hero-title">TAOÏSME</h1>
+  <p class="hero-subtitle">道可道，非常道 — Le Tao qui peut être nommé n'est pas le Tao éternel. Wu wei : agir en accord avec le cours naturel des choses</p>
+  <div class="hero-divider"></div>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><p class="hero-meta-label">Fondateur légendaire</p><p class="hero-meta-value">Lao Tseu (老子)</p></div>
+    <div class="hero-meta-item"><p class="hero-meta-label">Texte fondateur</p><p class="hero-meta-value">Tao Te Ching (道德經)</p></div>
+    <div class="hero-meta-item"><p class="hero-meta-label">Maître du paradoxe</p><p class="hero-meta-value">Zhuangzi (莊子)</p></div>
+    <div class="hero-meta-item"><p class="hero-meta-label">Concept central</p><p class="hero-meta-value">Wu wei (無為)</p></div>
+  </div>
+  <div class="hero-opening-quote">
+    <p class="oq-original">道可道，非常道。名可名，非常名。無名天地之始。有名萬物之母。</p>
+    <p class="oq-translation">« Le Tao qu'on peut nommer n'est pas le Tao éternel. Le nom qu'on peut nommer n'est pas le nom éternel. Sans nom, il est le commencement du ciel et de la terre. »</p>
+    <p class="oq-author">— Lao Tseu, Tao Te Ching, chapitre 1</p>
+  </div>
+</section>
+
+<section id="intro">
+  <div class="intro-grid">
+    <div>
+      <span class="section-label">L'insaisissable Tao</span>
+      <h2 class="section-title">Au-delà de <em>toute définition</em></h2>
+      <div class="sep"></div>
+      <div class="prose">
+        <p>Le Taoïsme commence par un paradoxe : dès que l'on tente de définir le Tao, on le perd. Le Tao — traduit approximativement par « Voie » — est le principe immanent de l'univers, antérieur à tout être, source de toute chose. Mais contrairement au Dieu des monothéismes ou au logos stoïcien, le Tao est <strong>sans qualité, sans volonté, sans intentionnalité</strong>.</p>
+        <p>Lao Tseu — figure semi-légendaire dont l'historicité est débattue — aurait rédigé le <em>Tao Te Ching</em> (le Classique de la Voie et de la Vertu) à la demande d'un gardien de frontière, avant de disparaître vers l'Ouest. Ce texte de 81 courts chapitres, en seulement 5000 caractères, est l'un des textes les plus traduits au monde après la Bible. Sa langue est délibérément ambiguë — chaque chapitre supporte des interprétations multiples.</p>
+        <p>Le Taoïsme philosophique (<em>daojia</em>) se distingue du Taoïsme religieux (<em>daojiao</em>) qui développa un panthéon, des rituels et des pratiques d'immortalité. C'est le premier qui nous intéresse ici — une philosophie de l'existence en harmonie avec le mouvement naturel de l'univers.</p>
+      </div>
+    </div>
+    <div>
+      <span class="section-label">Zhuangzi — Le maître du paradoxe</span>
+      <h2 class="section-title">Le rêve du <em>papillon</em></h2>
+      <div class="sep"></div>
+      <div class="prose">
+        <p>Si Lao Tseu est l'austère fondateur, Zhuangzi (IVe siècle av. J.-C.) est le poète fou et génial du Taoïsme. Ses textes sont des fables, des paradoxes, des dialogues absurdes — une philosophie qui se refuse à se laisser saisir dans un système. Son histoire la plus célèbre : il rêve qu'il est un papillon qui vole librement, puis se réveille. Mais alors : est-il un homme qui rêvait être un papillon, ou un papillon qui rêve maintenant être un homme ?</p>
+        <p>Zhuangzi refuse les distinctions tranchées — bien/mal, vie/mort, rêve/réalité — non par nihilisme mais parce que toutes ces distinctions sont relatives à un point de vue particulier. Le sage taoïste ne s'installe dans aucun point de vue fixe : il <em>suit le courant</em>, s'adapte, se transforme. C'est ce que Zhuangzi appelle le <strong>naturel sans effort</strong> — être un avec le processus de transformation universelle.</p>
+        <p>La confrontation avec la mort de Zhuangzi est exemplaire : à la mort de sa femme, ses amis le trouvèrent chantant en battant d'un bol. « Elle était dispersée dans le Grand Changement — comment lui résister ? »</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="concepts">
+  <div class="section-header reveal" style="text-align:center;margin-bottom:0">
+    <span class="section-label">Lexique fondamental</span>
+    <h2 class="section-title">Les concepts <em>essentiels</em></h2>
+  </div>
+  <div class="concepts-grid">
+    <div class="concept-card reveal">
+      <p class="concept-chinese">道</p>
+      <p class="concept-name">Tao — La Voie</p>
+      <p class="concept-desc">Le principe ultime qui sous-tend tout l'univers — antérieur à l'être et au non-être, source de tout mouvement et de toute transformation. Il ne peut être ni nommé ni conçu pleinement. Il n'agit pas directement : il se manifeste à travers le cours naturel des choses. « Le Tao fait tout sans rien faire. »</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">道生一，一生二，二生三，三生萬物。</p>
+        <p class="cq-trans">« Le Tao engendre l'Un, l'Un engendre le Deux, le Deux engendre le Trois, le Trois engendre les dix mille êtres. »</p>
+        <p class="cq-src">— Tao Te Ching, chapitre 42</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-chinese">無為</p>
+      <p class="concept-name">Wu Wei — Non-agir</p>
+      <p class="concept-desc">Traduit maladroitement « inaction », le wu wei signifie plutôt agir en accord parfait avec le flux naturel des choses — sans forcer, sans résister, sans s'imposer. L'eau illustre le wu wei : elle cède à tout, ne combat rien, et pourtant creuse la roche la plus dure. C'est l'efficacité maximale par le non-forcé.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">為學日益，為道日損。損之又損，以至於無為。無為而無不為。</p>
+        <p class="cq-trans">« Pour apprendre, chaque jour on ajoute. Pour suivre le Tao, chaque jour on enlève. En enlevant encore et encore, on arrive au non-agir. Et dans le non-agir, rien n'est laissé sans être fait. »</p>
+        <p class="cq-src">— Tao Te Ching, chapitre 48</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-chinese">陰陽</p>
+      <p class="concept-name">Yin et Yang</p>
+      <p class="concept-desc">Non pas deux forces opposées mais deux aspects complémentaires et mutuellement engendrants du Tao. Le yin (ombre, passivité, réceptivité) et le yang (lumière, activité, impulsion) se transforment continuellement l'un en l'autre. La sagesse taoïste consiste à percevoir et à suivre ce mouvement d'alternance plutôt qu'à figer l'un ou l'autre.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">萬物負陰而抱陽，沖氣以為和。</p>
+        <p class="cq-trans">« Les dix mille êtres portent le yin sur leur dos et tiennent le yang dans leurs bras, et ils s'harmonisent dans le souffle qui les mêle. »</p>
+        <p class="cq-src">— Tao Te Ching, chapitre 42</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-chinese">德</p>
+      <p class="concept-name">Te — La Vertu/Puissance</p>
+      <p class="concept-desc">La vertu ou puissance propre de chaque être — son expression particulière du Tao. Le Te n'est pas une vertu morale au sens occidental : c'est la pleine réalisation de sa nature propre, sans artifice ni contrainte. Le sage au Te accompli agit sans que ses actes paraissent être des actes — il irradie naturellement.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">上德不德，是以有德；下德不失德，是以無德。</p>
+        <p class="cq-trans">« La haute vertu n'est pas vertueuse — c'est pourquoi elle a la vertu. La basse vertu ne manque pas à la vertu — c'est pourquoi elle est sans vertu. »</p>
+        <p class="cq-src">— Tao Te Ching, chapitre 38</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-chinese">自然</p>
+      <p class="concept-name">Ziran — Le Naturel</p>
+      <p class="concept-desc">Littéralement « ainsi de soi-même » ou « spontanément naturel » — la spontanéité non-forcée qui caractérise la manifestation du Tao. S'opposant à toute artificialité, à tout ritualisme confucéen, à toute convention imposée de l'extérieur. La plus haute sagesse est celle qui coule naturellement, sans effort apparent, comme le mouvement d'un habile artisan.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">人法地，地法天，天法道，道法自然。</p>
+        <p class="cq-trans">« L'homme suit la terre, la terre suit le ciel, le ciel suit le Tao, le Tao suit le naturel-de-soi-même. »</p>
+        <p class="cq-src">— Tao Te Ching, chapitre 25</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-chinese">虛</p>
+      <p class="concept-name">Xu — Le Vide</p>
+      <p class="concept-desc">Le vide n'est pas absence — il est la condition de toute utilité. La roue tourne autour de son moyeu vide, le vase est utile par son espace intérieur vide, la maison est habitable grâce au vide de ses pièces. Le sage cultive ce vide intérieur qui le rend capable de tout accueillir, de s'adapter à tout, d'être présent à tout.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">當其無，有室之用。故有之以為利，無之以為用。</p>
+        <p class="cq-trans">« C'est par son vide que la pièce est utile. Ainsi l'être apporte le profit, le non-être apporte l'usage. »</p>
+        <p class="cq-src">— Tao Te Ching, chapitre 11</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="timeline">
+  <div class="section-header reveal" style="text-align:center">
+    <span class="section-label">Frise chronologique</span>
+    <h2 class="section-title">Vingt-six siècles de <em>Voie</em></h2>
+  </div>
+  <div class="timeline-track">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">VIe siècle av. J.-C. (légendaire)</p>
+      <h3 class="tl-name">Lao Tseu (老子)</h3>
+      <p class="tl-role">Fondateur légendaire — gardien des archives royales de Zhou</p>
+      <p class="tl-desc">Son historicité est débattue depuis l'Antiquité. Sima Qian, le premier grand historien chinois (IIe siècle av. J.-C.), rapporte qu'il fut archiviste royal et contemporain de Confucius, qui lui aurait rendu visite. Mais aucun document contemporain ne l'atteste. Certains scholars estiment que le <em>Tao Te Ching</em> est une compilation de textes de différentes époques. Sa figure légendaire lui donne une aura qui convient à sa philosophie : un maître insaisissable, comme le Tao lui-même.</p>
+      <div class="tl-works"><span class="tl-work">Tao Te Ching (道德經)</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">~369–286 av. J.-C.</p>
+      <h3 class="tl-name">Zhuangzi (莊子)</h3>
+      <p class="tl-role">Le poète-philosophe du Taoïsme</p>
+      <p class="tl-desc">Contrairement à Lao Tseu, Zhuangzi est une figure historique documentée. Fonctionnaire mineur qui refusa les hautes fonctions offertes par le roi de Chu, il préféra la liberté philosophique à l'influence politique. Son œuvre — le <em>Zhuangzi</em> — mêle fables, dialogues, paradoxes et poèmes dans un style littéraire incomparable. Les sept premiers chapitres (« chapitres intérieurs ») sont considérés comme authentiques ; les autres chapitres sont des additions ultérieures.</p>
+      <div class="tl-works"><span class="tl-work">Zhuangzi (莊子)</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">IIIe siècle ap. J.-C.</p>
+      <h3 class="tl-name">Wang Bi (王弼)</h3>
+      <p class="tl-role">Le commentateur classique — mort à 23 ans</p>
+      <p class="tl-desc">Génie précoce mort à 23 ans, Wang Bi rédigea les commentaires du <em>Tao Te Ching</em> et du <em>Yi Jing</em> (Livre des mutations) qui devinrent les références canoniques pour les millénaires suivants. Son interprétation néo-taoïste (mouvement Xuanxue) fut fondatrice pour la philosophie chinoise médiévale et influença le développement du bouddhisme Chan (Zen).</p>
+      <div class="tl-works"><span class="tl-work">Commentaire du Tao Te Ching</span><span class="tl-work">Commentaire du Yi Jing</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">XXe siècle</p>
+      <h3 class="tl-name">Le Taoïsme en Occident</h3>
+      <p class="tl-role">De la traduction à l'influence culturelle</p>
+      <p class="tl-desc">Le <em>Tao Te Ching</em> est le texte le plus traduit en Occident après la Bible — avec des centaines de versions en langues européennes. Alan Watts (1915–1973) fut le grand médiateur du Taoïsme pour la contre-culture américaine. François Jullien, philosophe français, a consacré son œuvre entière à penser l'écart entre la philosophie chinoise (stratégie de l'oblique, efficacité silencieuse) et la philosophie grecque.</p>
+      <div class="tl-works"><span class="tl-work">Le Tao du Tao — Alan Watts</span><span class="tl-work">La Propension des choses — F. Jullien</span><span class="tl-work">Traité de l'efficacité — F. Jullien</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="thinkers">
+  <div class="section-header reveal" style="text-align:center">
+    <span class="section-label">Portraits philosophiques</span>
+    <h2 class="section-title">Les <em>sages de la Voie</em></h2>
+  </div>
+  <div class="thinkers-grid">
+    <div class="thinker-full reveal">
+      <div class="tf-header">
+        <div class="tf-monogram">老</div>
+        <div><p class="tf-name">Lao Tseu</p><p class="tf-dates">VIe siècle av. J.-C. (légendaire)</p></div>
+      </div>
+      <p class="tf-desc">L'image de Lao Tseu qui apparaît dans les textes est celle d'un vieillard aux cheveux blancs, discret, méconnu, qui s'en va vers l'Ouest sur un buffle noir et remet son texte au gardien de frontière avant de disparaître. Cette image est peut-être plus vraie que l'histoire : celui qui enseigne que la sagesse est imperceptible ne devrait-il pas lui-même être imperceptible ? Son texte incarne sa philosophie — concis, paradoxal, refusant toute systématisation.</p>
+      <div class="tf-quote">
+        <p class="tf-q-orig">知人者智，自知者明。勝人者有力，自勝者強。</p>
+        <p class="tf-q-text">« Connaître les autres, c'est la sagesse. Se connaître soi-même, c'est l'illumination. Vaincre les autres, c'est avoir de la force. Se vaincre soi-même, c'est être fort. »</p>
+        <p class="tf-q-src">— Tao Te Ching, chapitre 33</p>
+      </div>
+      <p class="tf-works-title">Texte fondateur</p>
+      <div class="tf-works"><span class="tf-work">Tao Te Ching (81 chapitres)</span></div>
+    </div>
+    <div class="thinker-full reveal">
+      <div class="tf-header">
+        <div class="tf-monogram">莊</div>
+        <div><p class="tf-name">Zhuangzi</p><p class="tf-dates">~369–286 av. J.-C.</p></div>
+      </div>
+      <p class="tf-desc">Quand ses disciples voulurent lui organiser de grandioses funérailles, Zhuangzi refusa : « Le ciel et la terre seront mon cercueil et mon sarcophage, le soleil, la lune et les étoiles seront mes jades, et toute la création sera l'assistance à mes funérailles. Que pourrait-on ajouter ? » Ses disciples s'inquiétèrent : « Nous craignons que les vautours ne mangent votre corps. » Il répondit : « Dessus, les corbeaux et les buses ; dessous, les vers et les fourmis. Pourquoi une telle partialité ? »</p>
+      <div class="tf-quote">
+        <p class="tf-q-orig">昔者莊周夢為胡蝶，栩栩然胡蝶也。自喻適志與！不知周也。俄然覺，則蘧蘧然周也。不知周之夢為胡蝶與，胡蝶之夢為周與？</p>
+        <p class="tf-q-text">« Jadis, moi Zhuangzi, je rêvai que j'étais un papillon... Puis je me réveillai. Ne sais-je pas si j'étais alors un homme rêvant d'être papillon, ou si je suis maintenant un papillon rêvant d'être un homme ? »</p>
+        <p class="tf-q-src">— Zhuangzi, chapitre 2 (齊物論)</p>
+      </div>
+      <p class="tf-works-title">Œuvre majeure</p>
+      <div class="tf-works"><span class="tf-work">Zhuangzi (33 chapitres)</span></div>
+    </div>
+    <div class="thinker-full reveal">
+      <div class="tf-header">
+        <div class="tf-monogram">茹</div>
+        <div><p class="tf-name">François Jullien</p><p class="tf-dates">1951 — · Romans-sur-Isère</p></div>
+      </div>
+      <p class="tf-desc">Philosophe français et sinologue, Jullien a consacré son œuvre entière à un dialogue entre la pensée chinoise et la philosophie grecque — non pas pour les fusionner, mais pour mesurer l'<em>écart</em> entre elles. Contre la philosophie grecque qui cherche des formes, des essences et des vérités universelles, la pensée chinoise préfère la propension silencieuse, l'efficacité par la transformation lente, le retrait stratégique. Un dialogue qui illumine les deux traditions.</p>
+      <div class="tf-quote">
+        <p class="tf-q-text">« La pensée chinoise n'a pas pensé l'être, mais la transformation ; non pas l'état, mais le passage ; non pas la forme, mais le processus. »</p>
+        <p class="tf-q-src">— La Propension des choses (1992)</p>
+      </div>
+      <p class="tf-works-title">Œuvres majeures</p>
+      <div class="tf-works"><span class="tf-work">La Propension des choses</span><span class="tf-work">Traité de l'efficacité</span><span class="tf-work">Du "temps"</span><span class="tf-work">L'Écart et l'Entre</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="comparison">
+  <div class="section-header reveal" style="text-align:center">
+    <span class="section-label">Mise en perspective</span>
+    <h2 class="section-title">Taoïsme & <em>autres écoles</em></h2>
+  </div>
+  <div style="overflow-x:auto">
+  <table class="comparison-table reveal">
+    <thead>
+      <tr><th>Dimension</th><th>Taoïsme</th><th>Stoïcisme</th><th>Épicurisme</th><th>Idéalisme</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Principe ultime</td><td class="ct-highlight">Le Tao — indicible, immanent, sans volonté</td><td>Le logos — rationnel, providence</td><td>Les atomes et le vide</td><td>L'Esprit absolu — rationnel et processuel</td></tr>
+      <tr><td>Rapport au langage</td><td class="ct-highlight">Méfiance — le Tao ne peut être nommé</td><td>Le logos fonde la raison et le langage</td><td>Clarté nécessaire pour guérir les peurs</td><td>Le concept est le moyen de l'Esprit</td></tr>
+      <tr><td>L'action</td><td class="ct-highlight">Wu wei — agir sans forcer, avec le flux</td><td>Agir selon le logos — raison et devoir</td><td>Agir prudemment pour son bonheur</td><td>L'action réalise la liberté rationnelle</td></tr>
+      <tr><td>Politique</td><td class="ct-highlight">Retrait — le meilleur gouvernement est invisible</td><td>Devoir cosmopolite et politique</td><td>Retrait dans le Jardin privé</td><td>L'État rationnel comme réalisation de la liberté</td></tr>
+      <tr><td>La nature</td><td class="ct-highlight">Le modèle — harmonie naturelle à imiter</td><td>Cosmos rationnel à comprendre</td><td>Atomes à connaître pour se libérer des peurs</td><td>L'Esprit dans son aliénation à lui-même</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section id="readings">
+  <div class="section-header reveal" style="text-align:center">
+    <span class="section-label">Bibliographie</span>
+    <h2 class="section-title">Pour aller <em>plus loin</em></h2>
+  </div>
+  <div class="readings-grid reveal">
+    <div class="reading-group">
+      <h3>Textes fondateurs</h3>
+      <div class="reading-list">
+        <div class="reading-item"><p class="r-title">Tao Te Ching</p><p class="r-author">Lao Tseu · ~IVe siècle av. J.-C.</p><p class="r-desc">Privilégier les traductions commentées : celle de Marcel Conche (Gallimard) ou de Claude Larre (Desclée de Brouwer). Éviter les traductions trop libres.</p></div>
+        <div class="reading-item"><p class="r-title">Zhuangzi</p><p class="r-author">Zhuangzi · ~IVe siècle av. J.-C.</p><p class="r-desc">Commencer par les 7 chapitres intérieurs. La traduction de Jean-Claude Pastor (Gallimard) ou celle de Rémi Mathieu sont les meilleures en français.</p></div>
+        <div class="reading-item"><p class="r-title">Lie Zi</p><p class="r-author">Attribué à Lie Yukou · ~IVe siècle av. J.-C.</p><p class="r-desc">Le troisième grand texte taoïste — plus accessible que le Zhuangzi, plein de paraboles et d'histoires philosophiques.</p></div>
+      </div>
+    </div>
+    <div class="reading-group">
+      <h3>Études classiques</h3>
+      <div class="reading-list">
+        <div class="reading-item"><p class="r-title">La Propension des choses</p><p class="r-author">François Jullien · 1992</p><p class="r-desc">L'œuvre maîtresse de Jullien sur l'efficacité chinoise par la propension silencieuse — comparaison systématique avec la stratégie grecque.</p></div>
+        <div class="reading-item"><p class="r-title">Taoism: The Enduring Tradition</p><p class="r-author">Russell Kirkland · 2004</p><p class="r-desc">L'introduction académique la plus complète et rigoureuse au Taoïsme dans ses dimensions philosophiques et religieuses.</p></div>
+        <div class="reading-item"><p class="r-title">The Way and Its Power</p><p class="r-author">Arthur Waley · 1934</p><p class="r-desc">Traduction et étude classique du Tao Te Ching — encore l'une des meilleures introductions en langue anglaise.</p></div>
+      </div>
+    </div>
+    <div class="reading-group">
+      <h3>Réceptions contemporaines</h3>
+      <div class="reading-list">
+        <div class="reading-item"><p class="r-title">Le Tao du Tao</p><p class="r-author">Alan Watts · 1975</p><p class="r-desc">L'introduction la plus vivante et accessible pour le lecteur occidental — Watts avec son brio habituel.</p></div>
+        <div class="reading-item"><p class="r-title">Traité de l'efficacité</p><p class="r-author">François Jullien · 1996</p><p class="r-desc">L'efficacité silencieuse contre la stratégie forcée — leçons du Taoïsme pour le management et la politique contemporains.</p></div>
+        <div class="reading-item"><p class="r-title">The Inner Chapters</p><p class="r-author">Zhuangzi, trad. David Hinton · 2000</p><p class="r-desc">La meilleure traduction anglaise des chapitres authentiques de Zhuangzi — poétique et rigoureuse.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="school-nav">
+  <p style="text-align:center;font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.45em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:40px">Toutes les écoles</p>
+  <div class="school-nav-grid">
+    <a href="stoicisme.html" class="school-nav-card"><p class="snc-label">Antiquité</p><p class="snc-name">Stoïcisme</p></a>
+    <a href="epicurisme.html" class="school-nav-card"><p class="snc-label">Antiquité</p><p class="snc-name">Épicurisme</p></a>
+    <a href="rationalisme.html" class="school-nav-card"><p class="snc-label">XVIIe</p><p class="snc-name">Rationalisme</p></a>
+    <a href="idealisme.html" class="school-nav-card"><p class="snc-label">XVIIIe–XIXe</p><p class="snc-name">Idéalisme</p></a>
+    <a href="nietzscheisme.html" class="school-nav-card"><p class="snc-label">XIXe</p><p class="snc-name">Nietzschéisme</p></a>
+    <a href="taoisme.html" class="school-nav-card" style="border-color:rgba(58,155,138,0.3)"><p class="snc-label">Antiquité · Actuel</p><p class="snc-name" style="color:var(--accent)">Taoïsme ←</p></a>
+    <a href="existentialisme.html" class="school-nav-card"><p class="snc-label">XXe</p><p class="snc-name">Existentialisme</p></a>
+    <a href="phenomenologie.html" class="school-nav-card"><p class="snc-label">XXe</p><p class="snc-name">Phénoménologie</p></a>
+  </div>
+</section>
+
+<footer>
+  <a href="aether-philosophie.html">← Retour à ÆTHER</a>
+  <p>« Le Tao qui peut être nommé n'est pas le Tao éternel. » — Lao Tseu</p>
+</footer>
+
+<script>
+const dot=document.getElementById('cursor-dot'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px'});
+(function ar(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(ar)})();
+document.querySelectorAll('a,button,.concept-card,.thinker-full,.reading-item,.school-nav-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ring.style.width='52px';ring.style.height='52px'});
+  el.addEventListener('mouseleave',()=>{ring.style.width='36px';ring.style.height='36px'});
+});
+const obs=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*80)})},{threshold:0.07});
+document.querySelectorAll('.reveal,.tl-item').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

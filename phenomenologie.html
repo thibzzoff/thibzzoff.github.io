@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phénoménologie — ÆTHER</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--void:#060708;--abyss:#090C12;--deep:#0E1220;--surface:#151B2E;--surface2:#1D2640;--surface3:#283455;--gold:#C9A84C;--gold-bright:#E8C76A;--gold-dim:#8A6E30;--gold-pale:#F5E6B8;--cream:#F0E6D0;--cream-dim:#B8A88A;--accent:#5A82C9;--accent-dim:#3056A0;--accent-pale:#B8CCF0;--r:16px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--cream);font-family:'EB Garamond',Georgia,serif;font-size:18px;line-height:1.7;cursor:none;overflow-x:hidden}
+#cursor{position:fixed;top:0;left:0;z-index:9999;pointer-events:none}
+#cursor-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);transform:translate(-50%,-50%)}
+#cursor-ring{position:fixed;top:0;left:0;z-index:9998;width:36px;height:36px;border-radius:50%;border:1px solid rgba(90,130,201,0.5);transform:translate(-50%,-50%);pointer-events:none;transition:width 0.3s,height 0.3s}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--void)}::-webkit-scrollbar-thumb{background:var(--accent-dim);border-radius:2px}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");background-size:200px;opacity:0.3;mix-blend-mode:overlay}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 6vw;display:flex;align-items:center;justify-content:space-between;height:72px;background:rgba(6,7,8,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(90,130,201,0.12)}
+.nav-logo{font-family:'Cinzel',serif;font-size:20px;letter-spacing:0.2em;color:var(--gold);text-decoration:none;cursor:none}
+.nav-back{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.25em;color:var(--cream-dim);text-decoration:none;text-transform:uppercase;cursor:none;transition:color 0.25s}.nav-back:hover{color:var(--accent)}
+.nav-schools{display:flex;gap:24px}
+.nav-schools a{font-family:'EB Garamond',serif;font-size:14px;letter-spacing:0.08em;color:var(--cream-dim);text-decoration:none;cursor:none;transition:color 0.25s;text-transform:uppercase}
+.nav-schools a:hover,.nav-schools a.active{color:var(--accent)}
+#hero{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 6vw 80px}
+.hero-era{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.45em;color:var(--accent-dim);text-transform:uppercase;margin-bottom:24px;opacity:0;animation:fadeUp 1s 0.3s forwards}
+.hero-title{font-family:'Cinzel',serif;font-size:clamp(32px,6vw,86px);font-weight:400;letter-spacing:0.1em;line-height:0.9;color:var(--accent);text-shadow:0 0 120px rgba(90,130,201,0.2);opacity:0;animation:fadeUp 1s 0.6s forwards}
+.hero-subtitle{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(18px,2.5vw,26px);color:var(--cream-dim);margin-top:28px;max-width:680px;opacity:0;animation:fadeUp 1s 1s forwards}
+.hero-divider{width:1px;height:0;background:linear-gradient(to bottom,transparent,var(--accent-dim),transparent);margin:36px auto;animation:growLine 1.2s 1.4s forwards}
+@keyframes growLine{to{height:72px}}
+.hero-meta{display:flex;gap:48px;opacity:0;animation:fadeUp 1s 1.6s forwards;flex-wrap:wrap;justify-content:center}
+.hero-meta-item{text-align:center}
+.hero-meta-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;color:var(--accent-dim);text-transform:uppercase;margin-bottom:6px}
+.hero-meta-value{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--cream)}
+.hero-opening-quote{margin-top:56px;padding:32px 48px;border:1px solid rgba(90,130,201,0.2);background:rgba(9,12,18,0.7);backdrop-filter:blur(8px);max-width:720px;opacity:0;animation:fadeUp 1s 2s forwards;position:relative}
+.hero-opening-quote::before{content:'"';font-family:'Cormorant Garamond',serif;font-size:120px;color:rgba(90,130,201,0.06);position:absolute;top:-20px;left:20px;line-height:1}
+.oq-original{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--accent-dim);letter-spacing:0.05em;margin-bottom:12px;font-style:italic}
+.oq-translation{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,2.5vw,24px);color:var(--cream);line-height:1.5;margin-bottom:16px}
+.oq-author{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;color:var(--accent-dim);text-transform:uppercase}
+section{position:relative;z-index:2;padding:100px 6vw}
+.section-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.5em;color:var(--accent-dim);text-transform:uppercase;margin-bottom:16px;display:block}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,52px);font-weight:300;color:var(--cream);line-height:1.1}
+.section-title em{font-style:italic;color:var(--accent)}
+.sep{display:block;width:48px;height:1px;background:var(--accent-dim);margin:32px 0}
+.prose{font-size:17px;color:var(--cream-dim);line-height:1.9;max-width:760px}.prose p{margin-bottom:1.4em}.prose strong{color:var(--cream);font-weight:500}
+#intro{background:var(--abyss)}
+.intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;max-width:1200px;margin:0 auto}
+#concepts{background:var(--void)}
+.concepts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:2px;margin-top:64px}
+.concept-card{padding:40px 36px;background:var(--deep);border:1px solid rgba(90,130,201,0.08);position:relative;overflow:hidden;transition:all 0.4s}
+.concept-card:hover{background:var(--surface);border-color:rgba(90,130,201,0.25);transform:translateY(-3px)}
+.concept-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,var(--accent),transparent);transform:scaleX(0);transition:transform 0.4s}
+.concept-card:hover::after{transform:scaleX(1)}
+.concept-german{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--accent);opacity:0.45;margin-bottom:8px;font-style:italic}
+.concept-name{font-family:'Cinzel',serif;font-size:14px;letter-spacing:0.2em;color:var(--accent);text-transform:uppercase;margin-bottom:16px}
+.concept-desc{font-size:16px;color:var(--cream-dim);line-height:1.7}
+.concept-quote-block{margin-top:24px;padding:16px 20px;border-left:2px solid rgba(90,130,201,0.3);background:rgba(90,130,201,0.04)}
+.cq-orig{font-size:13px;color:var(--accent-dim);font-style:italic;margin-bottom:6px}
+.cq-trans{font-size:15px;color:var(--cream-dim);font-style:italic;line-height:1.5}
+.cq-src{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.25em;color:var(--accent-dim);text-transform:uppercase;margin-top:8px}
+#timeline{background:var(--abyss)}
+.timeline-track{position:relative;max-width:900px;margin:64px auto 0;padding-left:60px}
+.timeline-track::before{content:'';position:absolute;left:20px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--accent-dim),transparent)}
+.tl-item{position:relative;margin-bottom:56px;opacity:0;transform:translateX(-20px);transition:all 0.6s cubic-bezier(0.23,1,0.32,1)}
+.tl-item.visible{opacity:1;transform:translateX(0)}
+.tl-dot{position:absolute;left:-48px;top:6px;width:12px;height:12px;border-radius:50%;border:2px solid var(--accent);background:var(--void);transition:background 0.3s}
+.tl-item:hover .tl-dot{background:var(--accent)}
+.tl-date{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;color:var(--accent);text-transform:uppercase;margin-bottom:8px}
+.tl-name{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--cream);margin-bottom:6px}
+.tl-role{font-family:'EB Garamond',serif;font-size:14px;color:var(--accent-dim);letter-spacing:0.05em;margin-bottom:12px}
+.tl-desc{font-size:16px;color:var(--cream-dim);line-height:1.7;max-width:640px}
+.tl-works{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.tl-work{font-family:'EB Garamond',serif;font-style:italic;font-size:13px;padding:3px 12px;border:1px solid rgba(90,130,201,0.2);color:var(--accent-dim)}
+#thinkers{background:var(--void)}
+.thinkers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:24px;margin-top:64px}
+.thinker-full{background:var(--deep);border:1px solid rgba(90,130,201,0.1);padding:36px;transition:border-color 0.4s}
+.thinker-full:hover{border-color:rgba(90,130,201,0.3)}
+.tf-header{display:flex;align-items:flex-start;gap:20px;margin-bottom:24px}
+.tf-monogram{width:64px;height:64px;flex-shrink:0;background:var(--surface2);border:1px solid rgba(90,130,201,0.2);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:28px;font-style:italic;color:var(--accent)}
+.tf-name{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--cream);margin-bottom:4px}
+.tf-dates{font-size:13px;color:var(--accent-dim)}
+.tf-desc{font-size:16px;color:var(--cream-dim);line-height:1.7;margin-bottom:20px}
+.tf-quote{padding:16px 20px;border-left:2px solid var(--accent-dim);background:rgba(90,130,201,0.04);margin-bottom:20px}
+.tf-q-orig{font-size:13px;color:var(--accent-dim);font-style:italic;margin-bottom:6px}
+.tf-q-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:var(--cream-dim);line-height:1.5}
+.tf-q-src{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.25em;color:var(--accent-dim);text-transform:uppercase;margin-top:8px}
+.tf-works-title{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.3em;color:var(--accent-dim);text-transform:uppercase;margin-bottom:10px}
+.tf-works{display:flex;flex-wrap:wrap;gap:6px}
+.tf-work{font-family:'EB Garamond',serif;font-style:italic;font-size:13px;padding:3px 12px;border:1px solid rgba(90,130,201,0.2);color:var(--cream-dim)}
+#comparison{background:var(--abyss)}
+.comparison-table{width:100%;border-collapse:collapse;margin-top:56px}
+.comparison-table th{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;padding:16px 24px;text-align:left;border-bottom:1px solid rgba(90,130,201,0.2);color:var(--accent)}
+.comparison-table th:first-child{color:var(--cream-dim)}
+.comparison-table td{padding:20px 24px;border-bottom:1px solid rgba(90,130,201,0.06);font-size:15px;color:var(--cream-dim);vertical-align:top;line-height:1.6}
+.comparison-table td:first-child{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent-dim);white-space:nowrap}
+.comparison-table tr:hover td{background:rgba(90,130,201,0.03)}
+.ct-highlight{color:var(--accent);font-style:italic}
+#readings{background:var(--void)}
+.readings-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px}
+.reading-group h3{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent-dim);margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid rgba(90,130,201,0.15)}
+.reading-list{display:flex;flex-direction:column;gap:20px}
+.reading-item{padding:20px;background:var(--deep);border:1px solid rgba(90,130,201,0.08);transition:border-color 0.3s}
+.reading-item:hover{border-color:rgba(90,130,201,0.25)}
+.r-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--cream);margin-bottom:4px}
+.r-author{font-size:13px;color:var(--accent-dim);margin-bottom:8px}
+.r-desc{font-size:14px;color:var(--cream-dim);line-height:1.5}
+#school-nav{background:var(--abyss);padding:80px 6vw}
+.school-nav-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;max-width:1200px;margin:0 auto}
+.school-nav-card{padding:32px;background:var(--deep);border:1px solid rgba(201,168,76,0.08);text-decoration:none;cursor:none;transition:all 0.4s;display:block}
+.school-nav-card:hover{background:var(--surface);border-color:rgba(201,168,76,0.2);transform:translateY(-3px)}
+.snc-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:10px}
+.snc-name{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--cream)}
+footer{position:relative;z-index:2;background:var(--void);border-top:1px solid rgba(90,130,201,0.08);padding:40px 6vw;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+footer p{font-size:14px;color:rgba(176,155,123,0.4)}
+footer a{color:var(--gold);text-decoration:none;font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.15em;cursor:none}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.7s,transform 0.7s}
+.reveal.visible{opacity:1;transform:translateY(0)}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}from{opacity:0;transform:translateY(18px)}}
+@media(max-width:900px){.intro-grid,.readings-grid{grid-template-columns:1fr}.school-nav-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.school-nav-grid{grid-template-columns:1fr}.nav-schools{display:none}}
+</style>
+</head>
+<body>
+<div id="cursor"><div id="cursor-dot"></div></div>
+<div id="cursor-ring"></div>
+<nav>
+  <a href="aether-philosophie.html" class="nav-logo">Æ</a>
+  <div class="nav-schools">
+    <a href="stoicisme.html">Stoïcisme</a>
+    <a href="epicurisme.html">Épicurisme</a>
+    <a href="existentialisme.html">Existentialisme</a>
+    <a href="idealisme.html">Idéalisme</a>
+    <a href="nietzscheisme.html">Nietzschéisme</a>
+    <a href="taoisme.html">Taoïsme</a>
+    <a href="phenomenologie.html" class="active">Phénoménologie</a>
+    <a href="rationalisme.html">Rationalisme</a>
+  </div>
+  <a href="aether-philosophie.html" class="nav-back">← Accueil</a>
+</nav>
+
+<section id="hero">
+  <p class="hero-era">XIXe — XXe siècle</p>
+  <h1 class="hero-title">PHÉNOMÉNOLOGIE</h1>
+  <p class="hero-subtitle">Retourner aux choses elles-mêmes — étudier les structures de la conscience et la manière dont le monde se donne à l'expérience vécue</p>
+  <div class="hero-divider"></div>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><p class="hero-meta-label">Fondateur</p><p class="hero-meta-value">Edmund Husserl</p></div>
+    <div class="hero-meta-item"><p class="hero-meta-label">Lieu</p><p class="hero-meta-value">Göttingen, Fribourg, Paris</p></div>
+    <div class="hero-meta-item"><p class="hero-meta-label">Texte fondateur</p><p class="hero-meta-value">Recherches logiques, 1900</p></div>
+    <div class="hero-meta-item"><p class="hero-meta-label">Concept central</p><p class="hero-meta-value">L'intentionnalité</p></div>
+  </div>
+  <div class="hero-opening-quote">
+    <p class="oq-original">«&nbsp;Zu den Sachen selbst!&nbsp;»</p>
+    <p class="oq-translation">« Retournons aux choses elles-mêmes ! » — Cri de guerre de la phénoménologie : contre les systèmes abstraits, pour l'expérience vécue directe.</p>
+    <p class="oq-author">— Edmund Husserl, Recherches logiques, Prologue (1900)</p>
+  </div>
+</section>
+
+<section id="intro">
+  <div class="intro-grid">
+    <div>
+      <span class="section-label">Une révolution du regard</span>
+      <h2 class="section-title">La conscience <em>toujours intentionnelle</em></h2>
+      <div class="sep"></div>
+      <div class="prose">
+        <p>La phénoménologie est née d'une insatisfaction. À la fin du XIXe siècle, Edmund Husserl — mathématicien de formation — constate que ni le psychologisme (qui réduit la logique à des faits psychiques) ni le naturalisme (qui réduit tout à des faits de nature) ne parvient à rendre compte de la certitude mathématique ni de l'évidence de la conscience. Il faut une méthode nouvelle.</p>
+        <p>Le concept clé, emprunté à son maître Brentano, est celui d'<strong>intentionnalité</strong> : toute conscience est <em>conscience de quelque chose</em>. Il n'y a pas d'abord une conscience vide qui ensuite perçoit le monde — la conscience est toujours déjà orientée, tendue vers un objet, <em>visée</em>. Ce simple constat déclenche une révolution philosophique.</p>
+        <p>La méthode phénoménologique consiste à <strong>mettre le monde entre parenthèses</strong> (<em>époché</em>) — non pas nier son existence, mais suspendre le présupposé naturel de son existence pour décrire comment il se donne à la conscience. C'est ce que Husserl appelle la <em>réduction phénoménologique</em> ou transcendantale.</p>
+      </div>
+    </div>
+    <div>
+      <span class="section-label">La tradition française</span>
+      <h2 class="section-title">De Husserl à <em>Merleau-Ponty</em></h2>
+      <div class="sep"></div>
+      <div class="prose">
+        <p>La phénoménologie connut en France une extraordinaire fécondité. Sartre, découvrant la phénoménologie lors de son séjour à Berlin en 1933, s'exclame : <em>« Si tu es phénoménologue, tu peux parler de ce cocktail et c'est de la philosophie ! »</em> Le concret — le verre, le visage, la nausée — entre enfin en philosophie.</p>
+        <p>Mais c'est <strong>Maurice Merleau-Ponty</strong> qui pousse la phénoménologie dans ses conséquences les plus profondes : contre Husserl, il montre que la conscience n'est pas désincarnée. Le corps n'est pas un objet parmi d'autres — il est le <em>sujet de la perception</em>, le point zéro de l'orientation dans le monde. La <em>chair</em> (chair du monde, pas seulement ma chair) est la catégorie ontologique fondamentale de son dernier ouvrage, <em>Le Visible et l'Invisible</em>, inachevé à sa mort.</p>
+        <p>Cette ligne se prolonge dans la phénoménologie française contemporaine : <strong>Emmanuel Levinas</strong> (le visage de l'Autre comme fondement de l'éthique), <strong>Paul Ricœur</strong> (herméneutique du soi), <strong>Michel Henry</strong> (phénoménologie de la vie), <strong>Jean-Luc Marion</strong> (phénoménologie de la donation).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="concepts">
+  <div class="section-header reveal" style="text-align:center;margin-bottom:0">
+    <span class="section-label">Lexique fondamental</span>
+    <h2 class="section-title">Les concepts <em>essentiels</em></h2>
+  </div>
+  <div class="concepts-grid">
+    <div class="concept-card reveal">
+      <p class="concept-german">Intentionalität</p>
+      <p class="concept-name">Intentionnalité</p>
+      <p class="concept-desc">Toute conscience est conscience <em>de</em> quelque chose. La conscience n'est pas une chose close sur elle-même mais un rapport fondamental au monde. Ce concept, emprunté à Brentano et radicalisé par Husserl, constitue le fondement de toute la phénoménologie. Il y a toujours déjà une relation de visée entre le sujet et son objet.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">«&nbsp;Jedes Bewusstsein ist Bewusstsein von etwas&nbsp;»</p>
+        <p class="cq-trans">« Toute conscience est conscience de quelque chose »</p>
+        <p class="cq-src">— Husserl, Recherches logiques, V</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-german">Epoché</p>
+      <p class="concept-name">La Mise entre parenthèses</p>
+      <p class="concept-desc">Méthode centrale de Husserl : suspendre la <em>thèse naturelle</em> — le présupposé ordinaire que le monde existe indépendamment de moi — pour décrire rigoureusement comment les choses se donnent à la conscience. Ce n'est pas un doute sur l'existence du monde, mais une neutralisation méthodique qui permet de décrire les structures de l'expérience.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">«&nbsp;Die phänomenologische Reduktion&nbsp;»</p>
+        <p class="cq-trans">« La réduction phénoménologique — retour à la conscience pure »</p>
+        <p class="cq-src">— Husserl, Idées directrices I, §31–32</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-german">Lebenswelt</p>
+      <p class="concept-name">Le Monde de la vie</p>
+      <p class="concept-desc">Concept tardif de Husserl désignant le monde pré-scientifique, pré-théorique, dans lequel nous vivons ordinairement — monde de la perception, des habitudes, des valeurs culturelles. La science oublie qu'elle est fondée sur ce monde vécu et le réifie. La crise des sciences européennes, pour Husserl, est d'abord une crise du rapport au Lebenswelt.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">«&nbsp;Die Lebenswelt als vergessenes Sinnfundament&nbsp;»</p>
+        <p class="cq-trans">« Le monde de la vie comme fondement de sens oublié »</p>
+        <p class="cq-src">— Husserl, La Crise des sciences européennes, §34</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-german">Être-au-monde</p>
+      <p class="concept-name">In-der-Welt-sein</p>
+      <p class="concept-desc">Concept heideggerien fondamental : le Dasein n'est pas d'abord un sujet qui ensuite entre en relation avec un monde — il est constitutionnellement <em>dans</em> le monde, engagé, situé, jeté. Ce concept détruit la distinction sujet/objet héritée de Descartes et ouvre une ontologie de l'être-avec (<em>Mitsein</em>) et de l'être-là (<em>Da-sein</em>).</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">«&nbsp;Das Dasein ist wesenhaft In-der-Welt-sein&nbsp;»</p>
+        <p class="cq-trans">« Le Dasein est essentiellement être-au-monde »</p>
+        <p class="cq-src">— Heidegger, Être et Temps, §12</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-german">Leib / Körper</p>
+      <p class="concept-name">Le Corps propre</p>
+      <p class="concept-desc">Merleau-Ponty distingue le <em>Körper</em> (corps-objet, corps anatomique étudié de l'extérieur) et le <em>Leib</em> (corps propre, corps vécu de l'intérieur). Mon corps n'est pas un objet dans l'espace — il est mon accès au monde, ma façon d'être présent à lui. Toute perception est corporelle, tout mouvement intentionnel.</p>
+      <div class="concept-quote-block">
+        <p class="cq-trans">« Le corps propre est dans le monde comme le cœur dans l'organisme. »</p>
+        <p class="cq-src">— Merleau-Ponty, Phénoménologie de la perception, II, 1</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-german">Visage</p>
+      <p class="concept-name">Le Visage — Levinas</p>
+      <p class="concept-desc">Pour Levinas, le visage de l'Autre est le lieu fondamental de l'éthique. Il me parle avant toute parole, me commande avant tout contrat : <em>« Tu ne tueras point. »</em> Ce visage est toujours vulnérable et toujours infini — il déborde toute représentation que j'en forme. L'éthique, non l'ontologie, est pour Levinas la philosophie première.</p>
+      <div class="concept-quote-block">
+        <p class="cq-trans">« Le visage ouvre le discours originaire dont la première parole est obligation. »</p>
+        <p class="cq-src">— Levinas, Totalité et Infini, III, A</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="timeline">
+  <div class="section-header reveal" style="text-align:center">
+    <span class="section-label">Frise chronologique</span>
+    <h2 class="section-title">Un siècle de <em>retour aux choses</em></h2>
+  </div>
+  <div class="timeline-track">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">1859–1938</p>
+      <h3 class="tl-name">Edmund Husserl</h3>
+      <p class="tl-role">Fondateur de la phénoménologie</p>
+      <p class="tl-desc">Mathématicien de formation, Husserl consacra sa vie à fonder une philosophie rigoureuse comme science stricte. Ses <em>Recherches logiques</em> (1900) fondèrent la phénoménologie. Ses <em>Idées directrices</em> (1913) développèrent la méthode transcendantale. La <em>Crise des sciences européennes</em> (posthume, 1936) introduisit le concept de Lebenswelt. Juif sous le nazisme, il vit ses droits supprimés à la fin de sa vie — Heidegger, son élève, ne le défendit pas.</p>
+      <div class="tl-works"><span class="tl-work">Recherches logiques</span><span class="tl-work">Idées directrices I</span><span class="tl-work">Méditations cartésiennes</span><span class="tl-work">La Crise des sciences européennes</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">1889–1976</p>
+      <h3 class="tl-name">Martin Heidegger</h3>
+      <p class="tl-role">L'ontologie fondamentale</p>
+      <p class="tl-desc">Disciple puis rival de Husserl, Heidegger transforme la phénoménologie en ontologie : <em>Être et Temps</em> (1927) pose la question de l'Être à partir du Dasein. Son engagement nazi (1933–1934) demeure l'une des questions les plus débattues de la philosophie du XXe siècle — la pensée peut-elle être dissociée de son auteur ? Les <em>Cahiers noirs</em> publiés posthumément ont renouvelé et durci ce débat.</p>
+      <div class="tl-works"><span class="tl-work">Être et Temps</span><span class="tl-work">Chemins qui ne mènent nulle part</span><span class="tl-work">Introduction à la métaphysique</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">1908–1961</p>
+      <h3 class="tl-name">Maurice Merleau-Ponty</h3>
+      <p class="tl-role">La phénoménologie de la chair</p>
+      <p class="tl-desc">La plus grande voix de la phénoménologie française. Sa <em>Phénoménologie de la perception</em> (1945) fait du corps propre le sujet de toute expérience — contre Descartes, contre Sartre qui maintient un pour-soi désincarné. Son dernier ouvrage, <em>Le Visible et l'Invisible</em>, inachevé à sa mort subite à 53 ans, introduit le concept de <em>chair</em> comme tissu commun du voyant et du visible. L'un des esprits les plus profonds du XXe siècle.</p>
+      <div class="tl-works"><span class="tl-work">Phénoménologie de la perception</span><span class="tl-work">La Structure du comportement</span><span class="tl-work">Le Visible et l'Invisible</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">1906–1995</p>
+      <h3 class="tl-name">Emmanuel Levinas</h3>
+      <p class="tl-role">L'éthique comme philosophie première</p>
+      <p class="tl-desc">Juif lituanien, prisonnier de guerre pendant toute la Seconde Guerre mondiale, Levinas fit de la phénoménologie un instrument de réflexion sur la responsabilité éthique radicale. Contre Heidegger qui met l'ontologie au premier plan, Levinas affirme que c'est la relation à l'Autre — irréductible, asymétrique, absolue — qui est le fondement de toute philosophie. <em>Totalité et Infini</em> (1961) est son chef-d'œuvre.</p>
+      <div class="tl-works"><span class="tl-work">Totalité et Infini</span><span class="tl-work">Autrement qu'être</span><span class="tl-work">Le Temps et l'Autre</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="thinkers">
+  <div class="section-header reveal" style="text-align:center">
+    <span class="section-label">Portraits philosophiques</span>
+    <h2 class="section-title">Les <em>architectes</em> du regard</h2>
+  </div>
+  <div class="thinkers-grid">
+    <div class="thinker-full reveal">
+      <div class="tf-header">
+        <div class="tf-monogram">H</div>
+        <div><p class="tf-name">Husserl</p><p class="tf-dates">1859–1938 · Prossnitz, Moravie</p></div>
+      </div>
+      <p class="tf-desc">Husserl travailla jusqu'à la dernière heure — ses manuscrits représentent plus de 40 000 pages de sténographie. À sa mort en 1938, ses papiers furent cachés par le père Herman van Breda et envoyés clandestinement à Louvain pour les soustraire aux nazis. Ce fonds — les <em>Archives Husserl</em> de Louvain — est toujours en cours de transcription et de publication. La <em>Husserliana</em> en compte aujourd'hui plus de 40 volumes.</p>
+      <div class="tf-quote">
+        <p class="tf-q-orig">«&nbsp;Die Phänomenologie: das ist das verborgene Sehnen der ganzen neuzeitlichen Philosophie&nbsp;»</p>
+        <p class="tf-q-text">« La phénoménologie : c'est le désir caché de toute la philosophie moderne »</p>
+        <p class="tf-q-src">— Husserl, Idées directrices I, Avant-propos</p>
+      </div>
+      <p class="tf-works-title">Œuvres majeures</p>
+      <div class="tf-works"><span class="tf-work">Recherches logiques</span><span class="tf-work">Idées directrices I</span><span class="tf-work">Méditations cartésiennes</span></div>
+    </div>
+    <div class="thinker-full reveal">
+      <div class="tf-header">
+        <div class="tf-monogram">M</div>
+        <div><p class="tf-name">Merleau-Ponty</p><p class="tf-dates">1908–1961 · Rochefort-sur-Mer</p></div>
+      </div>
+      <p class="tf-desc">Merleau-Ponty mourut d'une attaque cérébrale à son bureau, le livre de Descartes ouvert devant lui. Il avait 53 ans et son œuvre la plus ambitieuse — <em>Le Visible et l'Invisible</em> — était inachevée. Ce dernier texte, publié posthumément par Claude Lefort, trace les contours d'une ontologie nouvelle centrée sur le concept de <em>chair</em> : ce tissu commun dans lequel voyant et visible, touchant et touché, sont pris ensemble, avant toute distinction sujet/objet.</p>
+      <div class="tf-quote">
+        <p class="tf-q-text">« Mon corps est fait de la même chair que le monde, et de plus, cette chair de mon corps est participée par le monde, il la reflète, il empiète sur elle et elle empiète sur lui. »</p>
+        <p class="tf-q-src">— Le Visible et l'Invisible (1968), Notes de travail</p>
+      </div>
+      <p class="tf-works-title">Œuvres majeures</p>
+      <div class="tf-works"><span class="tf-work">Phénoménologie de la perception</span><span class="tf-work">L'Œil et l'Esprit</span><span class="tf-work">Le Visible et l'Invisible</span></div>
+    </div>
+    <div class="thinker-full reveal">
+      <div class="tf-header">
+        <div class="tf-monogram">L</div>
+        <div><p class="tf-name">Levinas</p><p class="tf-dates">1906–1995 · Kaunas, Lituanie</p></div>
+      </div>
+      <p class="tf-desc">Levinas fut l'un des premiers à introduire la phénoménologie husserlienne en France — son livre sur Husserl de 1930 est pionnier. Mais l'Holocauste — qui anéantit presque toute sa famille — transforma radicalement sa pensée. La philosophie de l'Être (Heidegger) lui parut insuffisante : seule la responsabilité absolue pour l'Autre — responsabilité qui me précède et que je n'ai pas choisie — peut répondre au défi éthique que l'histoire a posé.</p>
+      <div class="tf-quote">
+        <p class="tf-q-text">« Le visage d'autrui me concerne avant que je ne l'aie regardé. »</p>
+        <p class="tf-q-src">— Totalité et Infini, Section III</p>
+      </div>
+      <p class="tf-works-title">Œuvres majeures</p>
+      <div class="tf-works"><span class="tf-work">Totalité et Infini</span><span class="tf-work">Autrement qu'être</span><span class="tf-work">Le Temps et l'Autre</span><span class="tf-work">Difficile Liberté</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="comparison">
+  <div class="section-header reveal" style="text-align:center">
+    <span class="section-label">Mise en perspective</span>
+    <h2 class="section-title">Phénoménologie & <em>autres écoles</em></h2>
+  </div>
+  <div style="overflow-x:auto">
+  <table class="comparison-table reveal">
+    <thead>
+      <tr><th>Dimension</th><th>Phénoménologie</th><th>Stoïcisme</th><th>Existentialisme</th><th>Épicurisme</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Point de départ</td><td class="ct-highlight">La conscience et ses structures</td><td>Le logos universel</td><td>L'existence individuelle concrète</td><td>La nature humaine sensible</td></tr>
+      <tr><td>Méthode</td><td class="ct-highlight">Description (pas d'explication causale)</td><td>Exercices spirituels pratiques</td><td>Analyse ontologique de l'existence</td><td>Thérapeutique des peurs irrationnelles</td></tr>
+      <tr><td>Le corps</td><td class="ct-highlight">Corps propre = sujet de perception (Merleau-Ponty)</td><td>À maîtriser par la raison</td><td>Souvent relégué (Sartre) ou réhabilité (Heidegger)</td><td>Siège des plaisirs, à satisfaire sagement</td></tr>
+      <tr><td>L'autre</td><td class="ct-highlight">Alter ego co-constituant le monde commun</td><td>Frère universel (cosmopolitisme)</td><td>Regard pétrifiant ou solidarité (Camus)</td><td>Ami élu dans le Jardin</td></tr>
+      <tr><td>Rapport à la science</td><td class="ct-highlight">Fondement de la science (Lebenswelt)</td><td>Accord avec la physique stoïcienne</td><td>Indifférence ou critique</td><td>Atomisme comme libération des peurs</td></tr>
+      <tr><td>Éthique</td><td class="ct-highlight">Fondée sur la relation à l'Autre (Levinas)</td><td>Vertu et conformité au logos</td><td>Engagement et responsabilité universelle</td><td>Calcul hédoniste, amitié, retrait</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section id="readings">
+  <div class="section-header reveal" style="text-align:center">
+    <span class="section-label">Bibliographie</span>
+    <h2 class="section-title">Pour aller <em>plus loin</em></h2>
+  </div>
+  <div class="readings-grid reveal">
+    <div class="reading-group">
+      <h3>Textes fondateurs</h3>
+      <div class="reading-list">
+        <div class="reading-item"><p class="r-title">Méditations cartésiennes</p><p class="r-author">Edmund Husserl · 1931</p><p class="r-desc">L'introduction la plus accessible à la phénoménologie transcendantale de Husserl. Conférences données à la Sorbonne en 1929.</p></div>
+        <div class="reading-item"><p class="r-title">Phénoménologie de la perception</p><p class="r-author">Maurice Merleau-Ponty · 1945</p><p class="r-desc">Le chef-d'œuvre de la phénoménologie française. L'Avant-propos seul vaut d'être lu et relu — un chef-d'œuvre de clarté introductive.</p></div>
+        <div class="reading-item"><p class="r-title">Le Temps et l'Autre</p><p class="r-author">Emmanuel Levinas · 1947</p><p class="r-desc">Court et profond. Levinas y introduit sa conception du visage et de l'altérité absolue de l'Autre.</p></div>
+      </div>
+    </div>
+    <div class="reading-group">
+      <h3>Études & Commentaires</h3>
+      <div class="reading-list">
+        <div class="reading-item"><p class="r-title">La Phénoménologie</p><p class="r-author">Dan Zahavi · 2003</p><p class="r-desc">Introduction académique rigoureuse et claire, couvrant Husserl, Heidegger, Sartre, Merleau-Ponty et Levinas.</p></div>
+        <div class="reading-item"><p class="r-title">Merleau-Ponty : une introduction</p><p class="r-author">Renaud Barbaras · 1991</p><p class="r-desc">La référence française sur Merleau-Ponty, par l'un de ses meilleurs commentateurs contemporains.</p></div>
+        <div class="reading-item"><p class="r-title">Emmanuel Levinas : une introduction</p><p class="r-author">Colin Davis · 1996</p><p class="r-desc">Introduction claire et pédagogique à la pensée complexe de Levinas, accessible sans background phénoménologique.</p></div>
+      </div>
+    </div>
+    <div class="reading-group">
+      <h3>Réceptions contemporaines</h3>
+      <div class="reading-list">
+        <div class="reading-item"><p class="r-title">Étant donné</p><p class="r-author">Jean-Luc Marion · 1997</p><p class="r-desc">La phénoménologie de la donation — pousser la réduction plus loin que Husserl. La figure de référence de la phénoménologie française contemporaine.</p></div>
+        <div class="reading-item"><p class="r-title">L'Incarnation</p><p class="r-author">Michel Henry · 2000</p><p class="r-desc">La phénoménologie de la vie — la subjectivité vivante comme auto-affection pure. Une des voix les plus originales du XXe siècle.</p></div>
+        <div class="reading-item"><p class="r-title">Quel monde commun ?</p><p class="r-author">Renaud Barbaras · 2016</p><p class="r-desc">L'état actuel de la phénoménologie française — les débats entre Marion, Henry, Levinas et leurs héritiers.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="school-nav">
+  <p style="text-align:center;font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.45em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:40px">Toutes les écoles</p>
+  <div class="school-nav-grid">
+    <a href="stoicisme.html" class="school-nav-card"><p class="snc-label">Antiquité</p><p class="snc-name">Stoïcisme</p></a>
+    <a href="epicurisme.html" class="school-nav-card"><p class="snc-label">Antiquité</p><p class="snc-name">Épicurisme</p></a>
+    <a href="existentialisme.html" class="school-nav-card"><p class="snc-label">XXe</p><p class="snc-name">Existentialisme</p></a>
+    <a href="idealisme.html" class="school-nav-card"><p class="snc-label">XVIIIe–XIXe</p><p class="snc-name">Idéalisme</p></a>
+    <a href="nietzscheisme.html" class="school-nav-card"><p class="snc-label">XIXe</p><p class="snc-name">Nietzschéisme</p></a>
+    <a href="taoisme.html" class="school-nav-card"><p class="snc-label">Antiquité</p><p class="snc-name">Taoïsme</p></a>
+    <a href="phenomenologie.html" class="school-nav-card" style="border-color:rgba(90,130,201,0.5)"><p class="snc-label">XXe · Actuel</p><p class="snc-name" style="color:var(--accent)">Phénoménologie ←</p></a>
+    <a href="rationalisme.html" class="school-nav-card"><p class="snc-label">XVIIe</p><p class="snc-name">Rationalisme</p></a>
+  </div>
+</section>
+
+<footer>
+  <a href="aether-philosophie.html">← Retour à ÆTHER</a>
+  <p>« Retournons aux choses elles-mêmes. » — Husserl</p>
+</footer>
+
+<script>
+const dot=document.getElementById('cursor-dot'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px'});
+(function ar(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(ar)})();
+document.querySelectorAll('a,button,.concept-card,.thinker-full,.reading-item,.school-nav-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ring.style.width='52px';ring.style.height='52px'});
+  el.addEventListener('mouseleave',()=>{ring.style.width='36px';ring.style.height='36px'});
+});
+const obs=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*80)})},{threshold:0.07});
+document.querySelectorAll('.reveal,.tl-item').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

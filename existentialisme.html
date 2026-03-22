@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Existentialisme — ÆTHER</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--void:#070605;--abyss:#0D0809;--deep:#150C0D;--surface:#1F1213;--surface2:#2A1718;--surface3:#372022;--gold:#C9A84C;--gold-bright:#E8C76A;--gold-dim:#8A6E30;--gold-pale:#F5E6B8;--cream:#F0E6D0;--cream-dim:#B8A88A;--accent:#B04040;--accent-dim:#7A2828;--accent-pale:#F5C0C0;--r:16px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--cream);font-family:'EB Garamond',Georgia,serif;font-size:18px;line-height:1.7;cursor:none;overflow-x:hidden}
+#cursor{position:fixed;top:0;left:0;z-index:9999;pointer-events:none}
+#cursor-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);transform:translate(-50%,-50%)}
+#cursor-ring{position:fixed;top:0;left:0;z-index:9998;width:36px;height:36px;border-radius:50%;border:1px solid rgba(176,64,64,0.5);transform:translate(-50%,-50%);pointer-events:none;transition:transform 0.25s cubic-bezier(0.23,1,0.32,1),width 0.3s,height 0.3s}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--void)}::-webkit-scrollbar-thumb{background:var(--accent-dim);border-radius:2px}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");background-size:200px;opacity:0.3;mix-blend-mode:overlay}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 6vw;display:flex;align-items:center;justify-content:space-between;height:72px;background:rgba(7,6,5,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(176,64,64,0.12)}
+.nav-logo{font-family:'Cinzel',serif;font-size:20px;letter-spacing:0.2em;color:var(--gold);text-decoration:none;cursor:none}
+.nav-back{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.25em;color:var(--cream-dim);text-decoration:none;text-transform:uppercase;cursor:none;transition:color 0.25s}
+.nav-back:hover{color:var(--accent)}
+.nav-schools{display:flex;gap:24px}
+.nav-schools a{font-family:'EB Garamond',serif;font-size:14px;letter-spacing:0.08em;color:var(--cream-dim);text-decoration:none;cursor:none;transition:color 0.25s;text-transform:uppercase}
+.nav-schools a:hover,.nav-schools a.active{color:var(--accent)}
+#hero{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 6vw 80px;overflow:hidden}
+.hero-era{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.45em;color:var(--accent-dim);text-transform:uppercase;margin-bottom:24px;opacity:0;animation:fadeUp 1s 0.3s forwards}
+.hero-title{font-family:'Cinzel',serif;font-size:clamp(36px,7vw,96px);font-weight:400;letter-spacing:0.12em;line-height:0.9;color:var(--accent);text-shadow:0 0 120px rgba(176,64,64,0.25);opacity:0;animation:fadeUp 1s 0.6s forwards}
+.hero-subtitle{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(18px,2.5vw,26px);color:var(--cream-dim);margin-top:28px;max-width:660px;opacity:0;animation:fadeUp 1s 1s forwards}
+.hero-divider{width:1px;height:0;background:linear-gradient(to bottom,transparent,var(--accent-dim),transparent);margin:36px auto;animation:growLine 1.2s 1.4s forwards}
+@keyframes growLine{to{height:72px}}
+.hero-meta{display:flex;gap:48px;opacity:0;animation:fadeUp 1s 1.6s forwards;flex-wrap:wrap;justify-content:center}
+.hero-meta-item{text-align:center}
+.hero-meta-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;color:var(--accent-dim);text-transform:uppercase;margin-bottom:6px}
+.hero-meta-value{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--cream)}
+.hero-opening-quote{margin-top:56px;padding:32px 48px;border:1px solid rgba(176,64,64,0.2);background:rgba(22,12,13,0.7);backdrop-filter:blur(8px);max-width:720px;opacity:0;animation:fadeUp 1s 2s forwards;position:relative}
+.hero-opening-quote::before{content:'"';font-family:'Cormorant Garamond',serif;font-size:120px;color:rgba(176,64,64,0.07);position:absolute;top:-20px;left:20px;line-height:1}
+.oq-original{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--accent-dim);letter-spacing:0.05em;margin-bottom:12px;font-style:italic}
+.oq-translation{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,2.5vw,24px);color:var(--cream);line-height:1.5;margin-bottom:16px}
+.oq-author{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;color:var(--accent-dim);text-transform:uppercase}
+section{position:relative;z-index:2;padding:100px 6vw}
+.section-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.5em;color:var(--accent-dim);text-transform:uppercase;margin-bottom:16px;display:block}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,52px);font-weight:300;color:var(--cream);line-height:1.1}
+.section-title em{font-style:italic;color:var(--accent)}
+.sep{display:block;width:48px;height:1px;background:var(--accent-dim);margin:32px 0}
+.prose{font-size:17px;color:var(--cream-dim);line-height:1.9;max-width:760px}
+.prose p{margin-bottom:1.4em}
+.prose strong{color:var(--cream);font-weight:500}
+#intro{background:var(--abyss)}
+.intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;max-width:1200px;margin:0 auto}
+#concepts{background:var(--void)}
+.concepts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:2px;margin-top:64px}
+.concept-card{padding:40px 36px;background:var(--deep);border:1px solid rgba(176,64,64,0.08);position:relative;overflow:hidden;transition:all 0.4s cubic-bezier(0.23,1,0.32,1)}
+.concept-card:hover{background:var(--surface);border-color:rgba(176,64,64,0.25);transform:translateY(-3px)}
+.concept-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,var(--accent),transparent);transform:scaleX(0);transition:transform 0.4s}
+.concept-card:hover::after{transform:scaleX(1)}
+.concept-german{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--accent);opacity:0.45;margin-bottom:8px;font-style:italic}
+.concept-name{font-family:'Cinzel',serif;font-size:14px;letter-spacing:0.2em;color:var(--accent);text-transform:uppercase;margin-bottom:16px}
+.concept-desc{font-size:16px;color:var(--cream-dim);line-height:1.7}
+.concept-quote-block{margin-top:24px;padding:16px 20px;border-left:2px solid rgba(176,64,64,0.3);background:rgba(176,64,64,0.04)}
+.cq-orig{font-size:13px;color:var(--accent-dim);font-style:italic;margin-bottom:6px}
+.cq-trans{font-size:15px;color:var(--cream-dim);font-style:italic;line-height:1.5}
+.cq-src{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.25em;color:var(--accent-dim);text-transform:uppercase;margin-top:8px}
+#timeline{background:var(--abyss)}
+.timeline-track{position:relative;max-width:900px;margin:64px auto 0;padding-left:60px}
+.timeline-track::before{content:'';position:absolute;left:20px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--accent-dim),transparent)}
+.tl-item{position:relative;margin-bottom:56px;opacity:0;transform:translateX(-20px);transition:all 0.6s cubic-bezier(0.23,1,0.32,1)}
+.tl-item.visible{opacity:1;transform:translateX(0)}
+.tl-dot{position:absolute;left:-48px;top:6px;width:12px;height:12px;border-radius:50%;border:2px solid var(--accent);background:var(--void);transition:background 0.3s}
+.tl-item:hover .tl-dot{background:var(--accent)}
+.tl-date{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;color:var(--accent);text-transform:uppercase;margin-bottom:8px}
+.tl-name{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--cream);margin-bottom:6px}
+.tl-role{font-family:'EB Garamond',serif;font-size:14px;color:var(--accent-dim);letter-spacing:0.05em;margin-bottom:12px}
+.tl-desc{font-size:16px;color:var(--cream-dim);line-height:1.7;max-width:640px}
+.tl-works{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.tl-work{font-family:'EB Garamond',serif;font-style:italic;font-size:13px;padding:3px 12px;border:1px solid rgba(176,64,64,0.2);color:var(--accent-dim)}
+#thinkers{background:var(--void)}
+.thinkers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:24px;margin-top:64px}
+.thinker-full{background:var(--deep);border:1px solid rgba(176,64,64,0.1);padding:36px;position:relative;overflow:hidden;transition:border-color 0.4s}
+.thinker-full:hover{border-color:rgba(176,64,64,0.3)}
+.tf-header{display:flex;align-items:flex-start;gap:20px;margin-bottom:24px}
+.tf-monogram{width:64px;height:64px;flex-shrink:0;background:var(--surface2);border:1px solid rgba(176,64,64,0.2);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:28px;font-style:italic;color:var(--accent)}
+.tf-name{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--cream);margin-bottom:4px}
+.tf-dates{font-size:13px;color:var(--accent-dim);letter-spacing:0.05em}
+.tf-desc{font-size:16px;color:var(--cream-dim);line-height:1.7;margin-bottom:20px}
+.tf-quote{padding:16px 20px;border-left:2px solid var(--accent-dim);background:rgba(176,64,64,0.04);margin-bottom:20px}
+.tf-q-orig{font-size:13px;color:var(--accent-dim);font-style:italic;margin-bottom:6px}
+.tf-q-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:var(--cream-dim);line-height:1.5}
+.tf-q-src{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.25em;color:var(--accent-dim);text-transform:uppercase;margin-top:8px}
+.tf-works-title{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.3em;color:var(--accent-dim);text-transform:uppercase;margin-bottom:10px}
+.tf-works{display:flex;flex-wrap:wrap;gap:6px}
+.tf-work{font-family:'EB Garamond',serif;font-style:italic;font-size:13px;padding:3px 12px;border:1px solid rgba(176,64,64,0.2);color:var(--cream-dim)}
+#comparison{background:var(--abyss)}
+.comparison-table{width:100%;border-collapse:collapse;margin-top:56px}
+.comparison-table th{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;padding:16px 24px;text-align:left;border-bottom:1px solid rgba(176,64,64,0.2);color:var(--accent)}
+.comparison-table th:first-child{color:var(--cream-dim)}
+.comparison-table td{padding:20px 24px;border-bottom:1px solid rgba(176,64,64,0.06);font-size:15px;color:var(--cream-dim);vertical-align:top;line-height:1.6}
+.comparison-table td:first-child{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent-dim);white-space:nowrap}
+.comparison-table tr:hover td{background:rgba(176,64,64,0.03)}
+.ct-highlight{color:var(--accent);font-style:italic}
+#readings{background:var(--void)}
+.readings-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px}
+.reading-group h3{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent-dim);margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid rgba(176,64,64,0.15)}
+.reading-list{display:flex;flex-direction:column;gap:20px}
+.reading-item{padding:20px;background:var(--deep);border:1px solid rgba(176,64,64,0.08);transition:border-color 0.3s}
+.reading-item:hover{border-color:rgba(176,64,64,0.25)}
+.r-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--cream);margin-bottom:4px}
+.r-author{font-size:13px;color:var(--accent-dim);margin-bottom:8px}
+.r-desc{font-size:14px;color:var(--cream-dim);line-height:1.5}
+#school-nav{background:var(--abyss);padding:80px 6vw}
+.school-nav-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;max-width:1200px;margin:0 auto}
+.school-nav-card{padding:32px;background:var(--deep);border:1px solid rgba(201,168,76,0.08);text-decoration:none;cursor:none;transition:all 0.4s;display:block}
+.school-nav-card:hover{background:var(--surface);border-color:rgba(201,168,76,0.2);transform:translateY(-3px)}
+.snc-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:10px}
+.snc-name{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--cream)}
+footer{position:relative;z-index:2;background:var(--void);border-top:1px solid rgba(176,64,64,0.08);padding:40px 6vw;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+footer p{font-size:14px;color:rgba(176,155,123,0.4)}
+footer a{color:var(--gold);text-decoration:none;font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.15em;cursor:none}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.7s,transform 0.7s}
+.reveal.visible{opacity:1;transform:translateY(0)}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}from{opacity:0;transform:translateY(18px)}}
+@media(max-width:900px){.intro-grid,.readings-grid{grid-template-columns:1fr}.school-nav-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.school-nav-grid{grid-template-columns:1fr}.nav-schools{display:none}}
+</style>
+</head>
+<body>
+<div id="cursor"><div id="cursor-dot"></div></div>
+<div id="cursor-ring"></div>
+
+<nav>
+  <a href="aether-philosophie.html" class="nav-logo">Æ</a>
+  <div class="nav-schools">
+    <a href="stoicisme.html">Stoïcisme</a>
+    <a href="epicurisme.html">Épicurisme</a>
+    <a href="existentialisme.html" class="active">Existentialisme</a>
+    <a href="idealisme.html">Idéalisme</a>
+    <a href="nietzscheisme.html">Nietzschéisme</a>
+    <a href="taoisme.html">Taoïsme</a>
+    <a href="phenomenologie.html">Phénoménologie</a>
+    <a href="rationalisme.html">Rationalisme</a>
+  </div>
+  <a href="aether-philosophie.html" class="nav-back">← Accueil</a>
+</nav>
+
+<section id="hero">
+  <p class="hero-era">XIXe siècle — XXe siècle</p>
+  <h1 class="hero-title">EXISTENTIALISME</h1>
+  <p class="hero-subtitle">L'existence précède l'essence — l'être humain est condamné à la liberté radicale, sans nature préalable, sans Dieu pour le définir</p>
+  <div class="hero-divider"></div>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><p class="hero-meta-label">Précurseur</p><p class="hero-meta-value">Søren Kierkegaard</p></div>
+    <div class="hero-meta-item"><p class="hero-meta-label">Figure centrale</p><p class="hero-meta-value">Jean-Paul Sartre</p></div>
+    <div class="hero-meta-item"><p class="hero-meta-label">Lieu</p><p class="hero-meta-value">Paris, Copenhague</p></div>
+    <div class="hero-meta-item"><p class="hero-meta-label">Concept central</p><p class="hero-meta-value">L'authenticité</p></div>
+  </div>
+  <div class="hero-opening-quote">
+    <p class="oq-original">«&nbsp;L'existence précède l'essence&nbsp;»</p>
+    <p class="oq-translation">« L'homme existe d'abord, se rencontre, surgit dans le monde, et se définit après. »</p>
+    <p class="oq-author">— Jean-Paul Sartre, L'Existentialisme est un humanisme (1945)</p>
+  </div>
+</section>
+
+<section id="intro">
+  <div class="intro-grid">
+    <div>
+      <span class="section-label">Naissance d'une école</span>
+      <h2 class="section-title">Du désespoir <em>kierkegaardien</em> à l'absurde camusien</h2>
+      <div class="sep"></div>
+      <div class="prose">
+        <p>L'existentialisme n'est pas né d'un système — il est né d'un <strong>cri</strong>. Celui de Kierkegaard contre la philosophie hégélienne qui dissout l'individu dans l'Esprit universel, celui de Nietzsche contre la mort de Dieu et le nihilisme qui s'ensuit, celui de Dostoïevski face à l'absurdité de la condition humaine.</p>
+        <p>Ce n'est qu'à Paris, dans le bouillonnement intellectuel de l'après-guerre, que ce courant reçut son nom. En 1945, Jean-Paul Sartre donna une conférence intitulée <em>L'Existentialisme est un humanisme</em> — réponse aux accusations d'un pessimisme stérile — qui cristallisa le mouvement devant le grand public. Simone de Beauvoir, Albert Camus, Maurice Merleau-Ponty gravitaient dans la même orbite des cafés de Saint-Germain-des-Prés.</p>
+        <p>Mais l'existentialisme débordait déjà ces frontières : <strong>Martin Heidegger</strong>, qui rejeta toujours l'étiquette, avait posé les fondements ontologiques avec <em>Être et Temps</em> (1927) — une révolution philosophique qui transformait la question de l'être en question de l'existence temporelle et mortelle.</p>
+      </div>
+    </div>
+    <div>
+      <span class="section-label">La fracture fondamentale</span>
+      <h2 class="section-title">Athée vs <em>chrétien</em></h2>
+      <div class="sep"></div>
+      <div class="prose">
+        <p>L'existentialisme se divise en deux grands courants. L'existentialisme <strong>athée</strong> (Sartre, de Beauvoir, Camus) tire toutes les conséquences de l'absence de Dieu : si Dieu n'existe pas, il n'y a pas de nature humaine préalable, pas d'essence définie d'avance. L'homme est un projet — il n'est que ce qu'il se fait.</p>
+        <p>L'existentialisme <strong>chrétien</strong> (Kierkegaard, Gabriel Marcel, Karl Jaspers) maintient la relation à Dieu comme horizon de l'existence, mais insiste sur le fait que cette relation est radicalement individuelle et ne peut se réduire à aucun système rationnel. La foi est un saut dans l'absurde, un acte d'engagement total qui dépasse la raison.</p>
+        <p>Ce qui unit ces deux courants : la primauté de <strong>l'existence concrète et singulière</strong> sur toute abstraction, la résistance à tout système qui absorberait l'individu, et la conviction que les questions fondamentales — la mort, l'angoisse, la liberté — ne peuvent être résolues mais seulement <em>vécues</em>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="concepts">
+  <div class="section-header reveal" style="text-align:center;margin-bottom:0">
+    <span class="section-label">Lexique fondamental</span>
+    <h2 class="section-title">Les concepts <em>essentiels</em></h2>
+  </div>
+  <div class="concepts-grid">
+    <div class="concept-card reveal">
+      <p class="concept-german">Dasein</p>
+      <p class="concept-name">L'être-là</p>
+      <p class="concept-desc">Terme central de Heidegger désignant l'existence humaine en tant qu'elle est toujours déjà <em>là</em>, jetée dans un monde, temporelle et mortelle. Le Dasein n'a pas d'essence préalable — il <em>est</em> son existence, toujours en projet, toujours en avant de lui-même.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">«&nbsp;Das Wesen des Daseins liegt in seiner Existenz&nbsp;»</p>
+        <p class="cq-trans">« L'essence du Dasein réside dans son existence »</p>
+        <p class="cq-src">— Heidegger, Être et Temps, §9</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-german">L'Angoisse</p>
+      <p class="concept-name">Angst — Révélateur ontologique</p>
+      <p class="concept-desc">Chez Heidegger, l'angoisse révèle le néant et libère le Dasein de ses illusions quotidiennes. Chez Sartre, elle est le vertige de la liberté absolue — l'homme découvre qu'il n'y a rien à quoi s'accrocher, aucune nature, aucun Dieu pour justifier ses choix. L'angoisse est la conscience lucide de la liberté.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">«&nbsp;Angst ist die Stimmung, in der sich das Nichts aufdrängt&nbsp;»</p>
+        <p class="cq-trans">« L'angoisse est la disposition dans laquelle le néant s'impose »</p>
+        <p class="cq-src">— Heidegger, Qu'est-ce que la métaphysique ?</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-german">Mauvaise foi</p>
+      <p class="concept-name">La fuite devant la liberté</p>
+      <p class="concept-desc">Concept sartrién désignant le refus de reconnaître sa propre liberté. Celui qui dit « je ne pouvais pas faire autrement » ou qui se cache derrière son rôle social est de mauvaise foi. La mauvaise foi est une auto-tromperie : l'homme se traite lui-même comme une chose déterminée alors qu'il est liberté.</p>
+      <div class="concept-quote-block">
+        <p class="cq-trans">« Le garçon de café joue à être garçon de café. »</p>
+        <p class="cq-src">— Sartre, L'Être et le Néant, I, II</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-german">L'Absurde</p>
+      <p class="concept-name">Le divorce fondamental</p>
+      <p class="concept-desc">Pour Camus, l'absurde naît de la confrontation entre le besoin humain de clarté, de sens et d'unité, et le silence irrationnel du monde. Ce n'est ni dans l'homme seul, ni dans le monde seul, mais dans leur confrontation. La réponse camusienne : ni suicide ni espoir, mais la révolte.</p>
+      <div class="concept-quote-block">
+        <p class="cq-trans">« Il n'y a qu'un problème philosophique vraiment sérieux : c'est le suicide. »</p>
+        <p class="cq-src">— Camus, Le Mythe de Sisyphe, 1942</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-german">Authenticité</p>
+      <p class="concept-name">L'existence propre</p>
+      <p class="concept-desc">S'opposant à l'existence inauthentique du "On" (<em>das Man</em> — le conformisme social), l'authenticité est la reprise de son existence comme propre, la décision d'assumer sa liberté, sa finitude et sa responsabilité. Elle passe nécessairement par la confrontation à la mort.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">«&nbsp;Sein zum Tode&nbsp;»</p>
+        <p class="cq-trans">« L'être-pour-la-mort : horizon qui donne sens à toute existence »</p>
+        <p class="cq-src">— Heidegger, Être et Temps, §46–53</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-german">Engagement</p>
+      <p class="concept-name">La responsabilité universelle</p>
+      <p class="concept-desc">Pour Sartre, en choisissant pour soi, l'homme choisit pour tous — il crée une image de l'homme tel qu'il pense qu'il devrait être. Cette responsabilité universelle est le fondement de l'éthique existentialiste : aucune valeur transcendante ne peut justifier nos actes, seul l'engagement libre le peut.</p>
+      <div class="concept-quote-block">
+        <p class="cq-trans">« En me choisissant, je choisis l'homme. »</p>
+        <p class="cq-src">— Sartre, L'Existentialisme est un humanisme</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="timeline">
+  <div class="section-header reveal" style="text-align:center">
+    <span class="section-label">Frise chronologique</span>
+    <h2 class="section-title">Un siècle de <em>révolte existentielle</em></h2>
+  </div>
+  <div class="timeline-track">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">1813–1855</p>
+      <h3 class="tl-name">Søren Kierkegaard</h3>
+      <p class="tl-role">Précurseur — père de l'existentialisme</p>
+      <p class="tl-desc">Contre Hegel qui dissout l'individu dans le système, Kierkegaard crie que l'existence individuelle, concrète, angoissée, ne se laisse pas abstraire. Il décrit trois stades de l'existence — esthétique, éthique, religieux — et fait du <em>saut de la foi</em> la réponse à l'angoisse fondamentale. Écrit sous pseudonymes pour multiplier les perspectives.</p>
+      <div class="tl-works"><span class="tl-work">Ou bien... Ou bien</span><span class="tl-work">Crainte et Tremblement</span><span class="tl-work">Le Concept d'Angoisse</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">1889–1976</p>
+      <h3 class="tl-name">Martin Heidegger</h3>
+      <p class="tl-role">L'ontologie existentiale</p>
+      <p class="tl-desc"><em>Être et Temps</em> (1927) bouleverse la philosophie : la question de l'Être ne peut être posée qu'à partir de l'existence humaine temporelle. Le Dasein, l'être-au-monde, l'angoisse, le souci (<em>Sorge</em>), l'être-pour-la-mort — autant de concepts qui fondèrent la tradition existentialiste et influencèrent Sartre, Merleau-Ponty et toute la phénoménologie française.</p>
+      <div class="tl-works"><span class="tl-work">Être et Temps</span><span class="tl-work">Qu'est-ce que la métaphysique ?</span><span class="tl-work">La Lettre sur l'humanisme</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">1905–1980</p>
+      <h3 class="tl-name">Jean-Paul Sartre</h3>
+      <p class="tl-role">L'existentialisme athée comme humanisme</p>
+      <p class="tl-desc">Philosophe, dramaturge, romancier, militant — Sartre incarna l'intellectuel engagé du XXe siècle. Son œuvre philosophique majeure (<em>L'Être et le Néant</em>, 1943) construisit une ontologie rigoureuse distinguant l'en-soi (la chose) et le pour-soi (la conscience), fondant la liberté radicale sur la structure même de la conscience.</p>
+      <div class="tl-works"><span class="tl-work">L'Être et le Néant</span><span class="tl-work">L'Existentialisme est un humanisme</span><span class="tl-work">La Nausée</span><span class="tl-work">Huis Clos</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">1913–1960</p>
+      <h3 class="tl-name">Albert Camus</h3>
+      <p class="tl-role">La philosophie de l'absurde et de la révolte</p>
+      <p class="tl-desc">Camus refusa toujours l'étiquette existentialiste — il se distinguait de Sartre précisément sur la question de l'espoir et de l'engagement politique. Sa <em>philosophie de l'absurde</em> constitue une réponse originale : ni nihilisme, ni espoir transcendant, mais la révolte lucide et la solidarité humaine. Prix Nobel de littérature en 1957.</p>
+      <div class="tl-works"><span class="tl-work">Le Mythe de Sisyphe</span><span class="tl-work">L'Étranger</span><span class="tl-work">La Peste</span><span class="tl-work">L'Homme révolté</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">1908–1986</p>
+      <h3 class="tl-name">Simone de Beauvoir</h3>
+      <p class="tl-role">L'existentialisme féministe</p>
+      <p class="tl-desc">De Beauvoir appliqua les catégories existentialistes à la condition féminine avec une rigueur et une audace inégalées. <em>Le Deuxième Sexe</em> (1949) montra que la féminité n'est pas une essence mais une construction — « On ne naît pas femme, on le devient » — et fonda ainsi le féminisme philosophique du XXe siècle.</p>
+      <div class="tl-works"><span class="tl-work">Le Deuxième Sexe</span><span class="tl-work">Pour une morale de l'ambiguïté</span><span class="tl-work">Les Mandarins</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="thinkers">
+  <div class="section-header reveal" style="text-align:center">
+    <span class="section-label">Portraits philosophiques</span>
+    <h2 class="section-title">Les <em>voix</em> de l'existence</h2>
+  </div>
+  <div class="thinkers-grid">
+    <div class="thinker-full reveal">
+      <div class="tf-header">
+        <div class="tf-monogram">S</div>
+        <div><p class="tf-name">Sartre</p><p class="tf-dates">1905–1980 · Paris</p></div>
+      </div>
+      <p class="tf-desc">Refusant le Nobel de littérature en 1964 pour préserver son indépendance, Sartre fut l'un des rares philosophes à avoir fait de sa vie entière une démonstration de sa pensée. Sa rupture avec Camus en 1952, ses engagements politiques contradictoires, ses relations non conventionnelles avec de Beauvoir — tout confirme une existence assumée dans sa complexité et ses contradictions.</p>
+      <div class="tf-quote">
+        <p class="tf-q-text">« L'enfer, c'est les Autres. »</p>
+        <p class="tf-q-src">— Huis Clos (1944) · Non pas une condamnation de l'autre, mais le constat que c'est dans le regard d'autrui que nous risquons de nous pétrifier en objet</p>
+      </div>
+      <p class="tf-works-title">Œuvres majeures</p>
+      <div class="tf-works"><span class="tf-work">L'Être et le Néant</span><span class="tf-work">La Nausée</span><span class="tf-work">Huis Clos</span><span class="tf-work">Critique de la raison dialectique</span></div>
+    </div>
+    <div class="thinker-full reveal">
+      <div class="tf-header">
+        <div class="tf-monogram">C</div>
+        <div><p class="tf-name">Camus</p><p class="tf-dates">1913–1960 · Mondovi, Algérie</p></div>
+      </div>
+      <p class="tf-desc">Né dans une famille ouvrière en Algérie coloniale, tuberculeux à dix-sept ans, Camus porta toute sa vie la tension entre la beauté solaire du monde méditerranéen et l'absurdité de la condition humaine. Sa philosophie n'est pas une désertion du monde mais une <em>célébration lucide</em> — aimer la vie même sans illusions, même sans lendemain. Il mourut dans un accident de voiture à 46 ans.</p>
+      <div class="tf-quote">
+        <p class="tf-q-text">« Il faut imaginer Sisyphe heureux. »</p>
+        <p class="tf-q-src">— Le Mythe de Sisyphe (1942) · Dernière phrase, et peut-être la plus belle réponse à l'absurde jamais formulée</p>
+      </div>
+      <p class="tf-works-title">Œuvres majeures</p>
+      <div class="tf-works"><span class="tf-work">L'Étranger</span><span class="tf-work">Le Mythe de Sisyphe</span><span class="tf-work">La Peste</span><span class="tf-work">L'Homme révolté</span></div>
+    </div>
+    <div class="thinker-full reveal">
+      <div class="tf-header">
+        <div class="tf-monogram">B</div>
+        <div><p class="tf-name">de Beauvoir</p><p class="tf-dates">1908–1986 · Paris</p></div>
+      </div>
+      <p class="tf-desc">Philosophe avant d'être féministe, de Beauvoir développa dans <em>Pour une morale de l'ambiguïté</em> (1947) la première éthique existentialiste cohérente — comblant le vide laissé par Sartre sur ce terrain. Son œuvre montra que la liberté n'est pas seulement individuelle mais relationnelle : je ne suis libre qu'avec et pour l'autre. Cette intuition profonde anticipait le féminisme de la deuxième vague.</p>
+      <div class="tf-quote">
+        <p class="tf-q-text">« On ne naît pas femme : on le devient. »</p>
+        <p class="tf-q-src">— Le Deuxième Sexe, II (1949) · L'une des phrases les plus décisives du XXe siècle philosophique</p>
+      </div>
+      <p class="tf-works-title">Œuvres majeures</p>
+      <div class="tf-works"><span class="tf-work">Le Deuxième Sexe</span><span class="tf-work">Pour une morale de l'ambiguïté</span><span class="tf-work">Les Mandarins</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="comparison">
+  <div class="section-header reveal" style="text-align:center">
+    <span class="section-label">Mise en perspective</span>
+    <h2 class="section-title">Existentialisme & <em>autres écoles</em></h2>
+  </div>
+  <div style="overflow-x:auto">
+  <table class="comparison-table reveal">
+    <thead>
+      <tr>
+        <th>Dimension</th>
+        <th>Existentialisme</th>
+        <th>Stoïcisme</th>
+        <th>Épicurisme</th>
+        <th>Phénoménologie</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Nature humaine</td>
+        <td class="ct-highlight">Inexistante — l'homme se crée lui-même</td>
+        <td>Définie par le logos universel partagé</td>
+        <td>Être naturel cherchant le plaisir/l'absence de douleur</td>
+        <td>Conscience intentionnelle constituant son monde</td>
+      </tr>
+      <tr>
+        <td>Liberté</td>
+        <td class="ct-highlight">Radicale, absolue, angoissante</td>
+        <td>Intérieure — maîtrise des représentations</td>
+        <td>Retrait et choix prudents du jardin</td>
+        <td>Engagée dans la chair et le monde vécu</td>
+      </tr>
+      <tr>
+        <td>La mort</td>
+        <td class="ct-highlight">Fondatrice de sens (être-pour-la-mort)</td>
+        <td>Indifférente — seule la vertu importe</td>
+        <td">Rien à craindre : dissolution atomique</td>
+        <td>Horizon de l'être-au-monde temporel</td>
+      </tr>
+      <tr>
+        <td>L'autre</td>
+        <td class="ct-highlight">Menace et condition (regard pétrifiant)</td>
+        <td>Frère en humanité (cosmopolitisme)</td>
+        <td>Ami choisi dans le jardin retiré</td>
+        <td>Alter ego co-constituant le monde commun</td>
+      </tr>
+      <tr>
+        <td>Rapport à Dieu</td>
+        <td class="ct-highlight">Absent (athée) ou saut personnel (chrétien)</td>
+        <td>Providence rationnelle immanente (logos)</td>
+        <td>Les dieux existent mais ne s'occupent pas de nous</td>
+        <td>Hors du champ phénoménologique</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section id="readings">
+  <div class="section-header reveal" style="text-align:center">
+    <span class="section-label">Bibliographie</span>
+    <h2 class="section-title">Pour aller <em>plus loin</em></h2>
+  </div>
+  <div class="readings-grid reveal">
+    <div class="reading-group">
+      <h3>Textes fondateurs</h3>
+      <div class="reading-list">
+        <div class="reading-item"><p class="r-title">Le Mythe de Sisyphe</p><p class="r-author">Albert Camus · 1942</p><p class="r-desc">Point d'entrée idéal. Camus pose le problème de l'absurde avec une clarté et une beauté accessibles à tous.</p></div>
+        <div class="reading-item"><p class="r-title">L'Existentialisme est un humanisme</p><p class="r-author">Jean-Paul Sartre · 1945</p><p class="r-desc">Conférence transcrite — l'introduction la plus concise et pédagogique à l'existentialisme sartrien.</p></div>
+        <div class="reading-item"><p class="r-title">Être et Temps (extraits)</p><p class="r-author">Martin Heidegger · 1927</p><p class="r-desc">Dense et difficile mais incontournable. Commencer par les §39–42 sur le souci et §46–53 sur l'être-pour-la-mort.</p></div>
+      </div>
+    </div>
+    <div class="reading-group">
+      <h3>Études & Commentaires</h3>
+      <div class="reading-list">
+        <div class="reading-item"><p class="r-title">Sartre : une biographie philosophique</p><p class="r-author">Sarah Bakewell · 2016</p><p class="r-desc">Accessible et rigoureuse, cette biographie intellectuelle suit Sartre, de Beauvoir et Camus dans leurs vies et leurs idées.</p></div>
+        <div class="reading-item"><p class="r-title">L'existentialisme</p><p class="r-author">Vincent de Coorebyter · 2005</p><p class="r-desc">Introduction académique française aux grands thèmes de l'existentialisme, de Kierkegaard à Sartre.</p></div>
+        <div class="reading-item"><p class="r-title">Heidegger et la question de l'être</p><p class="r-author">Françoise Dastur · 2011</p><p class="r-desc">La référence française sur Heidegger — rigoureuse, claire, sans trahir la complexité de la pensée.</p></div>
+      </div>
+    </div>
+    <div class="reading-group">
+      <h3>Œuvres littéraires</h3>
+      <div class="reading-list">
+        <div class="reading-item"><p class="r-title">La Nausée</p><p class="r-author">Jean-Paul Sartre · 1938</p><p class="r-desc">Le roman de l'existence : Roquentin découvre l'absurdité de l'être des choses — et de lui-même. La philosophie vécue de l'intérieur.</p></div>
+        <div class="reading-item"><p class="r-title">L'Étranger</p><p class="r-author">Albert Camus · 1942</p><p class="r-desc">Meursault, l'homme absurde incarné : indifférence au monde, lucidité radicale, liberté dans la condamnation.</p></div>
+        <div class="reading-item"><p class="r-title">Crainte et Tremblement</p><p class="r-author">Søren Kierkegaard · 1843</p><p class="r-desc">L'analyse de la figure d'Abraham — le saut de la foi contre la raison éthique. Le fondement de l'existentialisme chrétien.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="school-nav">
+  <p style="text-align:center;font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.45em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:40px">Toutes les écoles</p>
+  <div class="school-nav-grid">
+    <a href="stoicisme.html" class="school-nav-card"><p class="snc-label">Antiquité</p><p class="snc-name">Stoïcisme</p></a>
+    <a href="epicurisme.html" class="school-nav-card"><p class="snc-label">Antiquité</p><p class="snc-name">Épicurisme</p></a>
+    <a href="existentialisme.html" class="school-nav-card" style="border-color:rgba(176,64,64,0.5)"><p class="snc-label">XXe · Actuel</p><p class="snc-name" style="color:var(--accent)">Existentialisme ←</p></a>
+    <a href="idealisme.html" class="school-nav-card"><p class="snc-label">XVIIIe–XIXe</p><p class="snc-name">Idéalisme</p></a>
+    <a href="nietzscheisme.html" class="school-nav-card"><p class="snc-label">XIXe</p><p class="snc-name">Nietzschéisme</p></a>
+    <a href="taoisme.html" class="school-nav-card"><p class="snc-label">Antiquité</p><p class="snc-name">Taoïsme</p></a>
+    <a href="phenomenologie.html" class="school-nav-card"><p class="snc-label">XXe</p><p class="snc-name">Phénoménologie</p></a>
+    <a href="rationalisme.html" class="school-nav-card"><p class="snc-label">XVIIe</p><p class="snc-name">Rationalisme</p></a>
+  </div>
+</section>
+
+<footer>
+  <a href="aether-philosophie.html">← Retour à ÆTHER</a>
+  <p>« L'homme est condamné à être libre. » — Sartre</p>
+</footer>
+
+<script>
+const dot=document.getElementById('cursor-dot'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px'});
+(function ar(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(ar)})();
+document.querySelectorAll('a,button,.concept-card,.thinker-full,.reading-item,.school-nav-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ring.style.width='52px';ring.style.height='52px'});
+  el.addEventListener('mouseleave',()=>{ring.style.width='36px';ring.style.height='36px'});
+});
+const obs=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*80)})},{threshold:0.07});
+document.querySelectorAll('.reveal,.tl-item').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

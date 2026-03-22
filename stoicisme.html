@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stoïcisme — ÆTHER</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void: #070605;
+  --abyss: #0E0B08;
+  --deep: #17120D;
+  --surface: #221A12;
+  --surface2: #2E2318;
+  --surface3: #3D3020;
+  --gold: #C9A84C;
+  --gold-bright: #E8C76A;
+  --gold-dim: #8A6E30;
+  --gold-pale: #F5E6B8;
+  --cream: #F0E6D0;
+  --cream-dim: #B8A88A;
+  --ink: #2A1F14;
+  --accent: #C9843C;
+  --accent-dim: #8A5820;
+  --accent-pale: #F5D4B0;
+  --r: 16px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--cream);font-family:'EB Garamond',Georgia,serif;font-size:18px;line-height:1.7;cursor:none;overflow-x:hidden}
+#cursor{position:fixed;top:0;left:0;z-index:9999;pointer-events:none}
+#cursor-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);transform:translate(-50%,-50%)}
+#cursor-ring{position:fixed;top:0;left:0;z-index:9998;width:36px;height:36px;border-radius:50%;border:1px solid rgba(201,132,60,0.5);transform:translate(-50%,-50%);pointer-events:none;transition:transform 0.25s cubic-bezier(0.23,1,0.32,1),width 0.3s,height 0.3s}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--void)}
+::-webkit-scrollbar-thumb{background:var(--accent-dim);border-radius:2px}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");background-size:200px;opacity:0.3;mix-blend-mode:overlay}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 6vw;display:flex;align-items:center;justify-content:space-between;height:72px;background:rgba(7,6,5,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,132,60,0.12)}
+.nav-logo{font-family:'Cinzel',serif;font-size:20px;letter-spacing:0.2em;color:var(--gold);text-decoration:none;cursor:none}
+.nav-back{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.25em;color:var(--cream-dim);text-decoration:none;text-transform:uppercase;cursor:none;transition:color 0.25s;display:flex;align-items:center;gap:8px}
+.nav-back:hover{color:var(--accent)}
+.nav-schools{display:flex;gap:24px}
+.nav-schools a{font-family:'EB Garamond',serif;font-size:14px;letter-spacing:0.08em;color:var(--cream-dim);text-decoration:none;cursor:none;transition:color 0.25s;text-transform:uppercase}
+.nav-schools a:hover,.nav-schools a.active{color:var(--accent)}
+
+/* HERO */
+#hero{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 6vw 80px;overflow:hidden}
+.hero-era{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.45em;color:var(--accent-dim);text-transform:uppercase;margin-bottom:24px;opacity:0;animation:fadeUp 1s 0.3s forwards}
+.hero-title{font-family:'Cinzel',serif;font-size:clamp(56px,10vw,120px);font-weight:400;letter-spacing:0.15em;line-height:0.9;color:var(--accent);text-shadow:0 0 120px rgba(201,132,60,0.25);opacity:0;animation:fadeUp 1s 0.6s forwards}
+.hero-subtitle{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(18px,2.5vw,26px);color:var(--cream-dim);margin-top:28px;max-width:640px;opacity:0;animation:fadeUp 1s 1s forwards}
+.hero-divider{width:1px;height:0;background:linear-gradient(to bottom,transparent,var(--accent-dim),transparent);margin:36px auto;animation:growLine 1.2s 1.4s forwards}
+@keyframes growLine{to{height:72px}}
+.hero-meta{display:flex;gap:48px;opacity:0;animation:fadeUp 1s 1.6s forwards;flex-wrap:wrap;justify-content:center}
+.hero-meta-item{text-align:center}
+.hero-meta-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;color:var(--accent-dim);text-transform:uppercase;margin-bottom:6px}
+.hero-meta-value{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--cream)}
+.hero-opening-quote{margin-top:56px;padding:32px 48px;border:1px solid rgba(201,132,60,0.2);background:rgba(22,17,12,0.6);backdrop-filter:blur(8px);max-width:720px;opacity:0;animation:fadeUp 1s 2s forwards;position:relative}
+.hero-opening-quote::before{content:'"';font-family:'Cormorant Garamond',serif;font-size:120px;color:rgba(201,132,60,0.07);position:absolute;top:-20px;left:20px;line-height:1}
+.oq-original{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--accent-dim);letter-spacing:0.05em;margin-bottom:12px;font-style:italic}
+.oq-translation{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,2.5vw,24px);color:var(--cream);line-height:1.5;margin-bottom:16px}
+.oq-author{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;color:var(--accent-dim);text-transform:uppercase}
+
+/* SECTIONS */
+section{position:relative;z-index:2;padding:100px 6vw}
+.section-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.5em;color:var(--accent-dim);text-transform:uppercase;margin-bottom:16px;display:block}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,52px);font-weight:300;color:var(--cream);line-height:1.1}
+.section-title em{font-style:italic;color:var(--accent)}
+.sep{display:block;width:48px;height:1px;background:var(--accent-dim);margin:32px 0}
+.prose{font-size:17px;color:var(--cream-dim);line-height:1.9;max-width:760px}
+.prose p{margin-bottom:1.4em}
+.prose strong{color:var(--cream);font-weight:500}
+
+/* INTRO */
+#intro{background:var(--abyss)}
+.intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;max-width:1200px;margin:0 auto}
+
+/* CONCEPTS */
+#concepts{background:var(--void)}
+.concepts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:2px;margin-top:64px}
+.concept-card{padding:40px 36px;background:var(--deep);border:1px solid rgba(201,132,60,0.08);position:relative;overflow:hidden;transition:all 0.4s cubic-bezier(0.23,1,0.32,1)}
+.concept-card:hover{background:var(--surface);border-color:rgba(201,132,60,0.25);transform:translateY(-3px)}
+.concept-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,var(--accent),transparent);transform:scaleX(0);transition:transform 0.4s}
+.concept-card:hover::after{transform:scaleX(1)}
+.concept-greek{font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--accent);opacity:0.4;margin-bottom:8px;font-style:italic}
+.concept-name{font-family:'Cinzel',serif;font-size:14px;letter-spacing:0.2em;color:var(--accent);text-transform:uppercase;margin-bottom:16px}
+.concept-desc{font-size:16px;color:var(--cream-dim);line-height:1.7}
+.concept-quote-block{margin-top:24px;padding:16px 20px;border-left:2px solid rgba(201,132,60,0.3);background:rgba(201,132,60,0.04)}
+.cq-orig{font-size:13px;color:var(--accent-dim);font-style:italic;margin-bottom:6px}
+.cq-trans{font-size:15px;color:var(--cream-dim);font-style:italic;line-height:1.5}
+.cq-src{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.25em;color:var(--accent-dim);text-transform:uppercase;margin-top:8px}
+
+/* TIMELINE */
+#timeline{background:var(--abyss)}
+.timeline-track{position:relative;max-width:900px;margin:64px auto 0;padding-left:60px}
+.timeline-track::before{content:'';position:absolute;left:20px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--accent-dim),transparent)}
+.tl-item{position:relative;margin-bottom:56px;opacity:0;transform:translateX(-20px);transition:all 0.6s cubic-bezier(0.23,1,0.32,1)}
+.tl-item.visible{opacity:1;transform:translateX(0)}
+.tl-dot{position:absolute;left:-48px;top:6px;width:12px;height:12px;border-radius:50%;border:2px solid var(--accent);background:var(--void);transition:background 0.3s}
+.tl-item:hover .tl-dot{background:var(--accent)}
+.tl-date{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;color:var(--accent);text-transform:uppercase;margin-bottom:8px}
+.tl-name{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--cream);margin-bottom:6px}
+.tl-role{font-family:'EB Garamond',serif;font-size:14px;color:var(--accent-dim);letter-spacing:0.05em;margin-bottom:12px}
+.tl-desc{font-size:16px;color:var(--cream-dim);line-height:1.7;max-width:640px}
+.tl-works{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.tl-work{font-family:'EB Garamond',serif;font-style:italic;font-size:13px;padding:3px 12px;border:1px solid rgba(201,132,60,0.2);color:var(--accent-dim)}
+
+/* THINKERS */
+#thinkers{background:var(--void)}
+.thinkers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:24px;margin-top:64px}
+.thinker-full{background:var(--deep);border:1px solid rgba(201,132,60,0.1);padding:36px;position:relative;overflow:hidden;transition:border-color 0.4s}
+.thinker-full:hover{border-color:rgba(201,132,60,0.3)}
+.tf-header{display:flex;align-items:flex-start;gap:20px;margin-bottom:24px}
+.tf-monogram{width:64px;height:64px;flex-shrink:0;background:var(--surface2);border:1px solid rgba(201,132,60,0.2);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:28px;font-style:italic;color:var(--accent)}
+.tf-name{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--cream);margin-bottom:4px}
+.tf-dates{font-size:13px;color:var(--accent-dim);letter-spacing:0.05em}
+.tf-desc{font-size:16px;color:var(--cream-dim);line-height:1.7;margin-bottom:20px}
+.tf-quote{padding:16px 20px;border-left:2px solid var(--accent-dim);background:rgba(201,132,60,0.04);margin-bottom:20px}
+.tf-q-orig{font-size:13px;color:var(--accent-dim);font-style:italic;margin-bottom:6px}
+.tf-q-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:var(--cream-dim);line-height:1.5}
+.tf-q-src{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.25em;color:var(--accent-dim);text-transform:uppercase;margin-top:8px}
+.tf-works-title{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.3em;color:var(--accent-dim);text-transform:uppercase;margin-bottom:10px}
+.tf-works{display:flex;flex-wrap:wrap;gap:6px}
+.tf-work{font-family:'EB Garamond',serif;font-style:italic;font-size:13px;padding:3px 12px;border:1px solid rgba(201,132,60,0.2);color:var(--cream-dim)}
+
+/* COMPARISON */
+#comparison{background:var(--abyss)}
+.comparison-table{width:100%;border-collapse:collapse;margin-top:56px}
+.comparison-table th{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;padding:16px 24px;text-align:left;border-bottom:1px solid rgba(201,132,60,0.2);color:var(--accent)}
+.comparison-table th:first-child{color:var(--cream-dim)}
+.comparison-table td{padding:20px 24px;border-bottom:1px solid rgba(201,132,60,0.06);font-size:15px;color:var(--cream-dim);vertical-align:top;line-height:1.6}
+.comparison-table td:first-child{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent-dim);white-space:nowrap}
+.comparison-table tr:hover td{background:rgba(201,132,60,0.03)}
+.ct-highlight{color:var(--accent);font-style:italic}
+
+/* READINGS */
+#readings{background:var(--void)}
+.readings-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px}
+.reading-group h3{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent-dim);margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid rgba(201,132,60,0.15)}
+.reading-list{display:flex;flex-direction:column;gap:20px}
+.reading-item{padding:20px;background:var(--deep);border:1px solid rgba(201,132,60,0.08);transition:border-color 0.3s}
+.reading-item:hover{border-color:rgba(201,132,60,0.25)}
+.r-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--cream);margin-bottom:4px}
+.r-author{font-size:13px;color:var(--accent-dim);margin-bottom:8px}
+.r-desc{font-size:14px;color:var(--cream-dim);line-height:1.5}
+
+/* SCHOOL NAV */
+#school-nav{background:var(--abyss);padding:80px 6vw}
+.school-nav-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;max-width:1200px;margin:0 auto}
+.school-nav-card{padding:32px;background:var(--deep);border:1px solid rgba(201,168,76,0.08);text-decoration:none;cursor:none;transition:all 0.4s;display:block}
+.school-nav-card:hover{background:var(--surface);border-color:rgba(201,168,76,0.2);transform:translateY(-3px)}
+.snc-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:10px}
+.snc-name{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--cream)}
+
+/* FOOTER */
+footer{position:relative;z-index:2;background:var(--void);border-top:1px solid rgba(201,132,60,0.08);padding:40px 6vw;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+footer p{font-size:14px;color:rgba(176,155,123,0.4)}
+footer a{color:var(--gold);text-decoration:none;font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.15em;cursor:none}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.7s,transform 0.7s}
+.reveal.visible{opacity:1;transform:translateY(0)}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}from{opacity:0;transform:translateY(18px)}}
+@media(max-width:900px){.intro-grid,.readings-grid{grid-template-columns:1fr}.school-nav-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.school-nav-grid{grid-template-columns:1fr}.nav-schools{display:none}}
+</style>
+</head>
+<body>
+<div id="cursor"><div id="cursor-dot"></div></div>
+<div id="cursor-ring"></div>
+
+<nav>
+  <a href="aether-philosophie.html" class="nav-logo">Æ</a>
+  <div class="nav-schools">
+    <a href="stoicisme.html" class="active">Stoïcisme</a>
+    <a href="epicurisme.html">Épicurisme</a>
+    <a href="existentialisme.html">Existentialisme</a>
+    <a href="idealisme.html">Idéalisme</a>
+    <a href="nietzscheisme.html">Nietzschéisme</a>
+    <a href="taoisme.html">Taoïsme</a>
+    <a href="phenomenologie.html">Phénoménologie</a>
+    <a href="rationalisme.html">Rationalisme</a>
+  </div>
+  <a href="aether-philosophie.html" class="nav-back">← Accueil</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <p class="hero-era">VIIIe siècle av. J.-C. — Présent</p>
+  <h1 class="hero-title">STOÏCISME</h1>
+  <p class="hero-subtitle">La philosophie comme art de vivre — gouverner l'âme par la raison, distinguer ce qui dépend de nous de ce qui ne le peut</p>
+  <div class="hero-divider"></div>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><p class="hero-meta-label">Fondateur</p><p class="hero-meta-value">Zénon de Kition</p></div>
+    <div class="hero-meta-item"><p class="hero-meta-label">Lieu</p><p class="hero-meta-value">Stoa Poikilè, Athènes</p></div>
+    <div class="hero-meta-item"><p class="hero-meta-label">Période</p><p class="hero-meta-value">~300 av. J.-C.</p></div>
+    <div class="hero-meta-item"><p class="hero-meta-label">Concept central</p><p class="hero-meta-value">Le logos universel</p></div>
+  </div>
+  <div class="hero-opening-quote">
+    <p class="oq-original">Τῶν ὄντων τὰ μέν ἐστιν ἐφ᾽ ἡμῖν, τὰ δὲ οὐκ ἐφ᾽ ἡμῖν.</p>
+    <p class="oq-translation">« Des choses qui existent, les unes dépendent de nous, les autres ne dépendent pas de nous. »</p>
+    <p class="oq-author">— Épictète, Encheiridion (Manuel), I, 1</p>
+  </div>
+</section>
+
+<!-- INTRO -->
+<section id="intro">
+  <div class="intro-grid">
+    <div>
+      <span class="section-label">Naissance d'une école</span>
+      <h2 class="section-title">De la <em>Stoa</em> au monde</h2>
+      <div class="sep"></div>
+      <div class="prose">
+        <p>Vers 300 avant notre ère, un marchand de Chypre du nom de <strong>Zénon de Kition</strong>, rescapé d'un naufrage qui lui avait tout pris, entra dans une librairie d'Athènes et tomba sur les <em>Mémorables</em> de Xénophon. Ébloui par la figure de Socrate, il demanda où trouver des hommes semblables. On lui désigna Cratès le Cynique qui passait par là. Il le suivit.</p>
+        <p>Quelques années plus tard, Zénon commença à enseigner sous le <em>Portique peint</em> — la Stoa Poikilè — qui donna son nom à l'école. La philosophie stoïcienne se voulait avant tout <strong>pratique</strong> : non un système spéculatif mais une thérapeutique de l'âme, un art de vivre en accord avec la nature rationnelle de l'univers.</p>
+        <p>Le stoïcisme se développa en trois phases : l'<strong>Ancien Portique</strong> (Zénon, Cléanthe, Chrysippe), le <strong>Moyen Portique</strong> (Panétios, Posidonios), et le <strong>Portique romain</strong> — le plus influent pour la postérité — avec Sénèque, Épictète et l'empereur Marc Aurèle.</p>
+      </div>
+    </div>
+    <div>
+      <span class="section-label">L'architecture de la pensée</span>
+      <h2 class="section-title">Trois <em>parties</em> indissociables</h2>
+      <div class="sep"></div>
+      <div class="prose">
+        <p>Les stoïciens divisèrent la philosophie en trois domaines formant un tout organique, souvent comparés à un verger : la <strong>logique</strong> est le mur d'enceinte (sans rigueur du raisonnement, rien n'est possible), la <strong>physique</strong> est le sol et les arbres (connaissance de la nature et du logos universel), et l'<strong>éthique</strong> est le fruit (la fin vers laquelle tout converge).</p>
+        <p>Cette architecture témoigne d'une ambition totalisante : le sage stoïcien est celui qui a compris que la nature entière est traversée par un principe rationnel immanent — le <em>logos</em> — et qui gouverne sa propre âme à l'image de cet ordre cosmique.</p>
+        <p>Le bien suprême (<em>to agathon</em>) est la vertu seule. La richesse, la santé, la réputation ne sont que des <strong>indifférents</strong> (<em>adiaphora</em>) — préférables certes, mais incapables de fonder le bonheur véritable.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONCEPTS -->
+<section id="concepts">
+  <div class="section-header reveal" style="text-align:center;margin-bottom:0">
+    <span class="section-label">Lexique fondamental</span>
+    <h2 class="section-title">Les concepts <em>essentiels</em></h2>
+  </div>
+  <div class="concepts-grid">
+    <div class="concept-card reveal">
+      <p class="concept-greek">Λόγος</p>
+      <p class="concept-name">Logos</p>
+      <p class="concept-desc">Raison universelle immanente au cosmos, principe actif et divin qui ordonne toute chose. L'âme humaine en est une parcelle — vivre selon le logos, c'est vivre selon sa nature profonde et selon Dieu.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">«&nbsp;τὸν λόγον κοινὸν ὄντα ζῆν&nbsp;»</p>
+        <p class="cq-trans">« Vivre selon le logos qui est commun à tous »</p>
+        <p class="cq-src">— Héraclite (précurseur), fr. 2</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-greek">Ἐφ᾽ ἡμῖν</p>
+      <p class="concept-name">La Dichotomie du contrôle</p>
+      <p class="concept-desc">La distinction fondatrice : il y a ce qui dépend de nous (nos jugements, désirs, pulsions) et ce qui n'en dépend pas (le corps, la réputation, la fortune). La liberté réside dans la maîtrise absolue du premier domaine, et dans l'indifférence sereine face au second.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">«&nbsp;Ἐφ᾽ ἡμῖν μέν ἐστιν ὑπόληψις, ὁρμή, ὄρεξις, ἔκκλισις&nbsp;»</p>
+        <p class="cq-trans">« Dépendent de nous : le jugement, la tendance, le désir, l'aversion »</p>
+        <p class="cq-src">— Épictète, Encheiridion, I</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-greek">Ἀρετή</p>
+      <p class="concept-name">Aretè — La Vertu</p>
+      <p class="concept-desc">Unique bien véritable, la vertu stoïcienne est une excellence de l'âme rationnelle. Elle se divise en quatre vertus cardinales : prudence (phronèsis), justice (dikaiosunè), courage (andreia), tempérance (sôphrosunè). Elle est la seule chose véritablement bonne.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">«&nbsp;Virtus enim aliud quam recta ratio non est&nbsp;»</p>
+        <p class="cq-trans">« La vertu n'est rien d'autre que la droite raison »</p>
+        <p class="cq-src">— Sénèque, Lettres à Lucilius, LXVI</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-greek">Ἀπάθεια</p>
+      <p class="concept-name">Apatheia</p>
+      <p class="concept-desc">Non pas l'insensibilité mais l'absence de passions irrationnelles (<em>pathè</em>). Le sage stoïcien ne détruit pas ses émotions — il les transforme en <em>eupathies</em> : joie rationnelle, précaution, vouloir mesuré. L'apatheia est équanimité, non froideur.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">«&nbsp;Non turbari&nbsp;»</p>
+        <p class="cq-trans">« Ne pas être troublé »</p>
+        <p class="cq-src">— Marc Aurèle, Pensées, IV, 3</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-greek">Εὐδαιμονία</p>
+      <p class="concept-name">Eudaimonia — La vie bonne</p>
+      <p class="concept-desc">Le bonheur stoïcien n'est pas le plaisir mais le <em>bien-être de l'âme</em> — état stable produit par la seule pratique de la vertu. Contrairement aux épicuriens, les stoïciens affirment que la vertu <em>suffit</em> au bonheur, même dans la souffrance physique.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">«&nbsp;Dum differtur vita transcurrit&nbsp;»</p>
+        <p class="cq-trans">« Pendant que tu diffères, la vie passe »</p>
+        <p class="cq-src">— Sénèque, De Brevitate Vitae, I</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-greek">Κοσμοπολίτης</p>
+      <p class="concept-name">Cosmopolitisme</p>
+      <p class="concept-desc">Le sage stoïcien est <em>citoyen du monde</em> avant d'être citoyen d'une cité. Tous les hommes partagent la même raison universelle, ce qui fonde une fraternité transcendant les frontières politiques, ethniques et sociales — idée révolutionnaire dans l'Antiquité.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">«&nbsp;κοσμοπολίτης εἶναι&nbsp;»</p>
+        <p class="cq-trans">« Être citoyen du cosmos »</p>
+        <p class="cq-src">— Diogène de Sinope (précurseur cynique)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section id="timeline">
+  <div class="section-header reveal" style="text-align:center">
+    <span class="section-label">Frise chronologique</span>
+    <h2 class="section-title">Six siècles de <em>Portique</em></h2>
+  </div>
+  <div class="timeline-track">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">~334–262 av. J.-C.</p>
+      <h3 class="tl-name">Zénon de Kition</h3>
+      <p class="tl-role">Fondateur du stoïcisme</p>
+      <p class="tl-desc">Né à Chypre, formé par les cyniques, Zénon inaugure son enseignement sous la Stoa Poikilè vers 300 av. J.-C. Il pose les fondements : logique, physique, éthique comme unité indivisible. Ses écrits sont perdus — sa pensée nous est connue par ses successeurs.</p>
+      <div class="tl-works"><span class="tl-work">La République</span><span class="tl-work">Du devoir</span><span class="tl-work">De la vie selon la nature</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">~331–232 av. J.-C.</p>
+      <h3 class="tl-name">Chrysippe de Soles</h3>
+      <p class="tl-role">Architecte systématique du Portique</p>
+      <p class="tl-desc">Auteur de plus de 700 ouvrages (tous perdus), Chrysippe est le véritable bâtisseur intellectuel du stoïcisme. Il développa la logique propositionnelle stoïcienne — bien plus sophistiquée que la logique aristotélicienne — et approfondit la doctrine du destin et du libre arbitre.</p>
+      <div class="tl-works"><span class="tl-work">Sur le logos</span><span class="tl-work">Traité des passions</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">4 av. J.-C. — 65 ap. J.-C.</p>
+      <h3 class="tl-name">Lucius Annaeus Sénèque</h3>
+      <p class="tl-role">Stoïcien romain, précepteur de Néron</p>
+      <p class="tl-desc">Philosophe, tragédien, homme politique — Sénèque est la plume la plus brillante du stoïcisme latin. Ses <em>Lettres à Lucilius</em> constituent l'un des monuments de la littérature philosophique, mêlant la profondeur doctrinale à une prose d'une beauté rare. Il mourut contraint au suicide par Néron.</p>
+      <div class="tl-works"><span class="tl-work">Lettres à Lucilius</span><span class="tl-work">De Brevitate Vitae</span><span class="tl-work">De la Tranquillité de l'âme</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">~50 — ~135 ap. J.-C.</p>
+      <h3 class="tl-name">Épictète</h3>
+      <p class="tl-role">Esclave affranchi, maître absolu de soi</p>
+      <p class="tl-desc">Né esclave en Phrygie, boiteux à la suite de mauvais traitements, Épictète incarne mieux que quiconque la doctrine qu'il enseigne : la liberté intérieure est absolue, indépendante de toute condition extérieure. Son <em>Manuel</em> — noté par son disciple Arrien — est le texte stoïcien le plus lu à travers les siècles.</p>
+      <div class="tl-works"><span class="tl-work">Encheiridion (Manuel)</span><span class="tl-work">Entretiens</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">121 — 180 ap. J.-C.</p>
+      <h3 class="tl-name">Marc Aurèle</h3>
+      <p class="tl-role">Empereur philosophe</p>
+      <p class="tl-desc">L'homme le plus puissant du monde antique pratiquait chaque matin la philosophie stoïcienne dans l'intimité de son journal personnel. Les <em>Pensées</em> — jamais destinées à la publication — sont l'une des œuvres les plus émouvantes de la littérature universelle : un homme qui gouverne un empire en combattant ses propres passions.</p>
+      <div class="tl-works"><span class="tl-work">Pensées (Τὰ εἰς ἑαυτόν)</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- THINKERS -->
+<section id="thinkers">
+  <div class="section-header reveal" style="text-align:center">
+    <span class="section-label">Portraits philosophiques</span>
+    <h2 class="section-title">Les <em>maîtres</em> du Portique</h2>
+  </div>
+  <div class="thinkers-grid">
+    <div class="thinker-full reveal">
+      <div class="tf-header">
+        <div class="tf-monogram">Ε</div>
+        <div><p class="tf-name">Épictète</p><p class="tf-dates">~50–135 · Hiérapolis, Phrygie</p></div>
+      </div>
+      <p class="tf-desc">Né esclave dans la maison d'un affranchi de Néron, Épictète vécut la contradiction stoïcienne au sens le plus concret. Son maître lui brisa la jambe pour tester sa résistance à la douleur. Épictète, dit-on, répondit calmement : « Tu vas la casser » — puis : « Je t'avais prévenu qu'elle était cassée. » Cette anecdote, vraie ou légendaire, illustre une philosophie vécue jusqu'à l'os.</p>
+      <div class="tf-quote">
+        <p class="tf-q-orig">«&nbsp;Ζήτει μὴ τὰ γινόμενα γίνεσθαι ὡς θέλεις, ἀλλὰ θέλε τὰ γινόμενα ὡς γίνεται&nbsp;»</p>
+        <p class="tf-q-text">« Ne cherche pas que ce qui arrive arrive comme tu le veux, mais veuille que ce qui arrive arrive comme cela arrive »</p>
+        <p class="tf-q-src">— Encheiridion, VIII</p>
+      </div>
+      <p class="tf-works-title">Œuvres majeures</p>
+      <div class="tf-works"><span class="tf-work">Encheiridion</span><span class="tf-work">Entretiens (4 livres)</span><span class="tf-work">Fragments</span></div>
+    </div>
+    <div class="thinker-full reveal">
+      <div class="tf-header">
+        <div class="tf-monogram">M</div>
+        <div><p class="tf-name">Marc Aurèle</p><p class="tf-dates">121–180 · Rome</p></div>
+      </div>
+      <p class="tf-desc">Adopté par l'empereur Antonin, éduqué par les meilleurs rhéteurs de Rome, Marc Aurèle découvrit la philosophie stoïcienne à douze ans et ne l'abandonna plus. Devenu le maître du monde romain, il passa ses campagnes militaires à écrire non des mémoires glorieux mais un carnet d'examens de conscience — les <em>Pensées</em> — dans lesquels il se réprimande pour ses faiblesses, doute de lui-même et tente de se rappeler ses devoirs.</p>
+      <div class="tf-quote">
+        <p class="tf-q-orig">«&nbsp;Εἴ τι τῶν ἐκτὸς σε λυπεῖ, οὐκ ἐκεῖνο ἐνοχλεῖ σε, ἀλλ᾽ ἡ περὶ αὐτοῦ κρίσις σου&nbsp;»</p>
+        <p class="tf-q-text">« Si quelque chose d'extérieur te cause de la peine, ce n'est pas cette chose qui te trouble, mais ton jugement à son sujet »</p>
+        <p class="tf-q-src">— Pensées, VIII, 47</p>
+      </div>
+      <p class="tf-works-title">Œuvres majeures</p>
+      <div class="tf-works"><span class="tf-work">Pensées (Τὰ εἰς ἑαυτόν)</span></div>
+    </div>
+    <div class="thinker-full reveal">
+      <div class="tf-header">
+        <div class="tf-monogram">S</div>
+        <div><p class="tf-name">Sénèque</p><p class="tf-dates">4 av. J.-C. — 65 ap. J.-C. · Cordoue</p></div>
+      </div>
+      <p class="tf-desc">Le stoïcisme de Sénèque est celui d'un homme qui connaît la richesse, le pouvoir, l'exil et la mort imminente. Conseiller de Néron, il accueillit l'ordre d'exécution avec la sérénité qu'il avait prêchée toute sa vie. Sa mort — consignée par Tacite — est devenue une scène emblématique de la philosophie antique. Ses écrits allient la rigueur doctrinale à la plus belle prose latine de l'époque impériale.</p>
+      <div class="tf-quote">
+        <p class="tf-q-orig">«&nbsp;Recede in te ipse quantum potes&nbsp;»</p>
+        <p class="tf-q-text">« Retire-toi en toi-même autant que tu le peux »</p>
+        <p class="tf-q-src">— Lettres à Lucilius, VII, 8</p>
+      </div>
+      <p class="tf-works-title">Œuvres majeures</p>
+      <div class="tf-works"><span class="tf-work">Lettres à Lucilius</span><span class="tf-work">De Brevitate Vitae</span><span class="tf-work">De Ira</span><span class="tf-work">De Providentia</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section id="comparison">
+  <div class="section-header reveal" style="text-align:center">
+    <span class="section-label">Mise en perspective</span>
+    <h2 class="section-title">Stoïcisme & <em>autres écoles</em></h2>
+  </div>
+  <div style="overflow-x:auto;margin-top:8px">
+  <table class="comparison-table reveal">
+    <thead>
+      <tr>
+        <th>Dimension</th>
+        <th>Stoïcisme</th>
+        <th>Épicurisme</th>
+        <th>Existentialisme</th>
+        <th>Phénoménologie</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Bien suprême</td>
+        <td class="ct-highlight">La vertu seule</td>
+        <td>L'ataraxie (absence de trouble)</td>
+        <td>L'authenticité existentielle</td>
+        <td>La conscience lucide du monde vécu</td>
+      </tr>
+      <tr>
+        <td>Rapport au cosmos</td>
+        <td class="ct-highlight">S'y soumettre librement (logos)</td>
+        <td>S'en distancier (les dieux ne s'y mêlent pas)</td>
+        <td>L'indifférence cosmique aggrave l'absurde</td>
+        <td>Le monde est structuré par la conscience</td>
+      </tr>
+      <tr>
+        <td>Émotions</td>
+        <td class="ct-highlight">À transformer (apatheia ≠ insensibilité)</td>
+        <td>À satisfaire raisonnablement</td>
+        <td>Sources de révélation (angoisse, nausée)</td>
+        <td>Modes d'accès au monde vécu</td>
+      </tr>
+      <tr>
+        <td>Liberté</td>
+        <td class="ct-highlight">Intérieure, absolue — même en esclavage</td>
+        <td>Retrait du monde politique</td>
+        <td>Radicale, angoissante, inévitable</td>
+        <td>Engagée dans le monde par la corporéité</td>
+      </tr>
+      <tr>
+        <td>Mort</td>
+        <td class="ct-highlight">Indifférente — seule la vertu compte</td>
+        <td>Rien à craindre ("je ne suis pas là où elle est")</td>
+        <td>Fondatrice de sens (Heidegger : être-pour-la-mort)</td>
+        <td>Horizon du monde vécu</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- READINGS -->
+<section id="readings">
+  <div class="section-header reveal" style="text-align:center">
+    <span class="section-label">Bibliographie</span>
+    <h2 class="section-title">Pour aller <em>plus loin</em></h2>
+  </div>
+  <div class="readings-grid reveal">
+    <div class="reading-group">
+      <h3>Textes fondateurs</h3>
+      <div class="reading-list">
+        <div class="reading-item"><p class="r-title">Encheiridion (Manuel)</p><p class="r-author">Épictète · ~135 ap. J.-C.</p><p class="r-desc">Le texte stoïcien le plus accessible et le plus pratiqué. Point d'entrée idéal — 53 maximes sur l'art de vivre.</p></div>
+        <div class="reading-item"><p class="r-title">Pensées (Τὰ εἰς ἑαυτόν)</p><p class="r-author">Marc Aurèle · ~167–180 ap. J.-C.</p><p class="r-desc">Journal intime d'un empereur. La philosophie stoïcienne appliquée au quotidien le plus exigeant.</p></div>
+        <div class="reading-item"><p class="r-title">Lettres à Lucilius</p><p class="r-author">Sénèque · ~63–65 ap. J.-C.</p><p class="r-desc">124 lettres philosophiques d'une beauté littéraire exceptionnelle. La version romaine et élégante du stoïcisme.</p></div>
+      </div>
+    </div>
+    <div class="reading-group">
+      <h3>Études classiques</h3>
+      <div class="reading-list">
+        <div class="reading-item"><p class="r-title">La Citadelle intérieure</p><p class="r-author">Pierre Hadot · 1992</p><p class="r-desc">L'analyse de référence des <em>Pensées</em> de Marc Aurèle par le plus grand spécialiste français du stoïcisme.</p></div>
+        <div class="reading-item"><p class="r-title">Qu'est-ce que la philosophie antique ?</p><p class="r-author">Pierre Hadot · 1995</p><p class="r-desc">La philosophie comme mode de vie — thèse fondamentale pour comprendre le stoïcisme dans son contexte.</p></div>
+        <div class="reading-item"><p class="r-title">The Stoics</p><p class="r-author">F.H. Sandbach · 1975</p><p class="r-desc">Introduction académique rigoureuse couvrant l'ensemble de la tradition stoïcienne de Zénon à Marc Aurèle.</p></div>
+      </div>
+    </div>
+    <div class="reading-group">
+      <h3>Réceptions contemporaines</h3>
+      <div class="reading-list">
+        <div class="reading-item"><p class="r-title">How to Be a Stoic</p><p class="r-author">Massimo Pigliucci · 2017</p><p class="r-desc">Un philosophe professionnel confronte le stoïcisme antique aux défis du XXIe siècle — sans trahir la rigueur.</p></div>
+        <div class="reading-item"><p class="r-title">A Guide to the Good Life</p><p class="r-author">William B. Irvine · 2008</p><p class="r-desc">La pratique stoïcienne pour un lecteur moderne : visualisation négative, dichotomie du contrôle, méditation.</p></div>
+        <div class="reading-item"><p class="r-title">Stoicism and the Art of Happiness</p><p class="r-author">Donald Robertson · 2013</p><p class="r-desc">Connexions profondes entre la thérapie cognitive-comportementale (TCC) et les exercices spirituels stoïciens.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCHOOL NAV -->
+<section id="school-nav">
+  <p style="text-align:center;font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.45em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:40px">Toutes les écoles</p>
+  <div class="school-nav-grid">
+    <a href="stoicisme.html" class="school-nav-card" style="border-color:rgba(201,168,76,0.5)"><p class="snc-label">Antiquité · Actuel</p><p class="snc-name" style="color:var(--accent)">Stoïcisme ←</p></a>
+    <a href="epicurisme.html" class="school-nav-card"><p class="snc-label">Antiquité</p><p class="snc-name">Épicurisme</p></a>
+    <a href="existentialisme.html" class="school-nav-card"><p class="snc-label">XXe</p><p class="snc-name">Existentialisme</p></a>
+    <a href="idealisme.html" class="school-nav-card"><p class="snc-label">XVIIIe–XIXe</p><p class="snc-name">Idéalisme</p></a>
+    <a href="nietzscheisme.html" class="school-nav-card"><p class="snc-label">XIXe</p><p class="snc-name">Nietzschéisme</p></a>
+    <a href="taoisme.html" class="school-nav-card"><p class="snc-label">Antiquité</p><p class="snc-name">Taoïsme</p></a>
+    <a href="phenomenologie.html" class="school-nav-card"><p class="snc-label">XXe</p><p class="snc-name">Phénoménologie</p></a>
+    <a href="rationalisme.html" class="school-nav-card"><p class="snc-label">XVIIe</p><p class="snc-name">Rationalisme</p></a>
+  </div>
+</section>
+
+<footer>
+  <a href="aether-philosophie.html">← Retour à ÆTHER</a>
+  <p>« La philosophie enseigne à agir, non à parler » — Sénèque</p>
+</footer>
+
+<script>
+const dot=document.getElementById('cursor-dot'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px'});
+(function ar(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(ar)})();
+document.querySelectorAll('a,button,.concept-card,.thinker-full,.reading-item,.school-nav-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ring.style.width='52px';ring.style.height='52px'});
+  el.addEventListener('mouseleave',()=>{ring.style.width='36px';ring.style.height='36px'});
+});
+const obs=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*80)})},{threshold:0.07});
+document.querySelectorAll('.reveal,.tl-item').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

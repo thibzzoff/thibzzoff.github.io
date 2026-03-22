@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rationalisme — ÆTHER</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--void:#060708;--abyss:#0A0C10;--deep:#101420;--surface:#161C2E;--surface2:#1E263E;--surface3:#283050;--gold:#C9A84C;--gold-bright:#E8C76A;--gold-dim:#8A6E30;--gold-pale:#F5E6B8;--cream:#F0E6D0;--cream-dim:#B8A88A;--accent:#7A9BC8;--accent-dim:#486A98;--accent-pale:#C0D4F0;--r:16px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--cream);font-family:'EB Garamond',Georgia,serif;font-size:18px;line-height:1.7;cursor:none;overflow-x:hidden}
+#cursor{position:fixed;top:0;left:0;z-index:9999;pointer-events:none}
+#cursor-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);transform:translate(-50%,-50%)}
+#cursor-ring{position:fixed;top:0;left:0;z-index:9998;width:36px;height:36px;border-radius:50%;border:1px solid rgba(122,155,200,0.5);transform:translate(-50%,-50%);pointer-events:none;transition:width 0.3s,height 0.3s}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--void)}::-webkit-scrollbar-thumb{background:var(--accent-dim);border-radius:2px}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");background-size:200px;opacity:0.3;mix-blend-mode:overlay}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 4vw;display:flex;align-items:center;justify-content:space-between;height:72px;background:rgba(6,7,8,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(122,155,200,0.12)}
+.nav-logo{font-family:'Cinzel',serif;font-size:20px;letter-spacing:0.2em;color:var(--gold);text-decoration:none;cursor:none;flex-shrink:0}
+.nav-back{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.25em;color:var(--cream-dim);text-decoration:none;text-transform:uppercase;cursor:none;transition:color 0.25s;flex-shrink:0}.nav-back:hover{color:var(--accent)}
+.nav-schools{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.nav-schools a{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.12em;color:var(--cream-dim);text-decoration:none;cursor:none;transition:color 0.25s;text-transform:uppercase;white-space:nowrap}
+.nav-schools a:hover,.nav-schools a.active{color:var(--accent)}
+#hero{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 6vw 80px}
+.hero-era{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.45em;color:var(--accent-dim);text-transform:uppercase;margin-bottom:24px;opacity:0;animation:fadeUp 1s 0.3s forwards}
+.hero-title{font-family:'Cinzel',serif;font-size:clamp(32px,7vw,96px);font-weight:400;letter-spacing:0.12em;line-height:0.9;color:var(--accent);text-shadow:0 0 120px rgba(122,155,200,0.2);opacity:0;animation:fadeUp 1s 0.6s forwards}
+.hero-subtitle{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(18px,2.5vw,26px);color:var(--cream-dim);margin-top:28px;max-width:680px;opacity:0;animation:fadeUp 1s 1s forwards}
+.hero-divider{width:1px;height:0;background:linear-gradient(to bottom,transparent,var(--accent-dim),transparent);margin:36px auto;animation:growLine 1.2s 1.4s forwards}
+@keyframes growLine{to{height:72px}}
+.hero-meta{display:flex;gap:48px;opacity:0;animation:fadeUp 1s 1.6s forwards;flex-wrap:wrap;justify-content:center}
+.hero-meta-item{text-align:center}
+.hero-meta-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;color:var(--accent-dim);text-transform:uppercase;margin-bottom:6px}
+.hero-meta-value{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--cream)}
+.hero-opening-quote{margin-top:56px;padding:32px 48px;border:1px solid rgba(122,155,200,0.2);background:rgba(10,12,16,0.7);backdrop-filter:blur(8px);max-width:720px;opacity:0;animation:fadeUp 1s 2s forwards;position:relative}
+.hero-opening-quote::before{content:'"';font-family:'Cormorant Garamond',serif;font-size:120px;color:rgba(122,155,200,0.06);position:absolute;top:-20px;left:20px;line-height:1}
+.oq-original{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--accent-dim);letter-spacing:0.05em;margin-bottom:12px;font-style:italic}
+.oq-translation{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,2.5vw,24px);color:var(--cream);line-height:1.5;margin-bottom:16px}
+.oq-author{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;color:var(--accent-dim);text-transform:uppercase}
+section{position:relative;z-index:2;padding:100px 6vw}
+.section-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.5em;color:var(--accent-dim);text-transform:uppercase;margin-bottom:16px;display:block}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,52px);font-weight:300;color:var(--cream);line-height:1.1}
+.section-title em{font-style:italic;color:var(--accent)}
+.sep{display:block;width:48px;height:1px;background:var(--accent-dim);margin:32px 0}
+.prose{font-size:17px;color:var(--cream-dim);line-height:1.9;max-width:760px}.prose p{margin-bottom:1.4em}.prose strong{color:var(--cream);font-weight:500}
+#intro{background:var(--abyss)}
+.intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;max-width:1200px;margin:0 auto}
+#concepts{background:var(--void)}
+.concepts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:2px;margin-top:64px}
+.concept-card{padding:40px 36px;background:var(--deep);border:1px solid rgba(122,155,200,0.08);position:relative;overflow:hidden;transition:all 0.4s}
+.concept-card:hover{background:var(--surface);border-color:rgba(122,155,200,0.25);transform:translateY(-3px)}
+.concept-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,var(--accent),transparent);transform:scaleX(0);transition:transform 0.4s}
+.concept-card:hover::after{transform:scaleX(1)}
+.concept-latin{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--accent);opacity:0.45;margin-bottom:8px;font-style:italic}
+.concept-name{font-family:'Cinzel',serif;font-size:14px;letter-spacing:0.2em;color:var(--accent);text-transform:uppercase;margin-bottom:16px}
+.concept-desc{font-size:16px;color:var(--cream-dim);line-height:1.7}
+.concept-quote-block{margin-top:24px;padding:16px 20px;border-left:2px solid rgba(122,155,200,0.3);background:rgba(122,155,200,0.04)}
+.cq-orig{font-size:13px;color:var(--accent-dim);font-style:italic;margin-bottom:6px}
+.cq-trans{font-size:15px;color:var(--cream-dim);font-style:italic;line-height:1.5}
+.cq-src{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.25em;color:var(--accent-dim);text-transform:uppercase;margin-top:8px}
+#timeline{background:var(--abyss)}
+.timeline-track{position:relative;max-width:900px;margin:64px auto 0;padding-left:60px}
+.timeline-track::before{content:'';position:absolute;left:20px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--accent-dim),transparent)}
+.tl-item{position:relative;margin-bottom:56px;opacity:0;transform:translateX(-20px);transition:all 0.6s cubic-bezier(0.23,1,0.32,1)}
+.tl-item.visible{opacity:1;transform:translateX(0)}
+.tl-dot{position:absolute;left:-48px;top:6px;width:12px;height:12px;border-radius:50%;border:2px solid var(--accent);background:var(--void);transition:background 0.3s}
+.tl-item:hover .tl-dot{background:var(--accent)}
+.tl-date{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;color:var(--accent);text-transform:uppercase;margin-bottom:8px}
+.tl-name{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--cream);margin-bottom:6px}
+.tl-role{font-family:'EB Garamond',serif;font-size:14px;color:var(--accent-dim);letter-spacing:0.05em;margin-bottom:12px}
+.tl-desc{font-size:16px;color:var(--cream-dim);line-height:1.7;max-width:640px}
+.tl-works{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.tl-work{font-family:'EB Garamond',serif;font-style:italic;font-size:13px;padding:3px 12px;border:1px solid rgba(122,155,200,0.2);color:var(--accent-dim)}
+#thinkers{background:var(--void)}
+.thinkers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:24px;margin-top:64px}
+.thinker-full{background:var(--deep);border:1px solid rgba(122,155,200,0.1);padding:36px;transition:border-color 0.4s}
+.thinker-full:hover{border-color:rgba(122,155,200,0.3)}
+.tf-header{display:flex;align-items:flex-start;gap:20px;margin-bottom:24px}
+.tf-monogram{width:64px;height:64px;flex-shrink:0;background:var(--surface2);border:1px solid rgba(122,155,200,0.2);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:28px;font-style:italic;color:var(--accent)}
+.tf-name{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--cream);margin-bottom:4px}
+.tf-dates{font-size:13px;color:var(--accent-dim)}
+.tf-desc{font-size:16px;color:var(--cream-dim);line-height:1.7;margin-bottom:20px}
+.tf-quote{padding:16px 20px;border-left:2px solid var(--accent-dim);background:rgba(122,155,200,0.04);margin-bottom:20px}
+.tf-q-orig{font-size:13px;color:var(--accent-dim);font-style:italic;margin-bottom:6px}
+.tf-q-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:var(--cream-dim);line-height:1.5}
+.tf-q-src{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.25em;color:var(--accent-dim);text-transform:uppercase;margin-top:8px}
+.tf-works-title{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.3em;color:var(--accent-dim);text-transform:uppercase;margin-bottom:10px}
+.tf-works{display:flex;flex-wrap:wrap;gap:6px}
+.tf-work{font-family:'EB Garamond',serif;font-style:italic;font-size:13px;padding:3px 12px;border:1px solid rgba(122,155,200,0.2);color:var(--cream-dim)}
+#comparison{background:var(--abyss)}
+.comparison-table{width:100%;border-collapse:collapse;margin-top:56px}
+.comparison-table th{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;padding:16px 24px;text-align:left;border-bottom:1px solid rgba(122,155,200,0.2);color:var(--accent)}
+.comparison-table th:first-child{color:var(--cream-dim)}
+.comparison-table td{padding:20px 24px;border-bottom:1px solid rgba(122,155,200,0.06);font-size:15px;color:var(--cream-dim);vertical-align:top;line-height:1.6}
+.comparison-table td:first-child{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent-dim);white-space:nowrap}
+.comparison-table tr:hover td{background:rgba(122,155,200,0.03)}
+.ct-highlight{color:var(--accent);font-style:italic}
+#readings{background:var(--void)}
+.readings-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px}
+.reading-group h3{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent-dim);margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid rgba(122,155,200,0.15)}
+.reading-list{display:flex;flex-direction:column;gap:20px}
+.reading-item{padding:20px;background:var(--deep);border:1px solid rgba(122,155,200,0.08);transition:border-color 0.3s}
+.reading-item:hover{border-color:rgba(122,155,200,0.25)}
+.r-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--cream);margin-bottom:4px}
+.r-author{font-size:13px;color:var(--accent-dim);margin-bottom:8px}
+.r-desc{font-size:14px;color:var(--cream-dim);line-height:1.5}
+#school-nav{background:var(--abyss);padding:80px 6vw}
+.school-nav-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;max-width:1200px;margin:0 auto}
+.school-nav-card{padding:28px;background:var(--deep);border:1px solid rgba(201,168,76,0.08);text-decoration:none;cursor:none;transition:all 0.4s;display:block}
+.school-nav-card:hover{background:var(--surface);border-color:rgba(201,168,76,0.2);transform:translateY(-3px)}
+.snc-label{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:8px}
+.snc-name{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--cream)}
+footer{position:relative;z-index:2;background:var(--void);border-top:1px solid rgba(122,155,200,0.08);padding:40px 6vw;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+footer p{font-size:14px;color:rgba(176,155,123,0.4)}
+footer a{color:var(--gold);text-decoration:none;font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.15em;cursor:none}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.7s,transform 0.7s}
+.reveal.visible{opacity:1;transform:translateY(0)}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}from{opacity:0;transform:translateY(18px)}}
+@media(max-width:1100px){.school-nav-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.intro-grid,.readings-grid{grid-template-columns:1fr}}
+@media(max-width:600px){.school-nav-grid{grid-template-columns:1fr}.nav-schools{display:none}}
+</style>
+</head>
+<body>
+<div id="cursor"><div id="cursor-dot"></div></div>
+<div id="cursor-ring"></div>
+<nav>
+  <a href="aether-philosophie.html" class="nav-logo">Æ</a>
+  <div class="nav-schools">
+    <a href="stoicisme.html">Stoïcisme</a>
+    <a href="epicurisme.html">Épicurisme</a>
+    <a href="existentialisme.html">Existentialisme</a>
+    <a href="idealisme.html">Idéalisme</a>
+    <a href="nietzscheisme.html">Nietzschéisme</a>
+    <a href="taoisme.html">Taoïsme</a>
+    <a href="phenomenologie.html">Phénoménologie</a>
+    <a href="rationalisme.html" class="active">Rationalisme</a>
+  </div>
+  <a href="aether-philosophie.html" class="nav-back">← Accueil</a>
+</nav>
+
+<section id="hero">
+  <p class="hero-era">XVIIe — XVIIIe siècle</p>
+  <h1 class="hero-title">RATIONALISME</h1>
+  <p class="hero-subtitle">Cogito ergo sum — la raison seule, indépendamment de l'expérience, est la source de la connaissance certaine et de l'ordre du monde</p>
+  <div class="hero-divider"></div>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><p class="hero-meta-label">Fondateur</p><p class="hero-meta-value">René Descartes</p></div>
+    <div class="hero-meta-item"><p class="hero-meta-label">Sommet</p><p class="hero-meta-value">Baruch Spinoza</p></div>
+    <div class="hero-meta-item"><p class="hero-meta-label">Période</p><p class="hero-meta-value">XVIIe — XVIIIe siècle</p></div>
+    <div class="hero-meta-item"><p class="hero-meta-label">Concept central</p><p class="hero-meta-value">Idées innées</p></div>
+  </div>
+  <div class="hero-opening-quote">
+    <p class="oq-original">«&nbsp;Cogito, ergo sum&nbsp;»</p>
+    <p class="oq-translation">« Je pense, donc je suis » — la première certitude absolue, fondement de toute connaissance, trouvée au terme du doute radical.</p>
+    <p class="oq-author">— René Descartes, Discours de la méthode (1637) · Méditations métaphysiques (1641)</p>
+  </div>
+</section>
+
+<section id="intro">
+  <div class="intro-grid">
+    <div>
+      <span class="section-label">Le doute méthodique</span>
+      <h2 class="section-title">Reconstruire la connaissance <em>depuis zéro</em></h2>
+      <div class="sep"></div>
+      <div class="prose">
+        <p>Descartes entama les <em>Méditations métaphysiques</em> par un geste philosophique radical : douter de tout ce qui peut être mis en doute — les sens (qui trompent), le monde extérieur (peut-être un songe), les vérités mathématiques même (et si un malin génie me trompait ?). Ce <strong>doute hyperbolique</strong> n'est pas scepticisme : c'est une méthode pour trouver une vérité absolument certaine.</p>
+        <p>Ce qui résiste à tout doute : le fait même que je doute. Et douter, c'est penser. <em>Je pense, donc je suis</em> — le cogito — est la première certitude indestructible. De là, Descartes reconstruit : il prouve l'existence de Dieu (garant de la véracité de nos idées claires et distinctes), puis l'existence du monde extérieur.</p>
+        <p>Le rationalisme cartésien repose sur la théorie des <strong>idées innées</strong> : certaines vérités — l'existence de Dieu, les vérités mathématiques — ne viennent pas de l'expérience sensible mais sont inscrites dans l'esprit par la raison elle-même. C'est ce qui distingue le rationalisme de l'empirisme (Locke, Hume) qui dérive toute connaissance de l'expérience.</p>
+      </div>
+    </div>
+    <div>
+      <span class="section-label">Spinoza — Dieu ou Nature</span>
+      <h2 class="section-title">La philosophie comme <em>géométrie de l'être</em></h2>
+      <div class="sep"></div>
+      <div class="prose">
+        <p>Spinoza pousse le rationalisme à son apogée et à ses conséquences les plus scandaleuses pour son époque. Son <em>Éthique</em> (1677) est construite <em>more geometrico</em> — à la manière géométrique : définitions, axiomes, propositions, démonstrations, corollaires. La philosophie comme mathématique pure.</p>
+        <p>Sa thèse centrale — le <strong>monisme</strong> — est explosive : il n'existe qu'une seule substance infinie, que l'on peut appeler indifféremment Dieu ou Nature (<em>Deus sive Natura</em>). Descartes avait posé deux substances distinctes (la pensée et l'étendue) — Spinoza les réunit dans l'unique substance dont elles sont deux attributs. Il n'y a donc pas de Dieu transcendant, de Providence, de libre arbitre au sens traditionnel.</p>
+        <p>Excommunié de sa synagogue à 23 ans pour ses idées, Spinoza vécut dans la pauvreté, refusant des chaires de professeur pour préserver son indépendance. Il mourut à 44 ans — à cause, peut-être, de la poussière de verre respirée dans son atelier de polisseur de lentilles. Une ironie pour celui qui cherchait à voir le réel avec la plus grande clarté.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="concepts">
+  <div class="section-header reveal" style="text-align:center;margin-bottom:0">
+    <span class="section-label">Lexique fondamental</span>
+    <h2 class="section-title">Les concepts <em>essentiels</em></h2>
+  </div>
+  <div class="concepts-grid">
+    <div class="concept-card reveal">
+      <p class="concept-latin">Cogito ergo sum</p>
+      <p class="concept-name">Le Cogito</p>
+      <p class="concept-desc">Première certitude absolue de Descartes : le fait de douter prouve que je pense, et penser prouve que j'existe. Cette vérité résiste à tout doute possible — même le malin génie ne peut me tromper sur le fait que je pense en ce moment. Fondement de toute la philosophie cartésienne.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">«&nbsp;Et remarquant que cette vérité, je pense, donc je suis, était si ferme et si assurée que toutes les suppositions extravagantes des sceptiques n'étaient pas capables de l'ébranler&nbsp;»</p>
+        <p class="cq-trans">Le cogito comme roc de certitude</p>
+        <p class="cq-src">— Descartes, Discours de la méthode, IV</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-latin">Ideae innatae</p>
+      <p class="concept-name">Idées innées</p>
+      <p class="concept-desc">Certaines idées — l'infini, Dieu, les vérités mathématiques — ne viennent pas de l'expérience sensible mais sont inscrites dans l'esprit a priori. Ce n'est pas qu'on en naît conscient, mais que la raison les développe en elle-même, indépendamment de toute sensation. Point de fracture avec l'empirisme.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">«&nbsp;Cum enim Deum primo-primum intelligam esse infinitum, ego autem sim finitus, non potui ideam entis infiniti ex meo ingenio depromere&nbsp;»</p>
+        <p class="cq-trans">« L'idée d'un être infini ne peut venir d'un esprit fini — elle est donc innée »</p>
+        <p class="cq-src">— Descartes, Méditations, III</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-latin">Deus sive Natura</p>
+      <p class="concept-name">Dieu ou Nature</p>
+      <p class="concept-desc">Formule spinoziste du monisme : Dieu et la Nature sont une seule et même substance infiniment infinie, exprimée sous une infinité d'attributs dont nous ne connaissons que deux — la pensée et l'étendue. Pas de Dieu transcendant, pas de Providence, pas de miracles. L'ordre de la nature <em>est</em> l'ordre de Dieu.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">«&nbsp;Quidquid est, in Deo est, et nihil sine Deo esse neque concipi potest&nbsp;»</p>
+        <p class="cq-trans">« Tout ce qui est, est en Dieu, et rien ne peut être ni être conçu sans Dieu »</p>
+        <p class="cq-src">— Spinoza, Éthique, I, Proposition 15</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-latin">Monas</p>
+      <p class="concept-name">La Monade — Leibniz</p>
+      <p class="concept-desc">Leibniz oppose à la substance étendue de Descartes et au monisme de Spinoza un pluralisme radical : la réalité est composée d'une infinité de substances simples, immatérielles, sans fenêtres — les monades. Chacune reflète l'univers entier depuis son propre point de vue. Dieu a choisi le meilleur des mondes possibles — ce qui scandalisa Voltaire (<em>Candide</em>).</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">«&nbsp;Les Monades n'ont point de fenêtres par lesquelles quelque chose y puisse entrer ou sortir&nbsp;»</p>
+        <p class="cq-trans">Chaque monade est close sur elle-même et pourtant harmonisée à toutes les autres par Dieu</p>
+        <p class="cq-src">— Leibniz, Monadologie, §7</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-latin">Conatus</p>
+      <p class="concept-name">Le Conatus — Spinoza</p>
+      <p class="concept-desc">L'effort par lequel chaque chose persévère dans son être — le désir fondamental de continuer à exister et à s'accroître. Pour Spinoza, ce conatus est l'essence même de chaque être. Il fonde une éthique : les émotions (affects) sont des augmentations ou diminutions de notre puissance d'agir. La joie augmente le conatus, la tristesse le diminue.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">«&nbsp;Unaquaeque res, quantum in se est, in suo esse perseverare conatur&nbsp;»</p>
+        <p class="cq-trans">« Toute chose, autant qu'il est en elle, s'efforce de persévérer dans son être »</p>
+        <p class="cq-src">— Spinoza, Éthique, III, Proposition 6</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-latin">Sub specie aeternitatis</p>
+      <p class="concept-name">Sous l'espèce de l'éternité</p>
+      <p class="concept-desc">La perspective la plus haute selon Spinoza : voir les choses non depuis leur point de vue temporel et contingent, mais sous l'aspect de l'éternité — telles que Dieu (= Nature) les voit. Cette sagesse libère des passions tristes — crainte, haine, envie — en comprenant que tout s'enchaîne nécessairement. La liberté spinoziste est la compréhension de la nécessité.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">«&nbsp;Aeternitas est ipsa Dei essentia&nbsp;»</p>
+        <p class="cq-trans">« L'éternité est l'essence même de Dieu » — et voir sous cet aspect, c'est participer à cette éternité</p>
+        <p class="cq-src">— Spinoza, Éthique, I, Définition 8</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="timeline">
+  <div class="section-header reveal" style="text-align:center">
+    <span class="section-label">Frise chronologique</span>
+    <h2 class="section-title">Un siècle de <em>raison triomphante</em></h2>
+  </div>
+  <div class="timeline-track">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">1596–1650</p>
+      <h3 class="tl-name">René Descartes</h3>
+      <p class="tl-role">Fondateur — le doute méthodique</p>
+      <p class="tl-desc">Officier de l'armée bavaroise, Descartes vécut une nuit de novembre 1619 trois songes révélateurs qui lui montrèrent sa mission : unifier toutes les sciences sous la raison mathématique. Il passa le reste de sa vie à fuir la notoriété — il refusa tout poste académique, vivant en Hollande pour sa liberté d'esprit. Il mourut à Stockholm en 1650, appelé comme précepteur de la reine Christine de Suède, épuisé par les leçons à 5h du matin dans le froid suédois.</p>
+      <div class="tl-works"><span class="tl-work">Discours de la méthode</span><span class="tl-work">Méditations métaphysiques</span><span class="tl-work">Principes de la philosophie</span><span class="tl-work">Les Passions de l'âme</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">1632–1677</p>
+      <h3 class="tl-name">Baruch Spinoza</h3>
+      <p class="tl-role">Le rationalisme radical</p>
+      <p class="tl-desc">Fils de marchands juifs portugais réfugiés en Hollande, Spinoza fut frappé à 23 ans du <em>herem</em> le plus sévère jamais prononcé par la communauté juive d'Amsterdam — excommunication totale et définitive. Ses raisons restent mystérieuses mais ses idées étaient clairement dangereuses pour toute religion révélée. Il vécut en taillant des lentilles optiques pour Huygens et d'autres savants, refusant la chaire que lui offrit Louis XIV. Il mourut à 44 ans de tuberculose, laissant une œuvre qui ne serait pleinement comprise que deux siècles plus tard.</p>
+      <div class="tl-works"><span class="tl-work">Éthique</span><span class="tl-work">Traité théologico-politique</span><span class="tl-work">Traité de la réforme de l'entendement</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">1646–1716</p>
+      <h3 class="tl-name">Gottfried Wilhelm Leibniz</h3>
+      <p class="tl-role">Le rationalisme encyclopédique</p>
+      <p class="tl-desc">Polymathe extraordinaire : mathématicien (co-inventeur du calcul infinitésimal avec Newton, dans une dispute de priorité féroce), physicien, logicien, diplomate, juriste et philosophe. Sa théorie des monades et de l'harmonie préétablie est le système rationaliste le plus ambitieux après Spinoza. Sa thèse que « nous vivons dans le meilleur des mondes possibles » fut immortalisée et ridiculisée par Voltaire dans <em>Candide</em> (1759).</p>
+      <div class="tl-works"><span class="tl-work">Monadologie</span><span class="tl-work">Discours de métaphysique</span><span class="tl-work">Nouveaux Essais sur l'entendement humain</span><span class="tl-work">Théodicée</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">1724–1804</p>
+      <h3 class="tl-name">Immanuel Kant</h3>
+      <p class="tl-role">Le dépassement — rationalisme + empirisme</p>
+      <p class="tl-desc">Kant se réveilla de son <em>sommeil dogmatique</em> — dit-il — en lisant Hume. Sa <em>Critique de la raison pure</em> tenta une synthèse entre le rationalisme (les structures a priori de l'esprit) et l'empirisme (la nécessité de l'expérience sensible). Il marqua ainsi la fin du rationalisme classique tout en en préservant les intuitions fondamentales dans un cadre nouveau — l'idéalisme transcendantal.</p>
+      <div class="tl-works"><span class="tl-work">Critique de la raison pure</span><span class="tl-work">Prolégomènes</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="thinkers">
+  <div class="section-header reveal" style="text-align:center">
+    <span class="section-label">Portraits philosophiques</span>
+    <h2 class="section-title">Les <em>géomètres de l'être</em></h2>
+  </div>
+  <div class="thinkers-grid">
+    <div class="thinker-full reveal">
+      <div class="tf-header">
+        <div class="tf-monogram">D</div>
+        <div><p class="tf-name">Descartes</p><p class="tf-dates">1596–1650 · La Haye, Touraine</p></div>
+      </div>
+      <p class="tf-desc">Descartes fut le premier à philosopher en français (le <em>Discours de la méthode</em>), voulant que sa philosophie soit accessible à « ceux qui n'usent que de leur raison naturelle toute pure ». Sa distinction de la substance pensante (<em>res cogitans</em>) et de la substance étendue (<em>res extensa</em>) — le dualisme corps/esprit — est l'une des positions les plus influentes et les plus débattues de toute l'histoire de la philosophie, encore au cœur des neurosciences contemporaines.</p>
+      <div class="tf-quote">
+        <p class="tf-q-orig">«&nbsp;Le bon sens est la chose du monde la mieux partagée&nbsp;»</p>
+        <p class="tf-q-text">Première phrase du Discours de la méthode — avec une ironie fine : si tout le monde a la raison, pourquoi si peu s'en servent bien ?</p>
+        <p class="tf-q-src">— Discours de la méthode, I (1637)</p>
+      </div>
+      <p class="tf-works-title">Œuvres majeures</p>
+      <div class="tf-works"><span class="tf-work">Discours de la méthode</span><span class="tf-work">Méditations métaphysiques</span><span class="tf-work">Principes de la philosophie</span></div>
+    </div>
+    <div class="thinker-full reveal">
+      <div class="tf-header">
+        <div class="tf-monogram">S</div>
+        <div><p class="tf-name">Spinoza</p><p class="tf-dates">1632–1677 · Amsterdam</p></div>
+      </div>
+      <p class="tf-desc">L'Éthique de Spinoza est l'une des œuvres philosophiques les plus intimidantes et les plus fascinantes jamais écrites — une tentative de démontrer more geometrico que Dieu est tout, que tout est nécessaire, que la liberté est la compréhension de la nécessité, et que la béatitude est la connaissance de l'union de l'esprit avec la nature tout entière. Hegel dira de lui : « Ou bien Spinoza, ou bien pas de philosophie du tout. »</p>
+      <div class="tf-quote">
+        <p class="tf-q-orig">«&nbsp;Homo liber de nulla re minus quam de morte cogitat, et ejus sapientia non mortis sed vitae meditatio est&nbsp;»</p>
+        <p class="tf-q-text">« L'homme libre ne pense à rien moins qu'à la mort, et sa sagesse est une méditation non de la mort mais de la vie. »</p>
+        <p class="tf-q-src">— Éthique, IV, Proposition 67</p>
+      </div>
+      <p class="tf-works-title">Œuvres majeures</p>
+      <div class="tf-works"><span class="tf-work">Éthique</span><span class="tf-work">Traité théologico-politique</span><span class="tf-work">Traité de la réforme de l'entendement</span></div>
+    </div>
+    <div class="thinker-full reveal">
+      <div class="tf-header">
+        <div class="tf-monogram">L</div>
+        <div><p class="tf-name">Leibniz</p><p class="tf-dates">1646–1716 · Leipzig</p></div>
+      </div>
+      <p class="tf-desc">Leibniz n'avait pas de poste universitaire — c'était un courtisan intellectuel au service des princes allemands, occupé à réconcilier les Églises, à inventer une langue universelle, à concevoir une encyclopédie des savoirs, à négocier des traités diplomatiques. Pourtant, dans les interstices de cette vie agitée, il produisit des œuvres philosophiques et mathématiques de premier rang. Sa mort fut ignominieuse : seul son secrétaire l'accompagna à sa tombe, ignoré de la cour de Hanovre qui célébrait l'accession de Georges Ier au trône d'Angleterre.</p>
+      <div class="tf-quote">
+        <p class="tf-q-orig">«&nbsp;La musique est un exercice d'arithmétique secret dans lequel l'âme ne sait pas qu'elle compte&nbsp;»</p>
+        <p class="tf-q-text">L'harmonie préétablie entre toutes les monades — chacune compte seule et pourtant s'accorde à toutes les autres</p>
+        <p class="tf-q-src">— Lettre à Goldbach (1712)</p>
+      </div>
+      <p class="tf-works-title">Œuvres majeures</p>
+      <div class="tf-works"><span class="tf-work">Monadologie</span><span class="tf-work">Discours de métaphysique</span><span class="tf-work">Théodicée</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="comparison">
+  <div class="section-header reveal" style="text-align:center">
+    <span class="section-label">Mise en perspective</span>
+    <h2 class="section-title">Rationalisme & <em>autres écoles</em></h2>
+  </div>
+  <div style="overflow-x:auto">
+  <table class="comparison-table reveal">
+    <thead>
+      <tr><th>Dimension</th><th>Rationalisme</th><th>Stoïcisme</th><th>Idéalisme</th><th>Phénoménologie</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Source du savoir</td><td class="ct-highlight">La raison seule — idées innées a priori</td><td>Raison + observation de la nature</td><td>L'Esprit se déploie dans le monde</td><td>L'expérience vécue (Lebenswelt)</td></tr>
+      <tr><td>La substance</td><td class="ct-highlight">Pensée + Étendue (Descartes) / Une seule (Spinoza)</td><td>Corps (atomes) + pneuma (logos)</td><td>L'Esprit absolu</td><td>Hors du champ phénoménologique</td></tr>
+      <tr><td>Dieu</td><td class="ct-highlight">Garant des vérités claires et distinctes</td><td>Logos immanent (panthéisme)</td><td>Esprit absolu se réalisant dans l'histoire</td><td>Hors du champ phénoménologique</td></tr>
+      <tr><td>Le corps</td><td class="ct-highlight">Machine étendue — séparé de l'esprit (Descartes)</td><td>À discipliner selon le logos</td><td>Nature comme Esprit aliéné</td><td>Corps propre = sujet de perception (Merleau-Ponty)</td></tr>
+      <tr><td>La liberté</td><td class="ct-highlight">Compréhension de la nécessité (Spinoza)</td><td>Maîtrise intérieure des représentations</td><td>Réalisation dans l'État rationnel</td><td>Engagée dans le monde par la corporéité</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section id="readings">
+  <div class="section-header reveal" style="text-align:center">
+    <span class="section-label">Bibliographie</span>
+    <h2 class="section-title">Pour aller <em>plus loin</em></h2>
+  </div>
+  <div class="readings-grid reveal">
+    <div class="reading-group">
+      <h3>Textes fondateurs</h3>
+      <div class="reading-list">
+        <div class="reading-item"><p class="r-title">Discours de la méthode</p><p class="r-author">Descartes · 1637</p><p class="r-desc">Court, élégant, fondateur. La première œuvre philosophique majeure en français. Le doute méthodique et le cogito en quelques pages accessibles.</p></div>
+        <div class="reading-item"><p class="r-title">Méditations métaphysiques</p><p class="r-author">Descartes · 1641</p><p class="r-desc">Avec les Objections et Réponses — un dialogue philosophique exceptionnel. L'œuvre la plus rigoureuse de Descartes.</p></div>
+        <div class="reading-item"><p class="r-title">Éthique (I et V)</p><p class="r-author">Spinoza · 1677</p><p class="r-desc">Commencer par les parties I (sur Dieu) et V (sur la liberté et la béatitude). Difficile mais d'une beauté intellectuelle inégalée.</p></div>
+      </div>
+    </div>
+    <div class="reading-group">
+      <h3>Études classiques</h3>
+      <div class="reading-list">
+        <div class="reading-item"><p class="r-title">Descartes</p><p class="r-author">Geneviève Rodis-Lewis · 1995</p><p class="r-desc">La biographie intellectuelle de référence sur Descartes en français — rigoureuse et accessible.</p></div>
+        <div class="reading-item"><p class="r-title">Spinoza</p><p class="r-author">Gilles Deleuze · 1970/1981</p><p class="r-desc">Deux ouvrages complémentaires — l'un introductif (<em>Spinoza : philosophie pratique</em>), l'autre avancé (<em>Spinoza et le problème de l'expression</em>).</p></div>
+        <div class="reading-item"><p class="r-title">The Rationalists</p><p class="r-author">John Cottingham · 1988</p><p class="r-desc">Introduction comparative solide à Descartes, Spinoza et Leibniz — idéale pour comprendre leurs relations et divergences.</p></div>
+      </div>
+    </div>
+    <div class="reading-group">
+      <h3>Réceptions contemporaines</h3>
+      <div class="reading-list">
+        <div class="reading-item"><p class="r-title">L'Erreur de Descartes</p><p class="r-author">Antonio Damasio · 1994</p><p class="r-desc">Le neuroscientifique montre que la séparation cartésienne raison/émotion est fausse — les émotions sont nécessaires à la raison. La revanche du corps sur le cogito.</p></div>
+        <div class="reading-item"><p class="r-title">Spinoza contre Descartes</p><p class="r-author">Jonathan Israel · 2001</p><p class="r-desc">Le rôle de Spinoza dans les Lumières radicales — comment son monisme athée déclencha une révolution intellectuelle secrète.</p></div>
+        <div class="reading-item"><p class="r-title">At the Existentialist Café</p><p class="r-author">Sarah Bakewell · 2016</p><p class="r-desc">Comment la phénoménologie et l'existentialisme répondirent au dualisme cartésien — la philo continentale contre Descartes.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="school-nav">
+  <p style="text-align:center;font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.45em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:40px">Toutes les écoles</p>
+  <div class="school-nav-grid">
+    <a href="stoicisme.html" class="school-nav-card"><p class="snc-label">Antiquité</p><p class="snc-name">Stoïcisme</p></a>
+    <a href="epicurisme.html" class="school-nav-card"><p class="snc-label">Antiquité</p><p class="snc-name">Épicurisme</p></a>
+    <a href="rationalisme.html" class="school-nav-card" style="border-color:rgba(122,155,200,0.3)"><p class="snc-label">XVIIe · Actuel</p><p class="snc-name" style="color:var(--accent)">Rationalisme ←</p></a>
+    <a href="idealisme.html" class="school-nav-card"><p class="snc-label">XVIIIe–XIXe</p><p class="snc-name">Idéalisme</p></a>
+    <a href="nietzscheisme.html" class="school-nav-card"><p class="snc-label">XIXe</p><p class="snc-name">Nietzschéisme</p></a>
+    <a href="taoisme.html" class="school-nav-card"><p class="snc-label">Antiquité</p><p class="snc-name">Taoïsme</p></a>
+    <a href="existentialisme.html" class="school-nav-card"><p class="snc-label">XXe</p><p class="snc-name">Existentialisme</p></a>
+    <a href="phenomenologie.html" class="school-nav-card"><p class="snc-label">XXe</p><p class="snc-name">Phénoménologie</p></a>
+  </div>
+</section>
+
+<footer>
+  <a href="aether-philosophie.html">← Retour à ÆTHER</a>
+  <p>« Je pense, donc je suis. » — Descartes</p>
+</footer>
+
+<script>
+const dot=document.getElementById('cursor-dot'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px'});
+(function ar(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(ar)})();
+document.querySelectorAll('a,button,.concept-card,.thinker-full,.reading-item,.school-nav-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ring.style.width='52px';ring.style.height='52px'});
+  el.addEventListener('mouseleave',()=>{ring.style.width='36px';ring.style.height='36px'});
+});
+const obs=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*80)})},{threshold:0.07});
+document.querySelectorAll('.reveal,.tl-item').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

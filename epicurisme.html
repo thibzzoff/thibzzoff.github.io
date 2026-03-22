@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Épicurisme — ÆTHER</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--void:#060807;--abyss:#0A0E0B;--deep:#101710;--surface:#192019;--surface2:#222E22;--surface3:#2E3E2E;--gold:#C9A84C;--gold-bright:#E8C76A;--gold-dim:#8A6E30;--gold-pale:#F5E6B8;--cream:#F0E6D0;--cream-dim:#B8A88A;--accent:#4E8A58;--accent-dim:#2E5E36;--accent-pale:#B0D8B8;--r:16px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--cream);font-family:'EB Garamond',Georgia,serif;font-size:18px;line-height:1.7;cursor:none;overflow-x:hidden}
+#cursor{position:fixed;top:0;left:0;z-index:9999;pointer-events:none}
+#cursor-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);transform:translate(-50%,-50%)}
+#cursor-ring{position:fixed;top:0;left:0;z-index:9998;width:36px;height:36px;border-radius:50%;border:1px solid rgba(78,138,88,0.5);transform:translate(-50%,-50%);pointer-events:none;transition:width 0.3s,height 0.3s}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--void)}::-webkit-scrollbar-thumb{background:var(--accent-dim);border-radius:2px}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");background-size:200px;opacity:0.3;mix-blend-mode:overlay}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 6vw;display:flex;align-items:center;justify-content:space-between;height:72px;background:rgba(6,8,7,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(78,138,88,0.12)}
+.nav-logo{font-family:'Cinzel',serif;font-size:20px;letter-spacing:0.2em;color:var(--gold);text-decoration:none;cursor:none}
+.nav-back{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.25em;color:var(--cream-dim);text-decoration:none;text-transform:uppercase;cursor:none;transition:color 0.25s}.nav-back:hover{color:var(--accent)}
+.nav-schools{display:flex;gap:24px}
+.nav-schools a{font-family:'EB Garamond',serif;font-size:14px;letter-spacing:0.08em;color:var(--cream-dim);text-decoration:none;cursor:none;transition:color 0.25s;text-transform:uppercase}
+.nav-schools a:hover,.nav-schools a.active{color:var(--accent)}
+#hero{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 6vw 80px}
+.hero-era{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.45em;color:var(--accent-dim);text-transform:uppercase;margin-bottom:24px;opacity:0;animation:fadeUp 1s 0.3s forwards}
+.hero-title{font-family:'Cinzel',serif;font-size:clamp(44px,8vw,108px);font-weight:400;letter-spacing:0.12em;line-height:0.9;color:var(--accent);text-shadow:0 0 120px rgba(78,138,88,0.2);opacity:0;animation:fadeUp 1s 0.6s forwards}
+.hero-subtitle{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(18px,2.5vw,26px);color:var(--cream-dim);margin-top:28px;max-width:660px;opacity:0;animation:fadeUp 1s 1s forwards}
+.hero-divider{width:1px;height:0;background:linear-gradient(to bottom,transparent,var(--accent-dim),transparent);margin:36px auto;animation:growLine 1.2s 1.4s forwards}
+@keyframes growLine{to{height:72px}}
+.hero-meta{display:flex;gap:48px;opacity:0;animation:fadeUp 1s 1.6s forwards;flex-wrap:wrap;justify-content:center}
+.hero-meta-item{text-align:center}
+.hero-meta-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;color:var(--accent-dim);text-transform:uppercase;margin-bottom:6px}
+.hero-meta-value{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--cream)}
+.hero-opening-quote{margin-top:56px;padding:32px 48px;border:1px solid rgba(78,138,88,0.2);background:rgba(10,14,11,0.7);backdrop-filter:blur(8px);max-width:720px;opacity:0;animation:fadeUp 1s 2s forwards;position:relative}
+.hero-opening-quote::before{content:'"';font-family:'Cormorant Garamond',serif;font-size:120px;color:rgba(78,138,88,0.06);position:absolute;top:-20px;left:20px;line-height:1}
+.oq-original{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--accent-dim);letter-spacing:0.05em;margin-bottom:12px;font-style:italic}
+.oq-translation{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,2.5vw,24px);color:var(--cream);line-height:1.5;margin-bottom:16px}
+.oq-author{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;color:var(--accent-dim);text-transform:uppercase}
+section{position:relative;z-index:2;padding:100px 6vw}
+.section-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.5em;color:var(--accent-dim);text-transform:uppercase;margin-bottom:16px;display:block}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,52px);font-weight:300;color:var(--cream);line-height:1.1}
+.section-title em{font-style:italic;color:var(--accent)}
+.sep{display:block;width:48px;height:1px;background:var(--accent-dim);margin:32px 0}
+.prose{font-size:17px;color:var(--cream-dim);line-height:1.9;max-width:760px}.prose p{margin-bottom:1.4em}.prose strong{color:var(--cream);font-weight:500}
+#intro{background:var(--abyss)}
+.intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;max-width:1200px;margin:0 auto}
+#concepts{background:var(--void)}
+.concepts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:2px;margin-top:64px}
+.concept-card{padding:40px 36px;background:var(--deep);border:1px solid rgba(78,138,88,0.08);position:relative;overflow:hidden;transition:all 0.4s}
+.concept-card:hover{background:var(--surface);border-color:rgba(78,138,88,0.25);transform:translateY(-3px)}
+.concept-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,var(--accent),transparent);transform:scaleX(0);transition:transform 0.4s}
+.concept-card:hover::after{transform:scaleX(1)}
+.concept-greek{font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--accent);opacity:0.4;margin-bottom:8px;font-style:italic}
+.concept-name{font-family:'Cinzel',serif;font-size:14px;letter-spacing:0.2em;color:var(--accent);text-transform:uppercase;margin-bottom:16px}
+.concept-desc{font-size:16px;color:var(--cream-dim);line-height:1.7}
+.concept-quote-block{margin-top:24px;padding:16px 20px;border-left:2px solid rgba(78,138,88,0.3);background:rgba(78,138,88,0.04)}
+.cq-orig{font-size:13px;color:var(--accent-dim);font-style:italic;margin-bottom:6px}
+.cq-trans{font-size:15px;color:var(--cream-dim);font-style:italic;line-height:1.5}
+.cq-src{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.25em;color:var(--accent-dim);text-transform:uppercase;margin-top:8px}
+#timeline{background:var(--abyss)}
+.timeline-track{position:relative;max-width:900px;margin:64px auto 0;padding-left:60px}
+.timeline-track::before{content:'';position:absolute;left:20px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--accent-dim),transparent)}
+.tl-item{position:relative;margin-bottom:56px;opacity:0;transform:translateX(-20px);transition:all 0.6s cubic-bezier(0.23,1,0.32,1)}
+.tl-item.visible{opacity:1;transform:translateX(0)}
+.tl-dot{position:absolute;left:-48px;top:6px;width:12px;height:12px;border-radius:50%;border:2px solid var(--accent);background:var(--void);transition:background 0.3s}
+.tl-item:hover .tl-dot{background:var(--accent)}
+.tl-date{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;color:var(--accent);text-transform:uppercase;margin-bottom:8px}
+.tl-name{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--cream);margin-bottom:6px}
+.tl-role{font-family:'EB Garamond',serif;font-size:14px;color:var(--accent-dim);letter-spacing:0.05em;margin-bottom:12px}
+.tl-desc{font-size:16px;color:var(--cream-dim);line-height:1.7;max-width:640px}
+.tl-works{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.tl-work{font-family:'EB Garamond',serif;font-style:italic;font-size:13px;padding:3px 12px;border:1px solid rgba(78,138,88,0.2);color:var(--accent-dim)}
+#thinkers{background:var(--void)}
+.thinkers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:24px;margin-top:64px}
+.thinker-full{background:var(--deep);border:1px solid rgba(78,138,88,0.1);padding:36px;transition:border-color 0.4s}
+.thinker-full:hover{border-color:rgba(78,138,88,0.3)}
+.tf-header{display:flex;align-items:flex-start;gap:20px;margin-bottom:24px}
+.tf-monogram{width:64px;height:64px;flex-shrink:0;background:var(--surface2);border:1px solid rgba(78,138,88,0.2);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:28px;font-style:italic;color:var(--accent)}
+.tf-name{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--cream);margin-bottom:4px}
+.tf-dates{font-size:13px;color:var(--accent-dim)}
+.tf-desc{font-size:16px;color:var(--cream-dim);line-height:1.7;margin-bottom:20px}
+.tf-quote{padding:16px 20px;border-left:2px solid var(--accent-dim);background:rgba(78,138,88,0.04);margin-bottom:20px}
+.tf-q-orig{font-size:13px;color:var(--accent-dim);font-style:italic;margin-bottom:6px}
+.tf-q-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:var(--cream-dim);line-height:1.5}
+.tf-q-src{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.25em;color:var(--accent-dim);text-transform:uppercase;margin-top:8px}
+.tf-works-title{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.3em;color:var(--accent-dim);text-transform:uppercase;margin-bottom:10px}
+.tf-works{display:flex;flex-wrap:wrap;gap:6px}
+.tf-work{font-family:'EB Garamond',serif;font-style:italic;font-size:13px;padding:3px 12px;border:1px solid rgba(78,138,88,0.2);color:var(--cream-dim)}
+#comparison{background:var(--abyss)}
+.comparison-table{width:100%;border-collapse:collapse;margin-top:56px}
+.comparison-table th{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;padding:16px 24px;text-align:left;border-bottom:1px solid rgba(78,138,88,0.2);color:var(--accent)}
+.comparison-table th:first-child{color:var(--cream-dim)}
+.comparison-table td{padding:20px 24px;border-bottom:1px solid rgba(78,138,88,0.06);font-size:15px;color:var(--cream-dim);vertical-align:top;line-height:1.6}
+.comparison-table td:first-child{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent-dim);white-space:nowrap}
+.comparison-table tr:hover td{background:rgba(78,138,88,0.03)}
+.ct-highlight{color:var(--accent);font-style:italic}
+#readings{background:var(--void)}
+.readings-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px}
+.reading-group h3{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent-dim);margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid rgba(78,138,88,0.15)}
+.reading-list{display:flex;flex-direction:column;gap:20px}
+.reading-item{padding:20px;background:var(--deep);border:1px solid rgba(78,138,88,0.08);transition:border-color 0.3s}
+.reading-item:hover{border-color:rgba(78,138,88,0.25)}
+.r-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--cream);margin-bottom:4px}
+.r-author{font-size:13px;color:var(--accent-dim);margin-bottom:8px}
+.r-desc{font-size:14px;color:var(--cream-dim);line-height:1.5}
+#school-nav{background:var(--abyss);padding:80px 6vw}
+.school-nav-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;max-width:1200px;margin:0 auto}
+.school-nav-card{padding:32px;background:var(--deep);border:1px solid rgba(201,168,76,0.08);text-decoration:none;cursor:none;transition:all 0.4s;display:block}
+.school-nav-card:hover{background:var(--surface);border-color:rgba(201,168,76,0.2);transform:translateY(-3px)}
+.snc-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:10px}
+.snc-name{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--cream)}
+footer{position:relative;z-index:2;background:var(--void);border-top:1px solid rgba(78,138,88,0.08);padding:40px 6vw;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+footer p{font-size:14px;color:rgba(176,155,123,0.4)}
+footer a{color:var(--gold);text-decoration:none;font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.15em;cursor:none}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.7s,transform 0.7s}
+.reveal.visible{opacity:1;transform:translateY(0)}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}from{opacity:0;transform:translateY(18px)}}
+@media(max-width:900px){.intro-grid,.readings-grid{grid-template-columns:1fr}.school-nav-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.school-nav-grid{grid-template-columns:1fr}.nav-schools{display:none}}
+</style>
+</head>
+<body>
+<div id="cursor"><div id="cursor-dot"></div></div>
+<div id="cursor-ring"></div>
+<nav>
+  <a href="aether-philosophie.html" class="nav-logo">Æ</a>
+  <div class="nav-schools">
+    <a href="stoicisme.html">Stoïcisme</a>
+    <a href="epicurisme.html" class="active">Épicurisme</a>
+    <a href="existentialisme.html">Existentialisme</a>
+    <a href="idealisme.html">Idéalisme</a>
+    <a href="nietzscheisme.html">Nietzschéisme</a>
+    <a href="taoisme.html">Taoïsme</a>
+    <a href="phenomenologie.html">Phénoménologie</a>
+    <a href="rationalisme.html">Rationalisme</a>
+  </div>
+  <a href="aether-philosophie.html" class="nav-back">← Accueil</a>
+</nav>
+
+<section id="hero">
+  <p class="hero-era">IVe — IIIe siècle av. J.-C.</p>
+  <h1 class="hero-title">ÉPICURISME</h1>
+  <p class="hero-subtitle">Le jardin d'Épicure — l'art de vivre heureux par le retrait prudent du monde, la culture de l'amitié et la libération de la peur</p>
+  <div class="hero-divider"></div>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><p class="hero-meta-label">Fondateur</p><p class="hero-meta-value">Épicure de Samos</p></div>
+    <div class="hero-meta-item"><p class="hero-meta-label">Lieu</p><p class="hero-meta-value">Le Jardin, Athènes</p></div>
+    <div class="hero-meta-item"><p class="hero-meta-label">Période</p><p class="hero-meta-value">~306 av. J.-C.</p></div>
+    <div class="hero-meta-item"><p class="hero-meta-label">Concept central</p><p class="hero-meta-value">L'ataraxie</p></div>
+  </div>
+  <div class="hero-opening-quote">
+    <p class="oq-original">«&nbsp;Ὁ θάνατος οὐδὲν πρὸς ἡμᾶς· ὅτε μὲν γὰρ ἡμεῖς ἐσμεν, ὁ θάνατος οὐ πάρεστιν, ὅταν δὲ ὁ θάνατος παρῇ, τόθ᾽ ἡμεῖς οὐκ ἐσμεν.&nbsp;»</p>
+    <p class="oq-translation">« La mort n'est rien pour nous : quand nous sommes, la mort n'est pas là ; quand la mort est là, nous ne sommes plus. »</p>
+    <p class="oq-author">— Épicure, Lettre à Ménécée</p>
+  </div>
+</section>
+
+<section id="intro">
+  <div class="intro-grid">
+    <div>
+      <span class="section-label">Le Jardin — Κῆπος</span>
+      <h2 class="section-title">La philosophie comme <em>thérapeutique</em></h2>
+      <div class="sep"></div>
+      <div class="prose">
+        <p>En 306 avant notre ère, Épicure acheta un jardin aux portes d'Athènes et y fonda une communauté philosophique d'un genre nouveau. Là vivaient ensemble, dans la simplicité et l'amitié, des hommes et des femmes libres, des esclaves affranchis — une égalité scandaleuse pour l'époque. Sur la porte, une inscription : <em>« Étranger, ici tu seras bien ; ici le bien suprême est le plaisir. »</em></p>
+        <p>L'épicurisme naît d'un constat : les hommes sont <strong>malades de peurs irrationnelles</strong> — la peur des dieux, la peur de la mort, la peur de la douleur, la peur du destin. La philosophie est la médecine de l'âme. Épicure formula lui-même son programme en quatre remèdes — le célèbre <em>Tétrapharmakos</em> : « Ne crains pas Dieu, ne crains pas la mort, le bien est facile à obtenir, le mal est facile à supporter. »</p>
+        <p>Épicure fut l'un des philosophes antiques les plus prolifiques : 300 rouleaux selon Diogène Laërce. Presque tout est perdu. Il nous reste essentiellement ses <strong>trois Lettres</strong> et ses <em>Maximes capitales</em> — suffisant pour saisir la cohérence et la beauté d'un système.</p>
+      </div>
+    </div>
+    <div>
+      <span class="section-label">Le malentendu millénaire</span>
+      <h2 class="section-title">Plaisir ne signifie pas <em>débauche</em></h2>
+      <div class="sep"></div>
+      <div class="prose">
+        <p>L'épicurisme est la philosophie la plus mal comprise de l'Antiquité. Le mot « épicurien » est devenu synonyme de luxure et d'hédonisme débridé — trahison totale de la pensée d'Épicure. Pour lui, le plaisir suprême n'est pas le plaisir <em>en mouvement</em> (le festin, l'ivresse) mais le plaisir <em>en repos</em> : l'<strong>ataraxie</strong> (absence de trouble de l'âme) et l'<strong>aponie</strong> (absence de douleur du corps).</p>
+        <p>Épicure lui-même vivait d'eau et de pain d'orge. Dans une lettre écrite le jour de sa mort — il souffrait de calculs rénaux depuis des années — il écrit à son ami Idoménée : <em>« Les joies de mon âme balancent tous ces maux. »</em> C'est cela, l'épicurisme vécu : non la fuite de la douleur, mais la capacité à maintenir la joie de l'âme même dans la souffrance physique.</p>
+        <p>La distinction centrale est celle entre <strong>plaisirs cinétiques</strong> (mouvements de désir et satisfaction) et <strong>plaisirs catastématiques</strong> (états stables de paix). La sagesse épicurienne consiste à préférer résolument les seconds.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="concepts">
+  <div class="section-header reveal" style="text-align:center;margin-bottom:0">
+    <span class="section-label">Lexique fondamental</span>
+    <h2 class="section-title">Les concepts <em>essentiels</em></h2>
+  </div>
+  <div class="concepts-grid">
+    <div class="concept-card reveal">
+      <p class="concept-greek">Ἀταραξία</p>
+      <p class="concept-name">Ataraxie</p>
+      <p class="concept-desc">Littéralement : « absence de trouble ». État de l'âme délivrée de toute crainte irrationnelle — peur des dieux, peur de la mort, peur de la douleur. C'est le souverain bien épicurien : non une extase mais une paix profonde et stable, comparable à la mer par temps calme.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">«&nbsp;ἡ ἀταραξία εὐδαιμονία ἐστίν&nbsp;»</p>
+        <p class="cq-trans">« L'ataraxie est le bonheur »</p>
+        <p class="cq-src">— Épicure, Maximes capitales</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-greek">Τετραφάρμακος</p>
+      <p class="concept-name">Le Tétrapharmakos</p>
+      <p class="concept-desc">Les quatre remèdes de l'âme : <em>Ne crains pas Dieu — Ne crains pas la mort — Le bien est facile à obtenir — Le mal est facile à supporter.</em> Ce résumé de la philosophie épicurienne en quatre affirmations thérapeutiques est attribué à Philodème de Gadara, épicurien du Ier siècle av. J.-C.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">«&nbsp;Ἄφοβον ὁ θεός, ἀνύποπτον ὁ θάνατος...&nbsp;»</p>
+        <p class="cq-trans">« Sans crainte, le dieu — sans suspicion, la mort — le bien est aisé à trouver, facile à endurer le mal. »</p>
+        <p class="cq-src">— Philodème, Contre les Sophistes</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-greek">Ἡδονή</p>
+      <p class="concept-name">Hédonè — Le Plaisir</p>
+      <p class="concept-desc">Épicure distingue plaisirs <em>naturels et nécessaires</em> (manger, boire, se réchauffer), plaisirs <em>naturels non nécessaires</em> (festin raffiné) et plaisirs <em>ni naturels ni nécessaires</em> (gloire, richesse). La sagesse consiste à cultiver les premiers, à modérer les seconds, à abandonner les troisièmes.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">«&nbsp;ἀρχὴν καὶ ῥίζαν παντὸς ἀγαθοῦ ἡ τῆς γαστρὸς ἡδονή&nbsp;»</p>
+        <p class="cq-trans">« Le principe et la racine de tout bien, c'est le plaisir du ventre »</p>
+        <p class="cq-src">— Épicure, fr. 409 (souvent mal interprété)</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-greek">Φιλία</p>
+      <p class="concept-name">L'Amitié — Philia</p>
+      <p class="concept-desc">Paradoxalement pour une philosophie du retrait et du plaisir individuel, l'amitié est au cœur de l'épicurisme. <em>« De tout ce que la sagesse procure pour le bonheur de la vie entière, le plus grand est de loin la possession de l'amitié. »</em> Le Jardin était une communauté d'amis — modèle unique dans la philosophie antique.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">«&nbsp;Πάντων ὧν ἡ σοφία παρασκευάζεται εἰς τὴν τοῦ ὅλου βίου μακαριότητα πολὺ μέγιστόν ἐστιν ἡ τῆς φιλίας κτῆσις&nbsp;»</p>
+        <p class="cq-trans">« De tout ce que la sagesse procure pour le bonheur de la vie entière, le plus grand est la possession de l'amitié »</p>
+        <p class="cq-src">— Épicure, Maximes capitales, XXVII</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-greek">Ἀτομισμός</p>
+      <p class="concept-name">L'Atomisme — fondement physique</p>
+      <p class="concept-desc">Reprenant Démocrite, Épicure fonde son éthique sur une physique matérialiste : tout est composé d'atomes et de vide. L'âme est corporelle — ensemble d'atomes plus subtils. La mort est dissolution atomique : aucune douleur possible, aucun au-delà, aucun jugement divin. Cette physique <em>libère</em> de la peur.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">«&nbsp;ἀρχὴ καὶ θεμέλιον πάντων ἄτομα καὶ κενόν&nbsp;»</p>
+        <p class="cq-trans">« Le principe et le fondement de toutes choses, ce sont les atomes et le vide »</p>
+        <p class="cq-src">— Épicure, Lettre à Hérodote</p>
+      </div>
+    </div>
+    <div class="concept-card reveal">
+      <p class="concept-greek">Λάθε βιώσας</p>
+      <p class="concept-name">« Vis caché »</p>
+      <p class="concept-desc">Maxime épicurienne invitant au retrait de la vie politique et publique — scandale absolu dans une cité grecque où l'engagement politique était un devoir moral. Épicure rompt ici radicalement avec le modèle platonicien et aristotélicien : la sagesse n'est pas dans l'agora mais dans le jardin.</p>
+      <div class="concept-quote-block">
+        <p class="cq-orig">«&nbsp;Λάθε βιώσας&nbsp;»</p>
+        <p class="cq-trans">« Vis caché » — ou : « Vis sans te faire remarquer »</p>
+        <p class="cq-src">— Épicure, fr. 551 (Plutarque, Si l'on doit vivre caché)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="timeline">
+  <div class="section-header reveal" style="text-align:center">
+    <span class="section-label">Frise chronologique</span>
+    <h2 class="section-title">Du Jardin au <em>De Rerum Natura</em></h2>
+  </div>
+  <div class="timeline-track">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">341–270 av. J.-C.</p>
+      <h3 class="tl-name">Épicure de Samos</h3>
+      <p class="tl-role">Fondateur — maître du Jardin</p>
+      <p class="tl-desc">Né à Samos, formé au platonisme et à la philosophie de Démocrite, Épicure fonda son école à Athènes en 306. Il souffrit toute sa vie de maladies chroniques — ce qui rendit sa philosophie de la douleur et de la paix de l'âme profondément autobiographique. Il mourut de calculs rénaux en 270, dans ce qu'il décrivit lui-même comme un bonheur complet.</p>
+      <div class="tl-works"><span class="tl-work">Lettre à Hérodote</span><span class="tl-work">Lettre à Ménécée</span><span class="tl-work">Lettre à Pythoclès</span><span class="tl-work">Maximes capitales</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">~110–~40 av. J.-C.</p>
+      <h3 class="tl-name">Philodème de Gadara</h3>
+      <p class="tl-role">Transmetteur de la tradition</p>
+      <p class="tl-desc">Philosophe épicurien dont la bibliothèque fut ensevelie à Herculanum lors de l'éruption du Vésuve. Les rouleaux carbonisés — les <em>Papyrus d'Herculanum</em> — constituent une source irremplaçable pour la philosophie épicurienne. Ses traités sur la musique, la rhétorique, la mort et les émotions témoignent de la richesse de l'école.</p>
+      <div class="tl-works"><span class="tl-work">Papyrus d'Herculanum</span><span class="tl-work">Sur la mort</span><span class="tl-work">Sur la musique</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">~98–~55 av. J.-C.</p>
+      <h3 class="tl-name">Lucrèce</h3>
+      <p class="tl-role">Le poète de l'atomisme</p>
+      <p class="tl-desc">Titus Lucretius Carus composa en latin le seul grand poème philosophique de l'Antiquité qui nous soit parvenu complet : <em>De Rerum Natura</em> (De la Nature des Choses). En six livres de vers hexamètres d'une beauté saisissante, il expose la physique atomiste et l'éthique épicurienne — et compose l'un des textes les plus influents de la pensée occidentale.</p>
+      <div class="tl-works"><span class="tl-work">De Rerum Natura</span></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <p class="tl-date">IIe siècle ap. J.-C.</p>
+      <h3 class="tl-name">Diogène d'Œnoanda</h3>
+      <p class="tl-role">La philosophie gravée dans la pierre</p>
+      <p class="tl-desc">Ce riche citoyen de Lycie fit graver sur un mur de stoa de sa ville une immense inscription exposant la philosophie épicurienne — pour que tous puissent y accéder gratuitement. Fragments retrouvés et encore excavés en Turquie. Témoignage émouvant de la vocation thérapeutique et universelle de l'épicurisme.</p>
+      <div class="tl-works"><span class="tl-work">L'Inscription d'Œnoanda</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="thinkers">
+  <div class="section-header reveal" style="text-align:center">
+    <span class="section-label">Portraits philosophiques</span>
+    <h2 class="section-title">Les <em>gardiens</em> du Jardin</h2>
+  </div>
+  <div class="thinkers-grid">
+    <div class="thinker-full reveal">
+      <div class="tf-header">
+        <div class="tf-monogram">Ε</div>
+        <div><p class="tf-name">Épicure</p><p class="tf-dates">341–270 av. J.-C. · Samos</p></div>
+      </div>
+      <p class="tf-desc">La dernière lettre d'Épicure, écrite le jour de sa mort à son ami Idoménée, est l'un des documents les plus extraordinaires de l'Antiquité. Mourant dans d'atroces douleurs, il écrit : <em>« Ce jour bienheureux qui est aussi le dernier de ma vie, je t'écris ceci. Des douleurs des voies urinaires et de la dysenterie sont présentes, ne cédant en rien à leur intensité habituelle. Mais contre tout cela est posée la joie de mon âme au souvenir de nos conversations passées. »</em> C'est le stoïcisme avant la lettre — ou plutôt, c'est l'épicurisme dans toute sa vérité.</p>
+      <div class="tf-quote">
+        <p class="tf-q-orig">«&nbsp;Ὁ φιλόσοφος λόγος κενὸς ᾧ μηδὲν πάθος ἀνθρώπινον θεραπεύεται&nbsp;»</p>
+        <p class="tf-q-text">« Vain est le discours du philosophe qui ne guérit aucune souffrance humaine »</p>
+        <p class="tf-q-src">— Épicure, fr. 221 (Porphyre)</p>
+      </div>
+      <p class="tf-works-title">Textes conservés</p>
+      <div class="tf-works"><span class="tf-work">Lettre à Hérodote</span><span class="tf-work">Lettre à Ménécée</span><span class="tf-work">Maximes capitales</span><span class="tf-work">Sentences vaticanes</span></div>
+    </div>
+    <div class="thinker-full reveal">
+      <div class="tf-header">
+        <div class="tf-monogram">L</div>
+        <div><p class="tf-name">Lucrèce</p><p class="tf-dates">~98–55 av. J.-C. · Rome</p></div>
+      </div>
+      <p class="tf-desc">On sait presque rien de Lucrèce — une note de Saint Jérôme prétend qu'il devint fou après avoir bu un philtre d'amour et qu'il se suicida, ce qui ajoute une ironie tragique à un poème consacré à la libération des passions. Son œuvre fut sauvée de l'oubli par Poggio Bracciolini qui retrouva un manuscrit dans un monastère allemand en 1417 — événement que l'historien Stephen Greenblatt a appelé « the swerve » (le clinamen), titre de son livre sur cette découverte.</p>
+      <div class="tf-quote">
+        <p class="tf-q-orig">«&nbsp;Suave, mari magno turbantibus aequora ventis, / e terra magnum alterius spectare laborem&nbsp;»</p>
+        <p class="tf-q-text">« Il est doux, quand sur la grande mer les vents soulèvent les flots, d'observer du rivage la grande peine d'autrui »</p>
+        <p class="tf-q-src">— De Rerum Natura, II, 1–2</p>
+      </div>
+      <p class="tf-works-title">Œuvre majeure</p>
+      <div class="tf-works"><span class="tf-work">De Rerum Natura (6 livres)</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="comparison">
+  <div class="section-header reveal" style="text-align:center">
+    <span class="section-label">Mise en perspective</span>
+    <h2 class="section-title">Épicurisme & <em>autres écoles</em></h2>
+  </div>
+  <div style="overflow-x:auto">
+  <table class="comparison-table reveal">
+    <thead>
+      <tr><th>Dimension</th><th>Épicurisme</th><th>Stoïcisme</th><th>Existentialisme</th><th>Phénoménologie</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Le souverain bien</td><td class="ct-highlight">Ataraxie (paix) + aponie (sans douleur)</td><td>La vertu seule</td><td>L'authenticité libre</td><td>La conscience lucide du monde</td></tr>
+      <tr><td>Le plaisir</td><td class="ct-highlight">Fondement de l'éthique (bien naturel)</td><td>Indifférent — ni bien ni mal</td><td>Catégorie non centrale</td><td>Mode d'être-au-monde</td></tr>
+      <tr><td>La vie politique</td><td class="ct-highlight">À fuir : « vis caché »</td><td>Devoir cosmopolite</td><td>Engagement nécessaire (Sartre)</td><td>Hors du champ</td></tr>
+      <tr><td>Les dieux</td><td class="ct-highlight">Existent mais ne se mêlent pas de nous</td><td>Providence rationnelle immanente</td><td>Inexistants (athée) ou saut (chrétien)</td><td>Hors du champ phénoméno.</td></tr>
+      <tr><td>La mort</td><td class="ct-highlight">Dissolution atomique — rien à craindre</td><td>Indifférente à la vertu</td><td>Fondatrice (Heidegger) ou absurde</td><td>Horizon du Dasein temporel</td></tr>
+      <tr><td>L'amitié</td><td class="ct-highlight">Bien suprême, au cœur de la communauté</td><td>Devoir de fraternité universelle</td><td>Rapport au regard d'autrui (tension)</td><td>Intersubjectivité constitutive</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section id="readings">
+  <div class="section-header reveal" style="text-align:center">
+    <span class="section-label">Bibliographie</span>
+    <h2 class="section-title">Pour aller <em>plus loin</em></h2>
+  </div>
+  <div class="readings-grid reveal">
+    <div class="reading-group">
+      <h3>Textes fondateurs</h3>
+      <div class="reading-list">
+        <div class="reading-item"><p class="r-title">Lettre à Ménécée</p><p class="r-author">Épicure · ~300 av. J.-C.</p><p class="r-desc">La lettre la plus complète et la plus accessible d'Épicure. En quelques pages, toute la philosophie épicurienne du bonheur.</p></div>
+        <div class="reading-item"><p class="r-title">Maximes capitales</p><p class="r-author">Épicure · ~300 av. J.-C.</p><p class="r-desc">40 maximes condensant la sagesse épicurienne. À lire comme un vade-mecum quotidien.</p></div>
+        <div class="reading-item"><p class="r-title">De Rerum Natura</p><p class="r-author">Lucrèce · ~60 av. J.-C.</p><p class="r-desc">Six livres de poésie philosophique. La physique atomiste au service de la libération des peurs. Chef-d'œuvre absolu.</p></div>
+      </div>
+    </div>
+    <div class="reading-group">
+      <h3>Études classiques</h3>
+      <div class="reading-list">
+        <div class="reading-item"><p class="r-title">Épicure ou l'ivresse de la liberté</p><p class="r-author">Marcel Conche · 1985</p><p class="r-desc">La plus belle introduction française à Épicure, par l'un de ses plus grands spécialistes.</p></div>
+        <div class="reading-item"><p class="r-title">The Epicurean Philosophers</p><p class="r-author">John Gaskin (ed.) · 1995</p><p class="r-desc">Anthologie des textes épicuriens disponibles, avec introductions académiques rigoureuses.</p></div>
+        <div class="reading-item"><p class="r-title">Epicurus and his Gods</p><p class="r-author">A.-J. Festugière · 1946</p><p class="r-desc">Étude classique sur la théologie épicurienne — les dieux qui n'interviennent pas et la liberté que cela fonde.</p></div>
+      </div>
+    </div>
+    <div class="reading-group">
+      <h3>Réceptions contemporaines</h3>
+      <div class="reading-list">
+        <div class="reading-item"><p class="r-title">The Swerve</p><p class="r-author">Stephen Greenblatt · 2011</p><p class="r-desc">Prix Pulitzer. Comment la redécouverte du manuscrit de Lucrèce en 1417 déclencha la Renaissance. Magistral.</p></div>
+        <div class="reading-item"><p class="r-title">How to Be an Epicurean</p><p class="r-author">Catherine Wilson · 2019</p><p class="r-desc">L'épicurisme ancien face aux questions contemporaines : environnement, politique, relations, mort.</p></div>
+        <div class="reading-item"><p class="r-title">Épicure en Corrèze</p><p class="r-author">Michel Onfray · 1995</p><p class="r-desc">L'épicurisme populaire, hédoniste assumé, revendiqué comme éthique du corps et du plaisir concret.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="school-nav">
+  <p style="text-align:center;font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.45em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:40px">Toutes les écoles</p>
+  <div class="school-nav-grid">
+    <a href="stoicisme.html" class="school-nav-card"><p class="snc-label">Antiquité</p><p class="snc-name">Stoïcisme</p></a>
+    <a href="epicurisme.html" class="school-nav-card" style="border-color:rgba(78,138,88,0.5)"><p class="snc-label">Antiquité · Actuel</p><p class="snc-name" style="color:var(--accent)">Épicurisme ←</p></a>
+    <a href="existentialisme.html" class="school-nav-card"><p class="snc-label">XXe</p><p class="snc-name">Existentialisme</p></a>
+    <a href="idealisme.html" class="school-nav-card"><p class="snc-label">XVIIIe–XIXe</p><p class="snc-name">Idéalisme</p></a>
+    <a href="nietzscheisme.html" class="school-nav-card"><p class="snc-label">XIXe</p><p class="snc-name">Nietzschéisme</p></a>
+    <a href="taoisme.html" class="school-nav-card"><p class="snc-label">Antiquité</p><p class="snc-name">Taoïsme</p></a>
+    <a href="phenomenologie.html" class="school-nav-card"><p class="snc-label">XXe</p><p class="snc-name">Phénoménologie</p></a>
+    <a href="rationalisme.html" class="school-nav-card"><p class="snc-label">XVIIe</p><p class="snc-name">Rationalisme</p></a>
+  </div>
+</section>
+
+<footer>
+  <a href="aether-philosophie.html">← Retour à ÆTHER</a>
+  <p>« Vain est le discours du philosophe qui ne guérit aucune souffrance. » — Épicure</p>
+</footer>
+
+<script>
+const dot=document.getElementById('cursor-dot'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px'});
+(function ar(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(ar)})();
+document.querySelectorAll('a,button,.concept-card,.thinker-full,.reading-item,.school-nav-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ring.style.width='52px';ring.style.height='52px'});
+  el.addEventListener('mouseleave',()=>{ring.style.width='36px';ring.style.height='36px'});
+});
+const obs=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*80)})},{threshold:0.07});
+document.querySelectorAll('.reveal,.tl-item').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,1708 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ÆTHER — Bibliothèque de l'Esprit Humain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void: #070605;
+  --abyss: #0E0B08;
+  --deep: #17120D;
+  --surface: #221A12;
+  --surface2: #2E2318;
+  --surface3: #3D3020;
+  --gold: #C9A84C;
+  --gold-bright: #E8C76A;
+  --gold-dim: #8A6E30;
+  --gold-pale: #F5E6B8;
+  --cream: #F0E6D0;
+  --cream-dim: #B8A88A;
+  --rust: #8B4B2A;
+  --rose: #C47868;
+  --ink: #2A1F14;
+  --r: 16px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--void);
+  color: var(--cream);
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 18px;
+  line-height: 1.7;
+  cursor: none;
+  overflow-x: hidden;
+}
+
+/* ─── CUSTOM CURSOR ─── */
+#cursor {
+  position: fixed; top: 0; left: 0; z-index: 9999;
+  pointer-events: none;
+  mix-blend-mode: difference;
+}
+#cursor-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--gold);
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s;
+}
+#cursor-ring {
+  position: fixed; top: 0; left: 0; z-index: 9998;
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid rgba(201,168,76,0.5);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: transform 0.25s cubic-bezier(0.23,1,0.32,1), width 0.3s, height 0.3s, opacity 0.3s;
+}
+
+/* ─── CANVAS PARTICLES ─── */
+#cosmos { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; opacity: 0.6; }
+
+/* ─── NOISE OVERLAY ─── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 200px;
+  opacity: 0.35;
+  mix-blend-mode: overlay;
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--void); }
+::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
+
+/* ─── NAV ─── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 0 6vw;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 72px;
+  transition: background 0.4s, backdrop-filter 0.4s;
+}
+nav.scrolled {
+  background: rgba(7,6,5,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(201,168,76,0.12);
+}
+.nav-logo {
+  font-family: 'Cinzel', serif;
+  font-size: 22px;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  text-decoration: none;
+  display: flex; align-items: center; gap: 10px;
+}
+.nav-logo-symbol {
+  font-size: 28px;
+  line-height: 1;
+}
+.nav-links {
+  display: flex; gap: 36px; list-style: none;
+}
+.nav-links a {
+  font-family: 'EB Garamond', serif;
+  font-size: 15px;
+  letter-spacing: 0.12em;
+  color: var(--cream-dim);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.25s;
+  cursor: none;
+}
+.nav-links a:hover { color: var(--gold); }
+.nav-cta {
+  font-family: 'EB Garamond', serif;
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 8px 22px;
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
+  background: transparent;
+  cursor: none;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+.nav-cta:hover {
+  background: var(--gold);
+  color: var(--void);
+}
+
+/* ─── HERO ─── */
+#hero {
+  position: relative; z-index: 2;
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 120px 6vw 80px;
+  overflow: hidden;
+}
+.hero-subtitle-top {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.45em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 32px;
+  opacity: 0;
+  animation: fadeUp 1s 0.3s forwards;
+}
+.hero-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(72px, 14vw, 160px);
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  line-height: 0.9;
+  color: var(--gold);
+  text-shadow: 0 0 120px rgba(201,168,76,0.2);
+  opacity: 0;
+  animation: fadeUp 1s 0.6s forwards;
+}
+.hero-divider {
+  width: 1px;
+  height: 0;
+  background: linear-gradient(to bottom, transparent, var(--gold-dim), transparent);
+  margin: 36px auto;
+  animation: growLine 1.2s 1.2s forwards;
+}
+@keyframes growLine { to { height: 80px; } }
+.hero-tagline {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(18px, 2.5vw, 28px);
+  color: var(--cream-dim);
+  max-width: 600px;
+  opacity: 0;
+  animation: fadeUp 1s 1.4s forwards;
+}
+.hero-question-card {
+  margin-top: 64px;
+  padding: 32px 48px;
+  border: 1px solid rgba(201,168,76,0.2);
+  background: rgba(22,17,12,0.6);
+  backdrop-filter: blur(8px);
+  max-width: 680px;
+  position: relative;
+  opacity: 0;
+  animation: fadeUp 1s 1.8s forwards;
+}
+.hero-question-card::before {
+  content: '"';
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 120px;
+  color: rgba(201,168,76,0.08);
+  position: absolute;
+  top: -20px; left: 20px;
+  line-height: 1;
+}
+.daily-label {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.daily-question {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(20px, 2.8vw, 26px);
+  color: var(--cream);
+  line-height: 1.5;
+}
+.hero-actions {
+  display: flex; gap: 16px; justify-content: center;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+.btn-primary {
+  padding: 12px 32px;
+  background: var(--gold);
+  color: var(--void);
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  border: none;
+  cursor: none;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn-primary:hover {
+  background: var(--gold-bright);
+  transform: translateY(-2px);
+}
+.btn-ghost {
+  padding: 12px 32px;
+  background: transparent;
+  color: var(--cream-dim);
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  border: 1px solid rgba(201,168,76,0.3);
+  cursor: none;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn-ghost:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.scroll-hint {
+  position: absolute; bottom: 36px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  color: var(--gold-dim);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  animation: fadeUp 1s 2.4s both;
+}
+.scroll-hint-line {
+  width: 1px; height: 48px;
+  background: linear-gradient(to bottom, var(--gold-dim), transparent);
+  animation: scrollPulse 2s infinite;
+}
+@keyframes scrollPulse {
+  0%, 100% { transform: scaleY(1); opacity: 1; }
+  50% { transform: scaleY(0.5); opacity: 0.4; }
+}
+
+/* ─── SECTIONS ─── */
+section {
+  position: relative; z-index: 2;
+  padding: 120px 6vw;
+}
+.section-header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+.section-label {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.5em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  display: block;
+}
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 300;
+  color: var(--cream);
+  line-height: 1.1;
+}
+.section-title em {
+  font-style: italic;
+  color: var(--gold);
+}
+.section-subtitle {
+  margin-top: 20px;
+  font-family: 'EB Garamond', serif;
+  font-size: 16px;
+  color: var(--cream-dim);
+  max-width: 560px;
+  margin-left: auto; margin-right: auto;
+  line-height: 1.8;
+}
+
+/* ─── GOLD SEPARATOR ─── */
+.sep {
+  display: block;
+  width: 60px; height: 1px;
+  background: var(--gold-dim);
+  margin: 40px auto;
+}
+
+/* ─── SCHOOLS GRID ─── */
+#schools { background: var(--abyss); }
+.schools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2px;
+}
+.school-card {
+  position: relative;
+  padding: 44px 36px;
+  background: var(--deep);
+  border: 1px solid rgba(201,168,76,0.08);
+  overflow: hidden;
+  cursor: none;
+  transition: all 0.5s cubic-bezier(0.23,1,0.32,1);
+}
+.school-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(201,168,76,0.06) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.school-card:hover { background: var(--surface); transform: translateY(-4px); }
+.school-card:hover::before { opacity: 1; }
+.school-card:hover .school-border { transform: scaleX(1); }
+.school-border {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+  transform: scaleX(0);
+  transition: transform 0.5s;
+}
+.school-era {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.school-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--gold-pale);
+  margin-bottom: 12px;
+  line-height: 1.1;
+}
+.school-desc {
+  font-size: 15px;
+  color: var(--cream-dim);
+  line-height: 1.6;
+}
+.school-thinkers {
+  margin-top: 24px;
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.school-tag {
+  font-family: 'EB Garamond', serif;
+  font-size: 12px;
+  padding: 3px 10px;
+  border: 1px solid rgba(201,168,76,0.2);
+  color: var(--gold-dim);
+  letter-spacing: 0.05em;
+}
+.school-icon {
+  position: absolute; top: 36px; right: 36px;
+  font-size: 40px;
+  opacity: 0.15;
+  transition: opacity 0.3s;
+}
+.school-card:hover .school-icon { opacity: 0.3; }
+.school-card[href] { display: block; text-decoration: none; }
+.school-card[href]:hover { border-color: rgba(201,168,76,0.28); box-shadow: 0 0 40px rgba(201,168,76,0.06); }
+.school-card[href] .school-name { color: var(--gold); }
+.school-explore {
+  margin-top: 20px;
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'Cinzel', serif;
+  font-size: 10px; letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  transition: color 0.3s, gap 0.3s;
+}
+.school-card:hover .school-explore { color: var(--gold); gap: 12px; }
+.school-badge {
+  position: absolute; top: 12px; left: 12px;
+  font-family: 'Cinzel', serif; font-size: 9px;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  padding: 3px 10px;
+  background: rgba(201,168,76,0.08);
+  border: 1px solid rgba(201,168,76,0.2);
+  color: var(--gold-dim);
+}
+
+/* ─── THINKERS ─── */
+#thinkers { background: var(--void); }
+.thinkers-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 32px;
+}
+.thinker-card {
+  cursor: none;
+  position: relative;
+  overflow: hidden;
+}
+.thinker-portrait {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: var(--deep);
+  border: 1px solid rgba(201,168,76,0.1);
+  display: flex; align-items: flex-end;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s;
+}
+.thinker-card:hover .thinker-portrait { border-color: rgba(201,168,76,0.4); }
+.thinker-avatar {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 80px;
+  opacity: 0.12;
+  position: absolute;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  color: var(--gold);
+  transition: opacity 0.4s;
+}
+.thinker-card:hover .thinker-avatar { opacity: 0.22; }
+.thinker-quote-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(7,6,5,0.96) 0%, rgba(7,6,5,0.3) 60%, transparent 100%);
+  display: flex; flex-direction: column;
+  justify-content: flex-end;
+  padding: 24px 20px;
+  transform: translateY(60px);
+  transition: transform 0.5s cubic-bezier(0.23,1,0.32,1);
+}
+.thinker-card:hover .thinker-quote-overlay { transform: translateY(0); }
+.thinker-quote-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--cream-dim);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+.thinker-explore-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  text-transform: uppercase;
+  cursor: none;
+}
+.thinker-info {
+  padding: 16px 0;
+}
+.thinker-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  color: var(--cream);
+  margin-bottom: 4px;
+}
+.thinker-meta {
+  font-size: 13px;
+  color: var(--gold-dim);
+  letter-spacing: 0.05em;
+}
+
+/* ─── FEATURED CONCEPT ─── */
+#concept {
+  background: var(--abyss);
+  overflow: hidden;
+}
+.concept-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.concept-text .section-header { text-align: left; margin-bottom: 40px; }
+.concept-map-visual {
+  position: relative;
+  height: 480px;
+}
+.concept-node {
+  position: absolute;
+  padding: 12px 20px;
+  background: var(--deep);
+  border: 1px solid rgba(201,168,76,0.2);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  color: var(--cream-dim);
+  cursor: none;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+.concept-node:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: var(--surface);
+  z-index: 10;
+}
+.concept-node.central {
+  font-size: 18px;
+  color: var(--gold);
+  border-color: var(--gold-dim);
+  background: var(--surface2);
+  font-weight: 500;
+}
+svg.concept-lines {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
+svg.concept-lines line {
+  stroke: rgba(201,168,76,0.15);
+  stroke-width: 1;
+  stroke-dasharray: 4 6;
+}
+
+/* ─── ORACLE ─── */
+#oracle {
+  background: var(--void);
+  position: relative;
+}
+#oracle::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,168,76,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+.oracle-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.oracle-visual {
+  text-align: center;
+  margin-bottom: 56px;
+}
+.oracle-symbol {
+  font-size: 80px;
+  display: block;
+  margin-bottom: 16px;
+  animation: oraclePulse 4s ease-in-out infinite;
+}
+@keyframes oraclePulse {
+  0%, 100% { filter: brightness(1); transform: scale(1); }
+  50% { filter: brightness(1.3); transform: scale(1.04); }
+}
+.oracle-chat {
+  background: var(--deep);
+  border: 1px solid rgba(201,168,76,0.15);
+  overflow: hidden;
+}
+.oracle-messages {
+  min-height: 300px;
+  max-height: 460px;
+  overflow-y: auto;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  scroll-behavior: smooth;
+}
+.oracle-messages::-webkit-scrollbar { width: 2px; }
+.oracle-messages::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+.msg {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.msg-from {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+}
+.msg.user .msg-from { color: var(--gold-dim); align-self: flex-end; }
+.msg.oracle .msg-from { color: rgba(201,168,76,0.4); }
+.msg-bubble {
+  font-family: 'EB Garamond', serif;
+  font-size: 16px;
+  line-height: 1.7;
+  max-width: 85%;
+}
+.msg.user .msg-bubble {
+  align-self: flex-end;
+  text-align: right;
+  color: var(--cream);
+  border-right: 2px solid var(--gold-dim);
+  padding-right: 16px;
+}
+.msg.oracle .msg-bubble {
+  color: var(--cream-dim);
+  border-left: 2px solid rgba(201,168,76,0.2);
+  padding-left: 16px;
+  font-style: italic;
+}
+.oracle-input-row {
+  display: flex;
+  border-top: 1px solid rgba(201,168,76,0.1);
+}
+.oracle-input {
+  flex: 1;
+  padding: 20px 28px;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: 'EB Garamond', serif;
+  font-size: 17px;
+  color: var(--cream);
+  resize: none;
+  height: 72px;
+}
+.oracle-input::placeholder { color: rgba(176,155,123,0.4); font-style: italic; }
+.oracle-send {
+  padding: 0 28px;
+  background: transparent;
+  border: none;
+  border-left: 1px solid rgba(201,168,76,0.1);
+  color: var(--gold-dim);
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: none;
+  transition: all 0.3s;
+}
+.oracle-send:hover {
+  background: rgba(201,168,76,0.06);
+  color: var(--gold);
+}
+.oracle-credits {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 13px;
+  color: rgba(176,155,123,0.5);
+  letter-spacing: 0.05em;
+}
+.credits-count {
+  color: var(--gold);
+  font-family: 'Cinzel', serif;
+}
+.oracle-typing {
+  display: none;
+  align-items: center; gap: 6px;
+  padding: 8px 16px;
+  border-left: 2px solid rgba(201,168,76,0.2);
+}
+.oracle-typing.active { display: flex; }
+.dot { width: 4px; height: 4px; border-radius: 50%; background: var(--gold-dim); animation: blink 1.4s infinite; }
+.dot:nth-child(2) { animation-delay: 0.2s; }
+.dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes blink { 0%,80%,100% { opacity: 0.2; } 40% { opacity: 1; } }
+.oracle-suggestions {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  padding: 16px 28px;
+  border-top: 1px solid rgba(201,168,76,0.06);
+}
+.oracle-sug {
+  font-family: 'EB Garamond', serif;
+  font-size: 13px;
+  padding: 5px 14px;
+  border: 1px solid rgba(201,168,76,0.15);
+  color: var(--cream-dim);
+  background: transparent;
+  cursor: none;
+  transition: all 0.25s;
+  font-style: italic;
+}
+.oracle-sug:hover { border-color: var(--gold); color: var(--gold); }
+
+/* ─── DEBATES ─── */
+#debates { background: var(--abyss); }
+.debates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
+}
+.debate-card {
+  padding: 32px;
+  background: var(--deep);
+  border: 1px solid rgba(201,168,76,0.08);
+  cursor: none;
+  transition: all 0.4s;
+  position: relative;
+  overflow: hidden;
+}
+.debate-card:hover { border-color: rgba(201,168,76,0.25); background: var(--surface); }
+.debate-status {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.status-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+}
+.status-dot.live { background: #4CAF50; animation: livePulse 2s infinite; }
+.status-dot.hot { background: var(--rose); }
+.status-dot.new { background: var(--gold); }
+@keyframes livePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(76,175,80,0.4); }
+  70% { box-shadow: 0 0 0 8px rgba(76,175,80,0); }
+}
+.debate-question {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  color: var(--cream);
+  line-height: 1.4;
+  margin-bottom: 24px;
+}
+.debate-votes {
+  display: flex; gap: 0;
+  height: 4px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  border-radius: 2px;
+}
+.vote-yes { background: var(--gold); transition: width 0.6s; }
+.vote-no { background: var(--surface3); flex: 1; }
+.debate-meta {
+  display: flex; justify-content: space-between;
+  font-size: 13px;
+  color: var(--cream-dim);
+}
+.debate-count { color: var(--gold-dim); }
+.debate-vote-btns {
+  display: flex; gap: 8px; margin-top: 20px;
+}
+.vote-btn {
+  flex: 1; padding: 10px;
+  background: transparent;
+  border: 1px solid rgba(201,168,76,0.15);
+  color: var(--cream-dim);
+  font-family: 'EB Garamond', serif;
+  font-size: 14px;
+  cursor: none;
+  transition: all 0.25s;
+}
+.vote-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(201,168,76,0.04);
+}
+.vote-btn.voted-yes { background: rgba(201,168,76,0.15); border-color: var(--gold); color: var(--gold); }
+.vote-btn.voted-no { background: rgba(139,75,42,0.15); border-color: var(--rose); color: var(--rose); }
+
+/* ─── PREMIUM ─── */
+#premium {
+  background: var(--void);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+#premium::before {
+  content: '';
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 1px; height: 100%;
+  background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.1), transparent);
+}
+.premium-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2px;
+  max-width: 960px;
+  margin: 0 auto 64px;
+}
+.plan-card {
+  padding: 48px 36px;
+  background: var(--deep);
+  border: 1px solid rgba(201,168,76,0.08);
+  position: relative;
+  text-align: left;
+  transition: all 0.4s;
+}
+.plan-card.featured {
+  background: var(--surface);
+  border-color: rgba(201,168,76,0.3);
+}
+.plan-card.featured::before {
+  content: 'RECOMMANDÉ';
+  position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+  background: var(--gold);
+  color: var(--void);
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 0.35em;
+  padding: 6px 18px;
+}
+.plan-name {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.plan-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 56px;
+  font-weight: 300;
+  color: var(--cream);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.plan-price sup { font-size: 24px; vertical-align: super; margin-right: 2px; }
+.plan-price sub {
+  font-size: 16px;
+  color: var(--cream-dim);
+  font-family: 'EB Garamond', serif;
+}
+.plan-period {
+  font-size: 14px;
+  color: var(--cream-dim);
+  margin-bottom: 32px;
+}
+.plan-features {
+  list-style: none;
+  margin-bottom: 36px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.plan-features li {
+  font-size: 15px;
+  color: var(--cream-dim);
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.plan-features li::before {
+  content: '—';
+  color: var(--gold-dim);
+  flex-shrink: 0;
+}
+.plan-features li.included::before {
+  content: '✦';
+  color: var(--gold);
+}
+.plan-cta {
+  display: block;
+  text-align: center;
+  padding: 14px;
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: 0.25em;
+  text-decoration: none;
+  cursor: none;
+  transition: all 0.3s;
+}
+.plan-cta.free {
+  border: 1px solid rgba(201,168,76,0.2);
+  color: var(--cream-dim);
+}
+.plan-cta.free:hover { border-color: var(--gold-dim); color: var(--cream); }
+.plan-cta.gold {
+  background: var(--gold);
+  color: var(--void);
+}
+.plan-cta.gold:hover { background: var(--gold-bright); }
+
+/* ─── QUOTE RIBBON ─── */
+#quote-ribbon {
+  background: var(--surface);
+  border-top: 1px solid rgba(201,168,76,0.1);
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+  padding: 60px 6vw;
+  text-align: center;
+  position: relative; z-index: 2;
+}
+.ribbon-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(22px, 3.5vw, 36px);
+  color: var(--cream);
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+.ribbon-author {
+  margin-top: 20px;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+}
+
+/* ─── FOOTER ─── */
+footer {
+  position: relative; z-index: 2;
+  background: var(--abyss);
+  border-top: 1px solid rgba(201,168,76,0.08);
+  padding: 64px 6vw 36px;
+}
+.footer-inner {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 64px;
+  margin-bottom: 64px;
+}
+.footer-brand .nav-logo {
+  font-size: 20px; margin-bottom: 20px; display: block;
+}
+.footer-desc {
+  font-size: 15px;
+  color: var(--cream-dim);
+  line-height: 1.7;
+  max-width: 280px;
+}
+.footer-col h4 {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-col a {
+  color: var(--cream-dim);
+  text-decoration: none;
+  font-size: 15px;
+  transition: color 0.25s;
+  cursor: none;
+}
+.footer-col a:hover { color: var(--gold); }
+.footer-bottom {
+  padding-top: 32px;
+  border-top: 1px solid rgba(201,168,76,0.06);
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 12px;
+}
+.footer-bottom p {
+  font-size: 13px;
+  color: rgba(176,155,123,0.4);
+  letter-spacing: 0.05em;
+}
+
+/* ─── REVEAL ANIMATIONS ─── */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s, transform 0.8s; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(20px); }
+}
+
+/* ─── TOAST ─── */
+.toast {
+  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%);
+  background: var(--surface);
+  border: 1px solid rgba(201,168,76,0.3);
+  padding: 14px 28px;
+  font-family: 'EB Garamond', serif;
+  font-size: 15px;
+  color: var(--cream);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .concept-inner { grid-template-columns: 1fr; }
+  .concept-map-visual { display: none; }
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+  nav .nav-links { display: none; }
+}
+@media (max-width: 600px) {
+  .footer-inner { grid-template-columns: 1fr; gap: 40px; }
+  .hero-question-card { padding: 24px 28px; }
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cursor"><div id="cursor-dot"></div></div>
+<div id="cursor-ring"></div>
+
+<!-- COSMOS BACKGROUND -->
+<canvas id="cosmos"></canvas>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <span class="nav-logo-symbol">Æ</span>
+    <span>ther</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#schools">Écoles</a></li>
+    <li><a href="#thinkers">Penseurs</a></li>
+    <li><a href="#oracle">Oracle</a></li>
+    <li><a href="#debates">Débats</a></li>
+    <li><a href="#premium">Académie</a></li>
+  </ul>
+  <a href="#premium" class="nav-cta">Rejoindre</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <p class="hero-subtitle-top">Depuis l'Antiquité jusqu'à demain</p>
+  <h1 class="hero-title">ÆTHER</h1>
+  <div class="hero-divider"></div>
+  <p class="hero-tagline">La bibliothèque vivante de l'esprit humain — 2 600 ans de sagesse, accessible à tous</p>
+
+  <div class="hero-question-card reveal">
+    <p class="daily-label">Question du Jour</p>
+    <p class="daily-question" id="daily-q">
+      « La liberté consiste-t-elle à n'obéir qu'à soi-même, ou à n'obéir qu'à la raison ? »
+    </p>
+    <div class="hero-actions" style="margin-top: 28px;">
+      <a href="#oracle" class="btn-primary">Questionner l'Oracle</a>
+      <a href="#debates" class="btn-ghost">Rejoindre le Débat</a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Explorer</span>
+    <div class="scroll-hint-line"></div>
+  </div>
+</section>
+
+<!-- QUOTE RIBBON -->
+<div id="quote-ribbon">
+  <blockquote class="ribbon-quote">"La philosophie n'est pas une doctrine, mais une activité."</blockquote>
+  <p class="ribbon-author">— Ludwig Wittgenstein, Tractatus Logico-Philosophicus</p>
+</div>
+
+<!-- SCHOOLS -->
+<section id="schools">
+  <div class="section-header reveal">
+    <span class="section-label">Cartographie des Idées</span>
+    <h2 class="section-title">Les grandes <em>Écoles</em> de pensée</h2>
+    <p class="section-subtitle">De la maïeutique socratique au nihilisme nietzschéen, explorez les courants qui ont façonné notre manière d'être au monde.</p>
+  </div>
+  <div class="schools-grid">
+    <a href="stoicisme.html" class="school-card reveal">
+      <span class="school-badge">Page dédiée</span>
+      <span class="school-icon">⚖</span>
+      <p class="school-era">Ve siècle av. J.-C.</p>
+      <h3 class="school-name">Stoïcisme</h3>
+      <p class="school-desc">Distinguer ce qui dépend de nous de ce qui n'en dépend pas. Vivre selon la nature et la raison universelle.</p>
+      <div class="school-thinkers">
+        <span class="school-tag">Marc Aurèle</span>
+        <span class="school-tag">Épictète</span>
+        <span class="school-tag">Sénèque</span>
+      </div>
+      <p class="school-explore">Explorer →</p>
+      <div class="school-border"></div>
+    </a>
+    <a href="epicurisme.html" class="school-card reveal">
+      <span class="school-badge">Page dédiée</span>
+      <span class="school-icon">🌊</span>
+      <p class="school-era">IVe siècle av. J.-C.</p>
+      <h3 class="school-name">Épicurisme</h3>
+      <p class="school-desc">L'ataraxie — absence de trouble de l'âme — comme souverain bien. Le plaisir comme absence de douleur.</p>
+      <div class="school-thinkers">
+        <span class="school-tag">Épicure</span>
+        <span class="school-tag">Lucrèce</span>
+        <span class="school-tag">Philodème</span>
+      </div>
+      <p class="school-explore">Explorer →</p>
+      <div class="school-border"></div>
+    </a>
+    <a href="existentialisme.html" class="school-card reveal">
+      <span class="school-badge">Page dédiée</span>
+      <span class="school-icon">∃</span>
+      <p class="school-era">XXe siècle</p>
+      <h3 class="school-name">Existentialisme</h3>
+      <p class="school-desc">L'existence précède l'essence. L'être humain est condamné à être libre et doit créer son propre sens.</p>
+      <div class="school-thinkers">
+        <span class="school-tag">Sartre</span>
+        <span class="school-tag">Camus</span>
+        <span class="school-tag">de Beauvoir</span>
+      </div>
+      <p class="school-explore">Explorer →</p>
+      <div class="school-border"></div>
+    </a>
+    <a href="idealisme.html" class="school-card reveal">
+      <span class="school-badge">Page dédiée</span>
+      <span class="school-icon">👁</span>
+      <p class="school-era">XVIIIe siècle</p>
+      <h3 class="school-name">Idéalisme</h3>
+      <p class="school-desc">La réalité est fondamentalement mentale. Le monde phénoménal est structuré par les catégories de l'entendement.</p>
+      <div class="school-thinkers">
+        <span class="school-tag">Kant</span>
+        <span class="school-tag">Hegel</span>
+        <span class="school-tag">Fichte</span>
+      </div>
+      <p class="school-explore">Explorer →</p>
+      <div class="school-border"></div>
+    </a>
+    <a href="nietzscheisme.html" class="school-card reveal">
+      <span class="school-badge">Page dédiée</span>
+      <span class="school-icon">⚡</span>
+      <p class="school-era">XIXe siècle</p>
+      <h3 class="school-name">Nietzschéisme</h3>
+      <p class="school-desc">La volonté de puissance, le surhomme, le perspectivisme. Dieu est mort — réinventer les valeurs.</p>
+      <div class="school-thinkers">
+        <span class="school-tag">Nietzsche</span>
+        <span class="school-tag">Heidegger</span>
+      </div>
+      <p class="school-explore">Explorer →</p>
+      <div class="school-border"></div>
+    </a>
+    <a href="taoisme.html" class="school-card reveal">
+      <span class="school-badge">Page dédiée</span>
+      <span class="school-icon">♾</span>
+      <p class="school-era">VIe siècle av. J.-C.</p>
+      <h3 class="school-name">Taoïsme</h3>
+      <p class="school-desc">Le Tao qui peut être nommé n'est pas le Tao éternel. Wu wei — l'action par le non-agir, l'harmonie naturelle.</p>
+      <div class="school-thinkers">
+        <span class="school-tag">Lao Tseu</span>
+        <span class="school-tag">Zhuangzi</span>
+      </div>
+      <p class="school-explore">Explorer →</p>
+      <div class="school-border"></div>
+    </a>
+    <a href="phenomenologie.html" class="school-card reveal">
+      <span class="school-badge">Page dédiée</span>
+      <span class="school-icon">🔬</span>
+      <p class="school-era">XXe siècle</p>
+      <h3 class="school-name">Phénoménologie</h3>
+      <p class="school-desc">Retourner aux choses elles-mêmes. L'intentionnalité de la conscience et la constitution du monde vécu.</p>
+      <div class="school-thinkers">
+        <span class="school-tag">Husserl</span>
+        <span class="school-tag">Merleau-Ponty</span>
+      </div>
+      <p class="school-explore">Explorer →</p>
+      <div class="school-border"></div>
+    </a>
+    <a href="rationalisme.html" class="school-card reveal">
+      <span class="school-badge">Page dédiée</span>
+      <span class="school-icon">💎</span>
+      <p class="school-era">XVIIe siècle</p>
+      <h3 class="school-name">Rationalisme</h3>
+      <p class="school-desc">La raison seule est source de connaissance certaine. Le cogito cartésien fonde la certitude sur le doute radical.</p>
+      <div class="school-thinkers">
+        <span class="school-tag">Descartes</span>
+        <span class="school-tag">Spinoza</span>
+        <span class="school-tag">Leibniz</span>
+      </div>
+      <p class="school-explore">Explorer →</p>
+      <div class="school-border"></div>
+    </a>
+  </div>
+</section>
+
+<!-- THINKERS -->
+<section id="thinkers">
+  <div class="section-header reveal">
+    <span class="section-label">Galerie</span>
+    <h2 class="section-title">Les <em>Architectes</em> de la pensée</h2>
+    <p class="section-subtitle">Ceux qui ont osé interroger le fondement même de l'existence.</p>
+  </div>
+  <div class="thinkers-row">
+    <div class="thinker-card reveal">
+      <div class="thinker-portrait">
+        <div class="thinker-avatar">Σ</div>
+        <div class="thinker-quote-overlay">
+          <p class="thinker-quote-text">« Je sais que je ne sais rien. »</p>
+          <span class="thinker-explore-btn">Explorer →</span>
+        </div>
+      </div>
+      <div class="thinker-info">
+        <p class="thinker-name">Socrate</p>
+        <p class="thinker-meta">470–399 av. J.-C. · Athènes</p>
+      </div>
+    </div>
+    <div class="thinker-card reveal">
+      <div class="thinker-portrait">
+        <div class="thinker-avatar">Π</div>
+        <div class="thinker-quote-overlay">
+          <p class="thinker-quote-text">« L'amour est un dieu qui recherche la beauté. »</p>
+          <span class="thinker-explore-btn">Explorer →</span>
+        </div>
+      </div>
+      <div class="thinker-info">
+        <p class="thinker-name">Platon</p>
+        <p class="thinker-meta">428–348 av. J.-C. · Athènes</p>
+      </div>
+    </div>
+    <div class="thinker-card reveal">
+      <div class="thinker-portrait">
+        <div class="thinker-avatar">N</div>
+        <div class="thinker-quote-overlay">
+          <p class="thinker-quote-text">« Ce qui ne me tue pas me rend plus fort. »</p>
+          <span class="thinker-explore-btn">Explorer →</span>
+        </div>
+      </div>
+      <div class="thinker-info">
+        <p class="thinker-name">Nietzsche</p>
+        <p class="thinker-meta">1844–1900 · Prusse</p>
+      </div>
+    </div>
+    <div class="thinker-card reveal">
+      <div class="thinker-portrait">
+        <div class="thinker-avatar">S</div>
+        <div class="thinker-quote-overlay">
+          <p class="thinker-quote-text">« L'enfer, c'est les autres. »</p>
+          <span class="thinker-explore-btn">Explorer →</span>
+        </div>
+      </div>
+      <div class="thinker-info">
+        <p class="thinker-name">Sartre</p>
+        <p class="thinker-meta">1905–1980 · Paris</p>
+      </div>
+    </div>
+    <div class="thinker-card reveal">
+      <div class="thinker-portrait">
+        <div class="thinker-avatar">K</div>
+        <div class="thinker-quote-overlay">
+          <p class="thinker-quote-text">« Agis de telle sorte que tu traites l'humanité comme une fin, jamais seulement comme un moyen. »</p>
+          <span class="thinker-explore-btn">Explorer →</span>
+        </div>
+      </div>
+      <div class="thinker-info">
+        <p class="thinker-name">Kant</p>
+        <p class="thinker-meta">1724–1804 · Königsberg</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONCEPT MAP -->
+<section id="concept">
+  <div class="concept-inner">
+    <div class="concept-text">
+      <div class="section-header">
+        <span class="section-label">Cartographie Conceptuelle</span>
+        <h2 class="section-title">Des idées <em>vivantes</em></h2>
+      </div>
+      <p style="color: var(--cream-dim); font-size: 16px; line-height: 1.8; margin-bottom: 24px;">
+        Les concepts philosophiques ne sont pas isolés — ils forment une toile de relations, d'oppositions et de filiations. Chez ÆTHER, chaque notion est cartographiée dans son réseau d'influences.
+      </p>
+      <p style="color: var(--cream-dim); font-size: 16px; line-height: 1.8; margin-bottom: 36px;">
+        De la liberté à la justice, de l'être au néant — explorez les connexions profondes entre les concepts fondateurs de la pensée occidentale et orientale.
+      </p>
+      <a href="#oracle" class="btn-primary">Demander à l'Oracle</a>
+    </div>
+    <div class="concept-map-visual">
+      <svg class="concept-lines" id="concept-svg"></svg>
+      <div class="concept-node central" style="top: 42%; left: 38%; transform: translate(-50%, -50%);" id="cn-liberté">Liberté</div>
+      <div class="concept-node" style="top: 12%; left: 55%;">Volonté</div>
+      <div class="concept-node" style="top: 22%; left: 8%;">Déterminisme</div>
+      <div class="concept-node" style="top: 58%; left: 5%;">Responsabilité</div>
+      <div class="concept-node" style="top: 72%; left: 48%;">Justice</div>
+      <div class="concept-node" style="top: 55%; left: 70%;">Existence</div>
+      <div class="concept-node" style="top: 25%; left: 72%;">Conscience</div>
+      <div class="concept-node" style="top: 80%; left: 18%;">Vertu</div>
+    </div>
+  </div>
+</section>
+
+<!-- ORACLE -->
+<section id="oracle">
+  <div class="oracle-container">
+    <div class="oracle-visual reveal">
+      <span class="oracle-symbol">☽</span>
+      <div class="section-header">
+        <span class="section-label">Intelligence Philosophique</span>
+        <h2 class="section-title">L'<em>Oracle</em></h2>
+        <p class="section-subtitle">Interrogez une intelligence formée sur 2 600 ans de philosophie. Obtenez des réponses profondes, nuancées, et des contre-arguments socratiques.</p>
+      </div>
+    </div>
+    <div class="oracle-chat reveal">
+      <div class="oracle-messages" id="oracle-msgs">
+        <div class="msg oracle">
+          <span class="msg-from">L'Oracle</span>
+          <p class="msg-bubble">Je suis l'Oracle d'Æther — distillation de 2 600 ans de pensée humaine. Posez-moi votre question, aussi intime ou universelle soit-elle. Je n'ai pas de réponses définitives, seulement des chemins vers la clarté.</p>
+        </div>
+      </div>
+      <div class="oracle-suggestions">
+        <button class="oracle-sug" onclick="fillOracle('Le libre arbitre existe-t-il vraiment ?')">Le libre arbitre existe-t-il ?</button>
+        <button class="oracle-sug" onclick="fillOracle('Qu\'est-ce que le bonheur selon les philosophes ?')">Qu'est-ce que le bonheur ?</button>
+        <button class="oracle-sug" onclick="fillOracle('La mort doit-elle nous effrayer ?')">La mort doit-elle nous effrayer ?</button>
+        <button class="oracle-sug" onclick="fillOracle('Sommes-nous responsables de nos actions ?')">Sommes-nous responsables ?</button>
+      </div>
+      <div class="oracle-input-row">
+        <textarea class="oracle-input" id="oracle-input" placeholder="Interrogez l'Oracle…" rows="1"></textarea>
+        <button class="oracle-send" id="oracle-send-btn" onclick="sendToOracle()">Envoyer</button>
+      </div>
+    </div>
+    <p class="oracle-credits">
+      <span class="credits-count" id="credits-display">3</span> questions gratuites aujourd'hui · <a href="#premium" style="color: var(--gold-dim); text-decoration: none; cursor: none;">Illimité avec l'Académie →</a>
+    </p>
+  </div>
+</section>
+
+<!-- DEBATES -->
+<section id="debates">
+  <div class="section-header reveal">
+    <span class="section-label">Agora Numérique</span>
+    <h2 class="section-title">Le <em>Forum</em> des idées</h2>
+    <p class="section-subtitle">Là où Athènes rencontre l'internet. Votez, argumentez, changez d'avis.</p>
+  </div>
+  <div class="debates-grid" id="debates-grid">
+    <div class="debate-card reveal">
+      <div class="debate-status"><span class="status-dot live"></span><span style="color: #4CAF50; letter-spacing: 0.4em;">En direct</span></div>
+      <p class="debate-question">« Une IA peut-elle être consciente, ou simule-t-elle simplement la conscience ? »</p>
+      <div class="debate-votes"><div class="vote-yes" style="width: 62%"></div><div class="vote-no"></div></div>
+      <div class="debate-meta">
+        <span>62% — Elle peut l'être</span>
+        <span class="debate-count">2 847 votes</span>
+      </div>
+      <div class="debate-vote-btns">
+        <button class="vote-btn" onclick="vote(this,'yes','1')">Elle peut l'être</button>
+        <button class="vote-btn" onclick="vote(this,'no','1')">Non, impossible</button>
+      </div>
+    </div>
+    <div class="debate-card reveal">
+      <div class="debate-status"><span class="status-dot hot"></span><span style="color: var(--rose); letter-spacing: 0.4em;">Intense</span></div>
+      <p class="debate-question">« La morale est-elle universelle ou culturellement relative ? »</p>
+      <div class="debate-votes"><div class="vote-yes" style="width: 44%"></div><div class="vote-no"></div></div>
+      <div class="debate-meta">
+        <span>44% — Universelle</span>
+        <span class="debate-count">1 543 votes</span>
+      </div>
+      <div class="debate-vote-btns">
+        <button class="vote-btn" onclick="vote(this,'yes','2')">Universelle</button>
+        <button class="vote-btn" onclick="vote(this,'no','2')">Relative</button>
+      </div>
+    </div>
+    <div class="debate-card reveal">
+      <div class="debate-status"><span class="status-dot new"></span><span style="color: var(--gold); letter-spacing: 0.4em;">Nouveau</span></div>
+      <p class="debate-question">« Faut-il accepter la souffrance pour trouver du sens à l'existence ? »</p>
+      <div class="debate-votes"><div class="vote-yes" style="width: 71%"></div><div class="vote-no"></div></div>
+      <div class="debate-meta">
+        <span>71% — Oui</span>
+        <span class="debate-count">987 votes</span>
+      </div>
+      <div class="debate-vote-btns">
+        <button class="vote-btn" onclick="vote(this,'yes','3')">Nécessairement</button>
+        <button class="vote-btn" onclick="vote(this,'no','3')">Non, pas forcément</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PREMIUM -->
+<section id="premium">
+  <div class="section-header reveal">
+    <span class="section-label">L'Académie</span>
+    <h2 class="section-title">Plongez <em>plus profond</em></h2>
+    <p class="section-subtitle">L'Oracle gratuit vous ouvre une porte. L'Académie vous donne les clés de la maison entière.</p>
+  </div>
+  <div class="premium-grid reveal">
+    <div class="plan-card">
+      <p class="plan-name">Liberté</p>
+      <p class="plan-price"><sup>€</sup>0</p>
+      <p class="plan-period">Pour toujours</p>
+      <ul class="plan-features">
+        <li class="included">Bibliothèque complète (500+ penseurs)</li>
+        <li class="included">3 questions Oracle par jour</li>
+        <li class="included">Accès à tous les débats</li>
+        <li class="included">Question philosophique quotidienne</li>
+        <li>Oracle illimité</li>
+        <li>Journal philosophique personnel</li>
+        <li>Parcours guidés certifiants</li>
+      </ul>
+      <a href="#" class="plan-cta free">Commencer gratuitement</a>
+    </div>
+    <div class="plan-card featured">
+      <p class="plan-name">Académie</p>
+      <p class="plan-price"><sup>€</sup>9<sub>,99/mois</sub></p>
+      <p class="plan-period">ou €79/an · économisez 34%</p>
+      <ul class="plan-features">
+        <li class="included">Tout du plan Liberté</li>
+        <li class="included">Oracle IA illimité & personnalisé</li>
+        <li class="included">Journal philosophique avec analyse IA</li>
+        <li class="included">12 parcours guidés certifiants</li>
+        <li class="included">Dialogues socratiques approfondis</li>
+        <li class="included">Listes de lecture & PDF exclusifs</li>
+        <li class="included">Groupes de discussion privés</li>
+      </ul>
+      <a href="#" class="plan-cta gold">Rejoindre l'Académie</a>
+    </div>
+    <div class="plan-card">
+      <p class="plan-name">Symposium</p>
+      <p class="plan-price"><sup>€</sup>29<sub>/mois</sub></p>
+      <p class="plan-period">Pour les groupes & institutions</p>
+      <ul class="plan-features">
+        <li class="included">Tout du plan Académie</li>
+        <li class="included">Jusqu'à 20 membres</li>
+        <li class="included">Oracle partagé pour le groupe</li>
+        <li class="included">Cours en direct avec philosophes</li>
+        <li class="included">Tableau de bord administrateur</li>
+        <li class="included">API pour intégration LMS</li>
+        <li class="included">Support prioritaire dédié</li>
+      </ul>
+      <a href="#" class="plan-cta free">Contacter l'équipe</a>
+    </div>
+  </div>
+  <p style="text-align: center; color: var(--cream-dim); font-size: 14px; opacity: 0.6;">Aucune carte requise · Annulation à tout moment · Satisfait ou remboursé 30 jours</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo"><span class="nav-logo-symbol">Æ</span>THER</a>
+      <p class="footer-desc">La plus grande bibliothèque philosophique numérique du monde. 2 600 ans d'idées, rendues vivantes par l'intelligence artificielle.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Explorer</h4>
+      <ul>
+        <li><a href="#schools">Écoles de pensée</a></li>
+        <li><a href="#thinkers">Les penseurs</a></li>
+        <li><a href="#concept">Carte des concepts</a></li>
+        <li><a href="#debates">Débats du jour</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>L'Académie</h4>
+      <ul>
+        <li><a href="#oracle">Oracle IA</a></li>
+        <li><a href="#premium">Parcours guidés</a></li>
+        <li><a href="#premium">Groupes</a></li>
+        <li><a href="#">Institutions</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>À propos</h4>
+      <ul>
+        <li><a href="#">Notre mission</a></li>
+        <li><a href="#">Manifeste</a></li>
+        <li><a href="#">Rejoindre l'équipe</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 ÆTHER · La Bibliothèque de l'Esprit Humain</p>
+    <p style="font-style: italic; color: rgba(176,155,123,0.3);">« Connais-toi toi-même » — Temple d'Apollon, Delphes</p>
+  </div>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── CURSOR ───
+const dot = document.getElementById('cursor-dot');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.left = mx + 'px'; dot.style.top = my + 'px'; });
+function animRing() { rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(animRing); }
+animRing();
+document.querySelectorAll('a, button, .school-card, .thinker-card, .debate-card, .oracle-sug').forEach(el => {
+  el.addEventListener('mouseenter', () => { ring.style.width = '56px'; ring.style.height = '56px'; ring.style.opacity = '0.6'; });
+  el.addEventListener('mouseleave', () => { ring.style.width = '36px'; ring.style.height = '36px'; ring.style.opacity = '1'; });
+});
+
+// ─── COSMOS CANVAS ───
+const canvas = document.getElementById('cosmos');
+const ctx = canvas.getContext('2d');
+let W, H, stars = [], conLines = [];
+function resizeCanvas() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+resizeCanvas();
+window.addEventListener('resize', () => { resizeCanvas(); initStars(); });
+function initStars() {
+  stars = [];
+  for (let i = 0; i < 220; i++) {
+    stars.push({ x: Math.random()*W, y: Math.random()*H, r: Math.random()*1.2 + 0.2, speed: Math.random()*0.15 + 0.02, opacity: Math.random()*0.6 + 0.1, twinkle: Math.random()*Math.PI*2 });
+  }
+  conLines = [];
+  for (let i = 0; i < 15; i++) {
+    const s1 = stars[Math.floor(Math.random()*80)];
+    const s2 = stars[Math.floor(Math.random()*80)];
+    const d = Math.hypot(s1.x-s2.x, s1.y-s2.y);
+    if (d < 180) conLines.push({s1, s2, d});
+  }
+}
+initStars();
+let frame = 0;
+function drawCosmos() {
+  ctx.clearRect(0, 0, W, H);
+  frame += 0.008;
+  conLines.forEach(l => {
+    const op = (Math.sin(frame + l.d*0.01) * 0.5 + 0.5) * 0.08;
+    ctx.beginPath();
+    ctx.moveTo(l.s1.x, l.s1.y);
+    ctx.lineTo(l.s2.x, l.s2.y);
+    ctx.strokeStyle = `rgba(201,168,76,${op})`;
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+  });
+  stars.forEach(s => {
+    s.y -= s.speed;
+    if (s.y < -2) s.y = H + 2;
+    s.twinkle += 0.025;
+    const op = s.opacity * (0.6 + 0.4 * Math.sin(s.twinkle));
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(245,230,184,${op})`;
+    ctx.fill();
+  });
+  requestAnimationFrame(drawCosmos);
+}
+drawCosmos();
+
+// ─── NAV SCROLL ───
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ─── REVEAL ON SCROLL ───
+const reveals = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 60);
+    }
+  });
+}, { threshold: 0.08 });
+reveals.forEach(el => revealObs.observe(el));
+
+// ─── DAILY QUESTIONS ROTATION ───
+const questions = [
+  '« La liberté consiste-t-elle à n\'obéir qu\'à soi-même, ou à n\'obéir qu\'à la raison ? »',
+  '« Peut-on être heureux sans savoir que l\'on l\'est ? »',
+  '« L\'art peut-il nous enseigner la vérité ? »',
+  '« Avons-nous des obligations envers les générations futures ? »',
+  '« La justice est-elle toujours juste ? »',
+  '« Peut-on aimer quelqu\'un sans se perdre soi-même ? »',
+  '« La mort donne-t-elle un sens à la vie, ou le lui retire-t-elle ? »'
+];
+const dq = document.getElementById('daily-q');
+let qi = 0;
+setInterval(() => {
+  dq.style.opacity = '0';
+  dq.style.transform = 'translateY(8px)';
+  setTimeout(() => { qi = (qi + 1) % questions.length; dq.textContent = questions[qi]; dq.style.opacity = '1'; dq.style.transform = 'translateY(0)'; }, 500);
+}, 8000);
+dq.style.transition = 'opacity 0.5s, transform 0.5s';
+
+// ─── VOTE SYSTEM ───
+const voted = {};
+function vote(btn, side, id) {
+  if (voted[id]) { showToast('Vous avez déjà voté sur ce débat.'); return; }
+  voted[id] = side;
+  const card = btn.closest('.debate-card');
+  const btns = card.querySelectorAll('.vote-btn');
+  btns.forEach(b => b.classList.remove('voted-yes','voted-no'));
+  btn.classList.add(side === 'yes' ? 'voted-yes' : 'voted-no');
+  const bar = card.querySelector('.vote-yes');
+  const cur = parseInt(bar.style.width);
+  const newW = side === 'yes' ? Math.min(cur + 3, 97) : Math.max(cur - 3, 3);
+  bar.style.width = newW + '%';
+  card.querySelector('.debate-meta span:first-child').textContent = newW + '% — ' + (side === 'yes' ? btns[0].textContent : btns[1].textContent);
+  const countEl = card.querySelector('.debate-count');
+  const c = parseInt(countEl.textContent.replace(/\D/g,''));
+  countEl.textContent = (c + 1).toLocaleString('fr-FR') + ' votes';
+  showToast('Vote enregistré — merci pour votre contribution au débat.');
+}
+
+// ─── ORACLE AI ───
+let oracleCredits = 3;
+const oracleMsgs = document.getElementById('oracle-msgs');
+const oracleInput = document.getElementById('oracle-input');
+const creditsDisplay = document.getElementById('credits-display');
+
+function fillOracle(q) { oracleInput.value = q; oracleInput.focus(); }
+
+async function sendToOracle() {
+  const q = oracleInput.value.trim();
+  if (!q) return;
+  if (oracleCredits <= 0) {
+    showToast('Vos 3 questions gratuites sont épuisées. Rejoignez l\'Académie pour continuer.');
+    document.getElementById('premium').scrollIntoView({ behavior: 'smooth' });
+    return;
+  }
+  oracleCredits--;
+  creditsDisplay.textContent = oracleCredits;
+  oracleInput.value = '';
+  appendMsg('user', q);
+  const typing = appendTyping();
+  const btn = document.getElementById('oracle-send-btn');
+  btn.disabled = true;
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: `Tu es l'Oracle d'Æther — une intelligence philosophique distillée de 2 600 ans de pensée humaine. Tu réponds aux questions philosophiques avec profondeur, nuance et élégance littéraire. Tu parles en français. Tes réponses sont :
+- Poétiques mais précises (3-5 paragraphes max)
+- Ancrées dans les grands textes philosophiques (cite 1-2 penseurs pertinents)
+- Socratiques : tu termines souvent par une question qui pousse la réflexion plus loin
+- En prose noble et belle, jamais en listes ou bullet points
+- Tu n'as pas de réponses définitives — tu ouvres des chemins vers la clarté
+Tu incarne la sagesse, pas l'omniscience. Sois à la fois profond et accessible.`,
+        messages: [{ role: 'user', content: q }]
+      })
+    });
+    const data = await res.json();
+    typing.remove();
+    const text = data.content?.[0]?.text || "Le silence peut aussi être une réponse. Reformulez votre question.";
+    appendMsg('oracle', text);
+  } catch(e) {
+    typing.remove();
+    appendMsg('oracle', 'L\'Oracle médite en ce moment. Veuillez réessayer dans un instant.');
+  }
+  btn.disabled = false;
+  if (oracleCredits === 0 && oracleCredits !== null) {
+    setTimeout(() => showToast('Plus que 0 question gratuite. Rejoignez l\'Académie pour l\'illimité →'), 1500);
+  }
+}
+
+function appendMsg(from, text) {
+  const div = document.createElement('div');
+  div.className = 'msg ' + from;
+  div.innerHTML = `<span class="msg-from">${from === 'user' ? 'Vous' : "L'Oracle"}</span><p class="msg-bubble">${text.replace(/\n/g,'<br>')}</p>`;
+  oracleMsgs.appendChild(div);
+  oracleMsgs.scrollTop = oracleMsgs.scrollHeight;
+  return div;
+}
+
+function appendTyping() {
+  const div = document.createElement('div');
+  div.className = 'msg oracle';
+  div.innerHTML = `<span class="msg-from">L'Oracle</span><div class="oracle-typing active"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>`;
+  oracleMsgs.appendChild(div);
+  oracleMsgs.scrollTop = oracleMsgs.scrollHeight;
+  return div;
+}
+
+oracleInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendToOracle(); }
+});
+
+// ─── TOAST ───
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3800);
+}
+
+// ─── CONCEPT SVG LINES ───
+function drawConceptLines() {
+  const container = document.querySelector('.concept-map-visual');
+  if (!container) return;
+  const svg = document.getElementById('concept-svg');
+  const central = document.getElementById('cn-liberté');
+  const nodes = container.querySelectorAll('.concept-node:not(.central)');
+  const cRect = central.getBoundingClientRect();
+  const pRect = container.getBoundingClientRect();
+  const cx = (cRect.left + cRect.right) / 2 - pRect.left;
+  const cy = (cRect.top + cRect.bottom) / 2 - pRect.top;
+  svg.innerHTML = '';
+  nodes.forEach(n => {
+    const nRect = n.getBoundingClientRect();
+    const nx = (nRect.left + nRect.right) / 2 - pRect.left;
+    const ny = (nRect.top + nRect.bottom) / 2 - pRect.top;
+    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1', cx); line.setAttribute('y1', cy);
+    line.setAttribute('x2', nx); line.setAttribute('y2', ny);
+    svg.appendChild(line);
+  });
+}
+window.addEventListener('load', drawConceptLines);
+window.addEventListener('resize', drawConceptLines);
+</script>
+</body>
+</html>
