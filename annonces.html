@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annonces - InfluConnect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .annonce-card {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .annonce-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        .badge-urgent {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-[#09090b] text-white min-h-screen">
+    <!-- Navigation -->
+    <nav class="border-b border-gray-800 bg-[#09090b]/80 backdrop-blur-xl sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center space-x-2">
+                    <svg class="w-8 h-8 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 3.5a1.5 1.5 0 013 0V4a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-.5a1.5 1.5 0 000 3h.5a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-.5a1.5 1.5 0 00-3 0v.5a1 1 0 01-1 1H6a1 1 0 01-1-1v-3a1 1 0 00-1-1h-.5a1.5 1.5 0 010-3H4a1 1 0 001-1V6a1 1 0 011-1h3a1 1 0 001-1v-.5z"/>
+                    </svg>
+                    <span class="text-2xl font-bold gradient-text">InfluConnect</span>
+                </a>
+                <div class="flex items-center space-x-6">
+                    <a href="#" id="navDashboard" class="hidden text-gray-400 hover:text-white transition">Tableau de bord</a>
+                    <a href="annonces.html" class="text-purple-500 font-semibold">Annonces</a>
+                    <button onclick="showPostModal()" class="bg-gradient-to-r from-purple-600 to-indigo-600 px-4 py-2 rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition text-sm">
+                        + Publier une annonce
+                    </button>
+                    <button onclick="logout()" class="text-gray-400 hover:text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <!-- En-tête avec infos utilisateur -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold mb-2">
+                <span id="pageTitle">Annonces</span> <span class="gradient-text" id="pageSubtitle"></span>
+            </h1>
+            <p class="text-gray-400 text-lg" id="pageDescription"></p>
+        </div>
+
+        <div class="grid lg:grid-cols-4 gap-6">
+            <!-- Sidebar Filtres -->
+            <div class="lg:col-span-1">
+                <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-6 sticky top-24">
+                    <h2 class="text-lg font-bold mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                        </svg>
+                        Filtres
+                    </h2>
+
+                    <div class="space-y-4">
+                        <!-- Recherche -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Rechercher</label>
+                            <input type="text" id="searchInput" placeholder="Mots-clés..." 
+                                   class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500 transition"
+                                   oninput="filterAnnonces()">
+                        </div>
+
+                        <!-- Type d'annonce (visible pour tous) -->
+                        <div id="typeFilter">
+                            <label class="block text-sm font-medium mb-2">Type</label>
+                            <select id="typeSelect" onchange="filterAnnonces()"
+                                    class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500 transition">
+                                <option value="">Tous les types</option>
+                                <option value="collaboration">Collaboration</option>
+                                <option value="sponsoring">Sponsoring</option>
+                                <option value="ambassadeur">Programme ambassadeur</option>
+                                <option value="evenement">Événement</option>
+                                <option value="contenu">Création de contenu</option>
+                            </select>
+                        </div>
+
+                        <!-- Budget (pour créateurs uniquement) -->
+                        <div id="budgetFilter" class="hidden">
+                            <label class="block text-sm font-medium mb-2">Budget</label>
+                            <select id="budgetSelect" onchange="filterAnnonces()"
+                                    class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500 transition">
+                                <option value="">Tous les budgets</option>
+                                <option value="0-500">0 - 500€</option>
+                                <option value="500-1000">500 - 1000€</option>
+                                <option value="1000-2500">1000 - 2500€</option>
+                                <option value="2500-5000">2500 - 5000€</option>
+                                <option value="5000+">5000€+</option>
+                            </select>
+                        </div>
+
+                        <!-- Secteur (pour créateurs uniquement) -->
+                        <div id="secteurFilter" class="hidden">
+                            <label class="block text-sm font-medium mb-2">Secteur</label>
+                            <select id="secteurSelect" onchange="filterAnnonces()"
+                                    class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500 transition">
+                                <option value="">Tous les secteurs</option>
+                                <option value="tech">Technologie</option>
+                                <option value="fashion">Mode & Luxe</option>
+                                <option value="beauty">Beauté</option>
+                                <option value="food">Food & Boissons</option>
+                                <option value="travel">Voyage</option>
+                                <option value="sport">Sport & Fitness</option>
+                                <option value="finance">Finance</option>
+                                <option value="education">Éducation</option>
+                            </select>
+                        </div>
+
+                        <!-- Niche (pour entreprises uniquement) -->
+                        <div id="nicheFilter" class="hidden">
+                            <label class="block text-sm font-medium mb-2">Niche recherchée</label>
+                            <select id="nicheSelect" onchange="filterAnnonces()"
+                                    class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500 transition">
+                                <option value="">Toutes les niches</option>
+                                <option value="lifestyle">Lifestyle</option>
+                                <option value="tech">Tech & Gaming</option>
+                                <option value="beaute">Beauté & Mode</option>
+                                <option value="sport">Sport & Fitness</option>
+                                <option value="food">Food</option>
+                                <option value="travel">Voyage</option>
+                                <option value="business">Business</option>
+                            </select>
+                        </div>
+
+                        <!-- Abonnés minimum (pour entreprises uniquement) -->
+                        <div id="followersFilter" class="hidden">
+                            <label class="block text-sm font-medium mb-2">Abonnés min.</label>
+                            <select id="followersSelect" onchange="filterAnnonces()"
+                                    class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500 transition">
+                                <option value="0">Tous</option>
+                                <option value="10000">10K+</option>
+                                <option value="50000">50K+</option>
+                                <option value="100000">100K+</option>
+                                <option value="500000">500K+</option>
+                            </select>
+                        </div>
+
+                        <!-- Localisation -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Localisation</label>
+                            <select id="locationSelect" onchange="filterAnnonces()"
+                                    class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-purple-500 transition">
+                                <option value="">Toute la France</option>
+                                <option value="paris">Île-de-France</option>
+                                <option value="lyon">Auvergne-Rhône-Alpes</option>
+                                <option value="marseille">PACA</option>
+                                <option value="toulouse">Occitanie</option>
+                                <option value="bordeaux">Nouvelle-Aquitaine</option>
+                                <option value="nantes">Pays de la Loire</option>
+                                <option value="lille">Hauts-de-France</option>
+                                <option value="remote">Remote / En ligne</option>
+                            </select>
+                        </div>
+
+                        <!-- Vérifiés uniquement -->
+                        <div>
+                            <label class="flex items-center cursor-pointer">
+                                <input type="checkbox" id="verifiedOnly" onchange="filterAnnonces()" 
+                                       class="w-4 h-4 text-purple-600 rounded focus:ring-purple-500">
+                                <span class="ml-2 text-sm" id="verifiedLabel">Vérifiés uniquement</span>
+                            </label>
+                        </div>
+
+                        <button onclick="resetFilters()" class="w-full text-gray-400 hover:text-white text-sm py-2 border border-gray-700 rounded-lg transition">
+                            Réinitialiser
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Liste des annonces -->
+            <div class="lg:col-span-3">
+                <!-- Barre de tri -->
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                    <p class="text-gray-400">
+                        <span id="resultsCount" class="font-semibold text-white">0</span> annonces trouvées
+                    </p>
+                    <select id="sortSelect" onchange="filterAnnonces()"
+                            class="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-purple-500 transition">
+                        <option value="recent">Plus récentes</option>
+                        <option value="urgent">Urgentes d'abord</option>
+                        <option value="budget-high">Budget décroissant</option>
+                        <option value="budget-low">Budget croissant</option>
+                    </select>
+                </div>
+
+                <!-- Grille des annonces -->
+                <div id="annoncesContainer" class="space-y-4">
+                    <!-- Les annonces seront générées ici -->
+                </div>
+
+                <!-- Message si aucun résultat -->
+                <div id="noResults" class="hidden text-center py-16">
+                    <svg class="w-20 h-20 text-gray-700 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <h3 class="text-2xl font-bold mb-2">Aucune annonce trouvée</h3>
+                    <p class="text-gray-400 mb-6">Modifiez vos critères de recherche</p>
+                    <button onclick="resetFilters()" class="bg-gray-800 hover:bg-gray-700 px-6 py-2 rounded-lg transition">
+                        Réinitialiser les filtres
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal création d'annonce -->
+    <div id="postModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b border-gray-800 flex justify-between items-center sticky top-0 bg-gray-900 z-10">
+                <h2 class="text-2xl font-bold">Publier une annonce</h2>
+                <button onclick="closePostModal()" class="text-gray-400 hover:text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <form onsubmit="submitAnnonce(event)" class="p-6 space-y-4">
+                <!-- Titre -->
+                <div>
+                    <label class="block text-sm font-medium mb-2">Titre de l'annonce *</label>
+                    <input type="text" id="postTitle" required maxlength="100"
+                           class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-purple-500 transition"
+                           placeholder="Ex: Recherche influenceur lifestyle pour campagne été">
+                </div>
+
+                <!-- Type -->
+                <div>
+                    <label class="block text-sm font-medium mb-2">Type d'annonce *</label>
+                    <select id="postType" required
+                            class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-purple-500 transition">
+                        <option value="collaboration">Collaboration ponctuelle</option>
+                        <option value="sponsoring">Sponsoring</option>
+                        <option value="ambassadeur">Programme ambassadeur</option>
+                        <option value="evenement">Couverture événement</option>
+                        <option value="contenu">Création de contenu</option>
+                    </select>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="block text-sm font-medium mb-2">Description *</label>
+                    <textarea id="postDescription" required rows="5"
+                              class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-purple-500 transition"
+                              placeholder="Décrivez votre annonce en détail..."></textarea>
+                </div>
+
+                <!-- Champs spécifiques entreprise -->
+                <div id="brandPostFields">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Budget proposé *</label>
+                            <input type="number" id="postBudget" min="0" step="50"
+                                   class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-purple-500 transition"
+                                   placeholder="500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Secteur *</label>
+                            <select id="postSecteur"
+                                    class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-purple-500 transition">
+                                <option value="tech">Technologie</option>
+                                <option value="fashion">Mode & Luxe</option>
+                                <option value="beauty">Beauté</option>
+                                <option value="food">Food & Boissons</option>
+                                <option value="travel">Voyage</option>
+                                <option value="sport">Sport & Fitness</option>
+                                <option value="finance">Finance</option>
+                                <option value="education">Éducation</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium mb-2">Nombre maximum de candidatures *</label>
+                        <input type="number" id="postMaxApplications" min="1" max="200" value="50"
+                               class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-purple-500 transition"
+                               placeholder="50">
+                        <p class="text-xs text-gray-400 mt-1">Définissez combien de dossiers vous souhaitez recevoir maximum</p>
+                    </div>
+                </div>
+
+                <!-- Champs spécifiques créateur -->
+                <div id="creatorPostFields" class="hidden">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Tarif souhaité *</label>
+                            <input type="number" id="postPrice" min="0" step="50"
+                                   class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-purple-500 transition"
+                                   placeholder="800">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Niche *</label>
+                            <select id="postNiche"
+                                    class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-purple-500 transition">
+                                <option value="lifestyle">Lifestyle</option>
+                                <option value="tech">Tech & Gaming</option>
+                                <option value="beaute">Beauté & Mode</option>
+                                <option value="sport">Sport & Fitness</option>
+                                <option value="food">Food</option>
+                                <option value="travel">Voyage</option>
+                                <option value="business">Business</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium mb-2">Abonnés</label>
+                        <input type="number" id="postFollowers" min="0"
+                               class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-purple-500 transition"
+                               placeholder="50000">
+                    </div>
+                </div>
+
+                <!-- Localisation -->
+                <div>
+                    <label class="block text-sm font-medium mb-2">Localisation</label>
+                    <select id="postLocation"
+                            class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-purple-500 transition">
+                        <option value="remote">Remote / En ligne</option>
+                        <option value="paris">Île-de-France</option>
+                        <option value="lyon">Auvergne-Rhône-Alpes</option>
+                        <option value="marseille">PACA</option>
+                        <option value="toulouse">Occitanie</option>
+                        <option value="bordeaux">Nouvelle-Aquitaine</option>
+                        <option value="nantes">Pays de la Loire</option>
+                        <option value="lille">Hauts-de-France</option>
+                    </select>
+                </div>
+
+                <!-- Urgent -->
+                <div>
+                    <label class="flex items-center cursor-pointer">
+                        <input type="checkbox" id="postUrgent" 
+                               class="w-4 h-4 text-red-600 rounded focus:ring-red-500">
+                        <span class="ml-2 text-sm">🔥 Marquer comme urgent</span>
+                    </label>
+                </div>
+
+                <!-- Bouton submit -->
+                <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition">
+                    Publier l'annonce
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentUserRole = null;
+        let annoncesDatabase = [];
+
+        // Initialisation au chargement
+        window.onload = function() {
+            loadUserRole();
+            loadAnnonces();
+            filterAnnonces();
+        };
+
+        function loadUserRole() {
+            const userData = JSON.parse(localStorage.getItem('currentUser'));
+            
+            if (userData) {
+                currentUserRole = userData.role;
+                
+                // Adapter l'interface selon le rôle
+                if (currentUserRole === 'creator') {
+                    // Créateur voit les annonces d'entreprises
+                    document.getElementById('pageSubtitle').textContent = 'des entreprises';
+                    document.getElementById('pageDescription').textContent = 'Trouvez des opportunités de collaboration avec des marques';
+                    document.getElementById('budgetFilter').classList.remove('hidden');
+                    document.getElementById('secteurFilter').classList.remove('hidden');
+                    document.getElementById('verifiedLabel').textContent = 'Entreprises vérifiées uniquement';
+                    document.getElementById('navDashboard').href = 'dashboard-createur.html';
+                    document.getElementById('navDashboard').classList.remove('hidden');
+                    
+                    // Dans le modal
+                    document.getElementById('brandPostFields').classList.add('hidden');
+                    document.getElementById('creatorPostFields').classList.remove('hidden');
+                } else {
+                    // Entreprise voit les annonces de créateurs
+                    document.getElementById('pageSubtitle').textContent = 'des créateurs';
+                    document.getElementById('pageDescription').textContent = 'Découvrez les créateurs disponibles pour vos campagnes';
+                    document.getElementById('nicheFilter').classList.remove('hidden');
+                    document.getElementById('followersFilter').classList.remove('hidden');
+                    document.getElementById('verifiedLabel').textContent = 'Créateurs vérifiés uniquement';
+                    document.getElementById('navDashboard').href = 'explorer-marques.html';
+                    document.getElementById('navDashboard').classList.remove('hidden');
+                }
+            }
+        }
+
+        function loadAnnonces() {
+            // Charger les annonces depuis localStorage
+            const saved = localStorage.getItem('annonces');
+            if (saved) {
+                annoncesDatabase = JSON.parse(saved);
+            } else {
+                // Annonces par défaut (exemples)
+                annoncesDatabase = [
+                    // Annonces d'entreprises (visibles par créateurs)
+                    {
+                        id: 1,
+                        type: 'brand',
+                        posterRole: 'brand',
+                        title: 'Recherche influenceur lifestyle pour lancement produit',
+                        description: 'Nous lançons une nouvelle ligne de cosmétiques naturels et cherchons des influenceurs lifestyle (50K+) pour une collaboration authentique. Contenu Instagram Stories + Reels.',
+                        author: 'BeautyNature Paris',
+                        verified: true,
+                        annonceType: 'collaboration',
+                        budget: 1200,
+                        secteur: 'beauty',
+                        location: 'paris',
+                        urgent: true,
+                        date: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // il y a 2h
+                        avatar: 'BN'
+                    },
+                    {
+                        id: 2,
+                        type: 'brand',
+                        posterRole: 'brand',
+                        title: 'Programme ambassadeur - Marque de sportswear',
+                        description: 'Recherchons 3 ambassadeurs sport/fitness pour notre nouvelle collection. Collaboration longue durée (6 mois) avec rémunération mensuelle + produits offerts.',
+                        author: 'FitStyle Pro',
+                        verified: true,
+                        annonceType: 'ambassadeur',
+                        budget: 3500,
+                        secteur: 'sport',
+                        location: 'remote',
+                        urgent: false,
+                        date: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+                        avatar: 'FS'
+                    },
+                    {
+                        id: 3,
+                        type: 'brand',
+                        posterRole: 'brand',
+                        title: 'Couverture événement tech - Paris',
+                        description: 'Événement de lancement de notre nouveau smartphone. Besoin d\'un créateur tech pour coverage live (Stories + Reels + 1 vidéo YouTube). Le 15 janvier 2025.',
+                        author: 'TechVision France',
+                        verified: true,
+                        annonceType: 'evenement',
+                        budget: 800,
+                        secteur: 'tech',
+                        location: 'paris',
+                        urgent: true,
+                        date: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
+                        avatar: 'TV'
+                    },
+                    {
+                        id: 4,
+                        type: 'brand',
+                        posterRole: 'brand',
+                        title: 'Création contenu food - Restaurant chaîne',
+                        description: 'Chaîne de restaurants recherche créateurs food pour photos/vidéos menu printemps. 10 créateurs sélectionnés. Repas offert + rémunération.',
+                        author: 'Le Gourmet',
+                        verified: false,
+                        annonceType: 'contenu',
+                        budget: 400,
+                        secteur: 'food',
+                        location: 'lyon',
+                        urgent: false,
+                        date: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(),
+                        avatar: 'LG'
+                    },
+                    
+                    // Annonces de créateurs (visibles par entreprises)
+                    {
+                        id: 5,
+                        type: 'creator',
+                        posterRole: 'creator',
+                        title: 'Créatrice lifestyle dispo pour collaborations',
+                        description: '85K abonnés Instagram, taux d\'engagement 6.2%. Spécialisée lifestyle, mode et beauté. Recherche collaborations authentiques avec marques éthiques.',
+                        author: 'Julie @julielifestyle',
+                        verified: true,
+                        annonceType: 'collaboration',
+                        price: 750,
+                        niche: 'lifestyle',
+                        followers: 85000,
+                        location: 'paris',
+                        urgent: false,
+                        date: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
+                        avatar: 'JL'
+                    },
+                    {
+                        id: 6,
+                        type: 'creator',
+                        posterRole: 'creator',
+                        title: 'YouTubeur Tech - Disponible pour reviews',
+                        description: '200K abonnés YouTube, reviews tech et gaming. Recherche partenariats marques tech pour tests produits. Vidéos de qualité professionnelle.',
+                        author: 'Alex @alextech',
+                        verified: true,
+                        annonceType: 'sponsoring',
+                        price: 1800,
+                        niche: 'tech',
+                        followers: 200000,
+                        location: 'remote',
+                        urgent: false,
+                        date: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
+                        avatar: 'AT'
+                    },
+                    {
+                        id: 7,
+                        type: 'creator',
+                        posterRole: 'creator',
+                        title: 'Influenceuse beauté - TikTok 120K',
+                        description: 'Spécialisée makeup et skincare. Taux d\'engagement 9.1%. Dispo immédiatement pour collaborations marques beauté.',
+                        author: 'Emma @emmabeauty',
+                        verified: false,
+                        annonceType: 'collaboration',
+                        price: 600,
+                        niche: 'beaute',
+                        followers: 120000,
+                        location: 'marseille',
+                        urgent: true,
+                        date: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
+                        avatar: 'EB'
+                    },
+                    {
+                        id: 8,
+                        type: 'creator',
+                        posterRole: 'creator',
+                        title: 'Coach fitness - Programmes ambassadeur',
+                        description: '150K Instagram + 80K TikTok. Coach sportif certifié. Recherche marques sport/nutrition pour programmes long terme.',
+                        author: 'Marc @marcfit',
+                        verified: true,
+                        annonceType: 'ambassadeur',
+                        price: 2500,
+                        niche: 'sport',
+                        followers: 150000,
+                        location: 'toulouse',
+                        urgent: false,
+                        date: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+                        avatar: 'MF'
+                    }
+                ];
+                
+                localStorage.setItem('annonces', JSON.stringify(annoncesDatabase));
+            }
+        }
+
+        function filterAnnonces() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const type = document.getElementById('typeSelect').value;
+            const location = document.getElementById('locationSelect').value;
+            const verifiedOnly = document.getElementById('verifiedOnly').checked;
+            const sort = document.getElementById('sortSelect').value;
+
+            let filtered = annoncesDatabase.filter(annonce => {
+                if (currentUserRole === 'creator' && annonce.posterRole !== 'brand') return false;
+                if (currentUserRole === 'brand' && annonce.posterRole !== 'creator') return false;
+
+                const matchesSearch = !search || 
+                    annonce.title.toLowerCase().includes(search) ||
+                    annonce.description.toLowerCase().includes(search) ||
+                    annonce.author.toLowerCase().includes(search);
+
+                const matchesType = !type || annonce.annonceType === type;
+                const matchesLocation = !location || annonce.location === location;
+                const matchesVerified = !verifiedOnly || annonce.verified;
+
+                if (currentUserRole === 'creator') {
+                    const budget = document.getElementById('budgetSelect').value;
+                    const secteur = document.getElementById('secteurSelect').value;
+
+                    let matchesBudget = true;
+                    if (budget) {
+                        if (budget === '5000+') {
+                            matchesBudget = annonce.budget >= 5000;
+                        } else {
+                            const [min, max] = budget.split('-').map(Number);
+                            matchesBudget = annonce.budget >= min && annonce.budget <= max;
+                        }
+                    }
+
+                    const matchesSecteur = !secteur || annonce.secteur === secteur;
+
+                    return matchesSearch && matchesType && matchesLocation && 
+                           matchesVerified && matchesBudget && matchesSecteur;
+                }
+
+                if (currentUserRole === 'brand') {
+                    const niche = document.getElementById('nicheSelect').value;
+                    const followersMin = parseInt(document.getElementById('followersSelect').value);
+
+                    const matchesNiche = !niche || annonce.niche === niche;
+                    const matchesFollowers = annonce.followers >= followersMin;
+
+                    return matchesSearch && matchesType && matchesLocation && 
+                           matchesVerified && matchesNiche && matchesFollowers;
+                }
+
+                return matchesSearch && matchesType && matchesLocation && matchesVerified;
+            });
+
+            filtered.sort((a, b) => {
+                if (sort === 'urgent') {
+                    if (a.urgent && !b.urgent) return -1;
+                    if (!a.urgent && b.urgent) return 1;
+                }
+                if (sort === 'budget-high') {
+                    return (b.budget || b.price || 0) - (a.budget || a.price || 0);
+                }
+                if (sort === 'budget-low') {
+                    return (a.budget || a.price || 0) - (b.budget || b.price || 0);
+                }
+                return new Date(b.date) - new Date(a.date);
+            });
+
+            displayAnnonces(filtered);
+        }
+
+        function displayAnnonces(annonces) {
+            const container = document.getElementById('annoncesContainer');
+            const noResults = document.getElementById('noResults');
+            const count = document.getElementById('resultsCount');
+
+            count.textContent = annonces.length;
+
+            if (annonces.length === 0) {
+                container.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            noResults.classList.add('hidden');
+            container.innerHTML = annonces.map(createAnnonceCard).join('');
+        }
+
+        function createAnnonceCard(annonce) {
+            const timeAgo = getTimeAgo(new Date(annonce.date));
+            const urgent = annonce.urgent ? '<span class="badge-urgent px-2 py-1 rounded text-xs font-bold">🔥 URGENT</span>' : '';
+            const verified = annonce.verified ? `
+                <span class="verified-badge">
+                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                    </svg>
+                </span>
+            ` : '';
+
+            let priceInfo = '';
+            let extraInfo = '';
+            
+            if (annonce.posterRole === 'brand') {
+                priceInfo = `<div class="text-2xl font-bold text-green-400">${annonce.budget}€</div>`;
+                extraInfo = `<span class="text-xs bg-gray-800 px-2 py-1 rounded">${getSecteurLabel(annonce.secteur)}</span>`;
+            } else {
+                priceInfo = `<div class="text-2xl font-bold text-purple-400">${annonce.price}€</div>`;
+                extraInfo = `
+                    <span class="text-xs bg-gray-800 px-2 py-1 rounded">${getNicheLabel(annonce.niche)}</span>
+                    <span class="text-xs bg-gray-800 px-2 py-1 rounded">${formatNumber(annonce.followers)} abonnés</span>
+                `;
+            }
+
+            return `
+                <div class="annonce-card bg-gray-900/50 border border-gray-800 rounded-xl p-6 hover:border-purple-500/50" onclick="viewAnnonce(${annonce.id})">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-start space-x-4 flex-1">
+                            <div class="w-12 h-12 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-lg flex items-center justify-center text-lg font-bold flex-shrink-0">
+                                ${annonce.avatar}
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center gap-2 mb-1 flex-wrap">
+                                    <h3 class="font-bold text-lg hover:text-purple-400 transition">${annonce.title}</h3>
+                                    ${urgent}
+                                </div>
+                                <div class="flex items-center gap-2 text-sm text-gray-400 mb-2">
+                                    <span class="font-medium">${annonce.author}</span>
+                                    ${verified}
+                                    <span>•</span>
+                                    <span>${timeAgo}</span>
+                                    <span>•</span>
+                                    <span>📍 ${getLocationLabel(annonce.location)}</span>
+                                </div>
+                                <p class="text-gray-400 text-sm line-clamp-2 mb-3">
+                                    ${annonce.description}
+                                </p>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="text-xs bg-purple-600/20 text-purple-400 px-2 py-1 rounded font-medium">${getTypeLabel(annonce.annonceType)}</span>
+                                    ${extraInfo}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-right ml-4">
+                            ${priceInfo}
+                            <div class="text-xs text-gray-400 mt-1">${annonce.posterRole === 'brand' ? 'Budget proposé' : 'Tarif'}</div>
+                        </div>
+                    </div>
+                    <div class="flex justify-end pt-4 border-t border-gray-800">
+                        <button onclick="event.stopPropagation(); contactAnnonce(${annonce.id})" class="bg-gradient-to-r from-purple-600 to-indigo-600 px-6 py-2 rounded-lg font-semibold text-sm hover:shadow-lg hover:shadow-purple-500/50 transition">
+                            ${annonce.posterRole === 'brand' ? 'Postuler' : 'Contacter'}
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            const intervals = {
+                'an': 31536000,
+                'mois': 2592000,
+                'jour': 86400,
+                'heure': 3600,
+                'minute': 60
+            };
+
+            for (let [name, seconds_in_interval] of Object.entries(intervals)) {
+                const interval = Math.floor(seconds / seconds_in_interval);
+                if (interval >= 1) {
+                    return `Il y a ${interval} ${name}${interval > 1 && name !== 'mois' ? 's' : ''}`;
+                }
+            }
+            return 'À l\'instant';
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(0) + 'K';
+            return num.toString();
+        }
+
+        function getTypeLabel(type) {
+            const labels = {
+                collaboration: 'Collaboration',
+                sponsoring: 'Sponsoring',
+                ambassadeur: 'Ambassadeur',
+                evenement: 'Événement',
+                contenu: 'Contenu'
+            };
+            return labels[type] || type;
+        }
+
+        function getSecteurLabel(secteur) {
+            const labels = {
+                tech: 'Tech',
+                fashion: 'Mode',
+                beauty: 'Beauté',
+                food: 'Food',
+                travel: 'Voyage',
+                sport: 'Sport',
+                finance: 'Finance',
+                education: 'Éducation'
+            };
+            return labels[secteur] || secteur;
+        }
+
+        function getNicheLabel(niche) {
+            const labels = {
+                lifestyle: 'Lifestyle',
+                tech: 'Tech',
+                beaute: 'Beauté',
+                sport: 'Sport',
+                food: 'Food',
+                travel: 'Voyage',
+                business: 'Business'
+            };
+            return labels[niche] || niche;
+        }
+
+        function getLocationLabel(location) {
+            const labels = {
+                remote: 'Remote',
+                paris: 'Île-de-France',
+                lyon: 'Lyon',
+                marseille: 'Marseille',
+                toulouse: 'Toulouse',
+                bordeaux: 'Bordeaux',
+                nantes: 'Nantes',
+                lille: 'Lille'
+            };
+            return labels[location] || location;
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('typeSelect').value = '';
+            document.getElementById('locationSelect').value = '';
+            document.getElementById('verifiedOnly').checked = false;
+            document.getElementById('sortSelect').value = 'recent';
+            
+            if (currentUserRole === 'creator') {
+                document.getElementById('budgetSelect').value = '';
+                document.getElementById('secteurSelect').value = '';
+            } else {
+                document.getElementById('nicheSelect').value = '';
+                document.getElementById('followersSelect').value = '0';
+            }
+            
+            filterAnnonces();
+        }
+
+        function showPostModal() {
+            document.getElementById('postModal').classList.remove('hidden');
+        }
+
+        function closePostModal() {
+            document.getElementById('postModal').classList.add('hidden');
+        }
+
+        function submitAnnonce(event) {
+            event.preventDefault();
+
+            const userData = JSON.parse(localStorage.getItem('currentUser'));
+            
+            const newAnnonce = {
+                id: Date.now(),
+                type: currentUserRole,
+                posterRole: currentUserRole,
+                title: document.getElementById('postTitle').value,
+                description: document.getElementById('postDescription').value,
+                author: userData ? userData.fullName : 'Utilisateur',
+                verified: userData ? userData.verified : false,
+                annonceType: document.getElementById('postType').value,
+                location: document.getElementById('postLocation').value,
+                urgent: document.getElementById('postUrgent').checked,
+                date: new Date().toISOString(),
+                avatar: userData ? userData.fullName.charAt(0).toUpperCase() : 'U'
+            };
+
+            if (currentUserRole === 'brand') {
+                newAnnonce.budget = parseInt(document.getElementById('postBudget').value);
+                newAnnonce.secteur = document.getElementById('postSecteur').value;
+            } else {
+                newAnnonce.price = parseInt(document.getElementById('postPrice').value);
+                newAnnonce.niche = document.getElementById('postNiche').value;
+                newAnnonce.followers = parseInt(document.getElementById('postFollowers').value) || 0;
+            }
+
+            annoncesDatabase.unshift(newAnnonce);
+            localStorage.setItem('annonces', JSON.stringify(annoncesDatabase));
+
+            event.target.reset();
+            closePostModal();
+            filterAnnonces();
+
+            alert('✅ Votre annonce a été publiée avec succès !');
+        }
+
+        function viewAnnonce(id) {
+            const annonce = annoncesDatabase.find(a => a.id === id);
+            if (annonce) {
+                alert(`📋 ${annonce.title}\n\n${annonce.description}\n\nDans une version complète, ceci ouvrirait une page détaillée de l'annonce.`);
+            }
+        }
+
+        function contactAnnonce(id) {
+            const annonce = annoncesDatabase.find(a => a.id === id);
+            if (annonce) {
+                alert(`📧 Message envoyé à ${annonce.author} !\n\nDans une version complète, ceci ouvrirait une messagerie ou un formulaire de contact.`);
+            }
+        }
+
+        function logout() {
+            if (confirm('Voulez-vous vraiment vous déconnecter ?')) {
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>

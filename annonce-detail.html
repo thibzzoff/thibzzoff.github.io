@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détail Annonce - InfluConnect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .badge-urgent {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .profile-avatar:hover {
+            transform: scale(1.05);
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            margin-top: 8px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            min-width: 200px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        .dropdown-menu.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-[#09090b] text-white min-h-screen">
+    <!-- Navigation -->
+    <nav class="border-b border-gray-800 bg-[#09090b]/80 backdrop-blur-xl sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center space-x-2">
+                    <svg class="w-8 h-8 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 3.5a1.5 1.5 0 013 0V4a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-.5a1.5 1.5 0 000 3h.5a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-.5a1.5 1.5 0 00-3 0v.5a1 1 0 01-1 1H6a1 1 0 01-1-1v-3a1 1 0 00-1-1h-.5a1.5 1.5 0 010-3H4a1 1 0 001-1V6a1 1 0 011-1h3a1 1 0 001-1v-.5z"/>
+                    </svg>
+                    <span class="text-2xl font-bold gradient-text">InfluConnect</span>
+                </a>
+                <div class="flex items-center space-x-4">
+                    <a href="annonces.html" class="text-gray-400 hover:text-white transition">← Retour aux annonces</a>
+                    
+                    <!-- Messagerie -->
+                    <button onclick="window.location.href='messages.html'" class="relative text-gray-400 hover:text-white transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                        </svg>
+                        <span id="messageNotif" class="hidden absolute -top-1 -right-1 bg-red-500 text-xs rounded-full w-4 h-4 flex items-center justify-center">0</span>
+                    </button>
+
+                    <!-- Avatar profil avec dropdown -->
+                    <div class="relative">
+                        <div class="profile-avatar bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full flex items-center justify-center text-lg font-bold" onclick="toggleProfileMenu()">
+                            <span id="userInitialsNav">U</span>
+                        </div>
+                        <div id="profileDropdown" class="dropdown-menu">
+                            <div class="p-4 border-b border-gray-800">
+                                <div class="font-semibold" id="userNameDropdown">Utilisateur</div>
+                                <div class="text-sm text-gray-400" id="userRoleDropdown">Créateur</div>
+                            </div>
+                            <a href="dashboard-createur.html" id="dashboardLink" class="block px-4 py-3 hover:bg-gray-800 transition">
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                                    </svg>
+                                    Tableau de bord
+                                </div>
+                            </a>
+                            <a href="#" class="block px-4 py-3 hover:bg-gray-800 transition">
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    </svg>
+                                    Paramètres
+                                </div>
+                            </a>
+                            <div class="border-t border-gray-800"></div>
+                            <button onclick="logout()" class="w-full text-left px-4 py-3 hover:bg-gray-800 transition text-red-400">
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                    </svg>
+                                    Déconnexion
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-5xl mx-auto px-6 py-8">
+        <div id="annonceContent">
+            <!-- Le contenu sera chargé dynamiquement -->
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        let currentAnnonce = null;
+
+        window.onload = function() {
+            loadUser();
+            loadAnnonce();
+        };
+
+        function loadUser() {
+            const userData = JSON.parse(localStorage.getItem('currentUser'));
+            if (userData) {
+                currentUser = userData;
+                document.getElementById('userInitialsNav').textContent = userData.fullName.charAt(0).toUpperCase();
+                document.getElementById('userNameDropdown').textContent = userData.fullName;
+                document.getElementById('userRoleDropdown').textContent = userData.role === 'creator' ? 'Créateur' : 'Entreprise';
+                
+                if (userData.role === 'creator') {
+                    document.getElementById('dashboardLink').href = 'dashboard-createur.html';
+                } else {
+                    document.getElementById('dashboardLink').href = 'explorer-marques.html';
+                }
+            }
+        }
+
+        function loadAnnonce() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const annonceId = urlParams.get('id');
+            
+            if (!annonceId) {
+                window.location.href = 'annonces.html';
+                return;
+            }
+
+            const annonces = JSON.parse(localStorage.getItem('annonces')) || [];
+            currentAnnonce = annonces.find(a => a.id == annonceId);
+            
+            if (!currentAnnonce) {
+                alert('Annonce introuvable');
+                window.location.href = 'annonces.html';
+                return;
+            }
+
+            // Initialiser les candidatures si elles n'existent pas
+            if (!currentAnnonce.applications) {
+                currentAnnonce.applications = [];
+            }
+            if (!currentAnnonce.maxApplications) {
+                currentAnnonce.maxApplications = 50; // Par défaut
+            }
+
+            displayAnnonce();
+        }
+
+        function displayAnnonce() {
+            const isFullyBooked = currentAnnonce.applications.length >= currentAnnonce.maxApplications;
+            const remainingSlots = currentAnnonce.maxApplications - currentAnnonce.applications.length;
+            const hasAlreadyApplied = currentUser && currentAnnonce.applications.some(app => app.userId === currentUser.id);
+            
+            const urgent = currentAnnonce.urgent ? '<span class="badge-urgent px-3 py-1 rounded-full text-sm font-bold inline-block mb-4">🔥 URGENT</span>' : '';
+            const verified = currentAnnonce.verified ? `
+                <span class="verified-badge">
+                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                    </svg>
+                </span>
+            ` : '';
+
+            let actionButton = '';
+            let statusBadge = '';
+
+            // Vérifier si l'utilisateur peut postuler
+            const canApply = currentUser && currentUser.role === 'creator' && currentAnnonce.posterRole === 'brand';
+            const canContact = currentUser && currentUser.role === 'brand' && currentAnnonce.posterRole === 'creator';
+
+            if (isFullyBooked) {
+                statusBadge = `
+                    <div class="bg-red-500/20 border border-red-500 rounded-xl p-4 mb-6">
+                        <div class="flex items-center">
+                            <svg class="w-6 h-6 text-red-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"/>
+                            </svg>
+                            <div>
+                                <div class="font-bold text-red-400">Annonce complète</div>
+                                <div class="text-sm text-gray-400">Le nombre maximum de candidatures a été atteint</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (hasAlreadyApplied) {
+                statusBadge = `
+                    <div class="bg-blue-500/20 border border-blue-500 rounded-xl p-4 mb-6">
+                        <div class="flex items-center">
+                            <svg class="w-6 h-6 text-blue-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                            </svg>
+                            <div>
+                                <div class="font-bold text-blue-400">Candidature envoyée</div>
+                                <div class="text-sm text-gray-400">Vous avez déjà postulé à cette annonce</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (canApply) {
+                // Vérifier la limite de postulations
+                const userApplications = getUserApplicationsCount();
+                const maxApplications = currentUser.premium ? Infinity : 10;
+                const canStillApply = userApplications < maxApplications;
+
+                if (!canStillApply) {
+                    statusBadge = `
+                        <div class="bg-yellow-500/20 border border-yellow-500 rounded-xl p-4 mb-6">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <svg class="w-6 h-6 text-yellow-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"/>
+                                    </svg>
+                                    <div>
+                                        <div class="font-bold text-yellow-400">Limite atteinte</div>
+                                        <div class="text-sm text-gray-400">Vous avez utilisé vos ${maxApplications} candidatures gratuites ce mois</div>
+                                    </div>
+                                </div>
+                                <a href="dashboard-createur.html" class="bg-gradient-to-r from-purple-600 to-indigo-600 px-4 py-2 rounded-lg font-semibold text-sm hover:shadow-lg transition whitespace-nowrap ml-4">
+                                    Passer Premium
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    actionButton = `
+                        <button onclick="applyToAnnonce()" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 px-8 py-4 rounded-xl font-bold text-lg hover:shadow-lg hover:shadow-purple-500/50 transition">
+                            Postuler à cette annonce
+                        </button>
+                        ${!currentUser.premium ? `
+                            <div class="text-center mt-3 text-sm text-gray-400">
+                                ${userApplications}/${maxApplications} candidatures gratuites utilisées ce mois
+                            </div>
+                        ` : ''}
+                    `;
+                }
+            } else if (canContact) {
+                actionButton = `
+                    <button onclick="contactCreator()" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 px-8 py-4 rounded-xl font-bold text-lg hover:shadow-lg hover:shadow-purple-500/50 transition">
+                        Contacter ce créateur
+                    </button>
+                `;
+            }
+
+            let priceInfo = '';
+            let extraDetails = '';
+
+            if (currentAnnonce.posterRole === 'brand') {
+                priceInfo = `
+                    <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
+                        <div class="text-gray-400 text-sm mb-2">Budget proposé</div>
+                        <div class="text-4xl font-bold text-green-400">${currentAnnonce.budget}€</div>
+                    </div>
+                `;
+                extraDetails = `
+                    <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
+                        <div class="text-gray-400 text-sm mb-4">Détails de l'offre</div>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Secteur</span>
+                                <span class="font-semibold">${getSecteurLabel(currentAnnonce.secteur)}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Type</span>
+                                <span class="font-semibold">${getTypeLabel(currentAnnonce.annonceType)}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Localisation</span>
+                                <span class="font-semibold">${getLocationLabel(currentAnnonce.location)}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                priceInfo = `
+                    <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
+                        <div class="text-gray-400 text-sm mb-2">Tarif</div>
+                        <div class="text-4xl font-bold text-purple-400">${currentAnnonce.price}€</div>
+                    </div>
+                `;
+                extraDetails = `
+                    <div class="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
+                        <div class="text-gray-400 text-sm mb-4">Profil du créateur</div>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Niche</span>
+                                <span class="font-semibold">${getNicheLabel(currentAnnonce.niche)}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Abonnés</span>
+                                <span class="font-semibold">${formatNumber(currentAnnonce.followers)}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Type</span>
+                                <span class="font-semibold">${getTypeLabel(currentAnnonce.annonceType)}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            const html = `
+                ${urgent}
+                <div class="bg-gray-900/50 border border-gray-800 rounded-2xl p-8 mb-6">
+                    <div class="flex items-start space-x-4 mb-6">
+                        <div class="w-16 h-16 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-xl flex items-center justify-center text-2xl font-bold flex-shrink-0">
+                            ${currentAnnonce.avatar}
+                        </div>
+                        <div class="flex-1">
+                            <h1 class="text-3xl font-bold mb-2">${currentAnnonce.title}</h1>
+                            <div class="flex items-center gap-3 flex-wrap text-gray-400">
+                                <span class="font-medium">${currentAnnonce.author}</span>
+                                ${verified}
+                                <span>•</span>
+                                <span>${getTimeAgo(new Date(currentAnnonce.date))}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Jauge de candidatures -->
+                    ${currentAnnonce.posterRole === 'brand' ? `
+                        <div class="mb-6">
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="text-gray-400">Candidatures reçues</span>
+                                <span class="font-semibold ${isFullyBooked ? 'text-red-400' : 'text-purple-400'}">
+                                    ${currentAnnonce.applications.length} / ${currentAnnonce.maxApplications}
+                                </span>
+                            </div>
+                            <div class="bg-gray-800 rounded-full h-3">
+                                <div class="bg-gradient-to-r ${isFullyBooked ? 'from-red-600 to-red-500' : 'from-purple-600 to-indigo-600'} h-3 rounded-full transition-all duration-500"
+                                     style="width: ${(currentAnnonce.applications.length / currentAnnonce.maxApplications) * 100}%"></div>
+                            </div>
+                            ${isFullyBooked ? '' : `<div class="text-sm text-gray-400 mt-2">Encore ${remainingSlots} place${remainingSlots > 1 ? 's' : ''} disponible${remainingSlots > 1 ? 's' : ''}</div>`}
+                        </div>
+                    ` : ''}
+
+                    ${statusBadge}
+
+                    <div class="prose prose-invert max-w-none mb-6">
+                        <h2 class="text-xl font-bold mb-4">Description</h2>
+                        <p class="text-gray-300 leading-relaxed whitespace-pre-wrap">${currentAnnonce.description}</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    ${priceInfo}
+                    ${extraDetails}
+                </div>
+
+                <div class="bg-gray-900/50 border border-gray-800 rounded-2xl p-6">
+                    ${actionButton || '<div class="text-center text-gray-400 py-4">Connectez-vous pour interagir avec cette annonce</div>'}
+                </div>
+            `;
+
+            document.getElementById('annonceContent').innerHTML = html;
+        }
+
+        function getUserApplicationsCount() {
+            if (!currentUser) return 0;
+            
+            const annonces = JSON.parse(localStorage.getItem('annonces')) || [];
+            let count = 0;
+            
+            annonces.forEach(annonce => {
+                if (annonce.applications && annonce.applications.some(app => app.userId === currentUser.id)) {
+                    count++;
+                }
+            });
+            
+            return count;
+        }
+
+        function applyToAnnonce() {
+            if (!currentUser) {
+                alert('Vous devez être connecté pour postuler');
+                return;
+            }
+
+            const application = {
+                userId: currentUser.id,
+                userName: currentUser.fullName,
+                userAvatar: currentUser.fullName.charAt(0).toUpperCase(),
+                date: new Date().toISOString(),
+                status: 'pending',
+                message: `Bonjour, je suis intéressé(e) par votre annonce "${currentAnnonce.title}". Mon profil correspond parfaitement à vos besoins.`
+            };
+
+            currentAnnonce.applications.push(application);
+
+            // Sauvegarder
+            const annonces = JSON.parse(localStorage.getItem('annonces')) || [];
+            const index = annonces.findIndex(a => a.id === currentAnnonce.id);
+            if (index !== -1) {
+                annonces[index] = currentAnnonce;
+                localStorage.setItem('annonces', JSON.stringify(annonces));
+            }
+
+            alert('✅ Votre candidature a été envoyée avec succès !');
+            location.reload();
+        }
+
+        function contactCreator() {
+            alert('📧 Fonctionnalité de messagerie en cours de développement');
+        }
+
+        function toggleProfileMenu() {
+            const dropdown = document.getElementById('profileDropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        // Fermer le dropdown si on clique ailleurs
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('profileDropdown');
+            const avatar = document.querySelector('.profile-avatar');
+            
+            if (dropdown && !dropdown.contains(event.target) && !avatar.contains(event.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
+
+        function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(0) + 'K';
+            return num.toString();
+        }
+
+        function getTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            const intervals = {
+                'an': 31536000,
+                'mois': 2592000,
+                'jour': 86400,
+                'heure': 3600,
+                'minute': 60
+            };
+
+            for (let [name, seconds_in_interval] of Object.entries(intervals)) {
+                const interval = Math.floor(seconds / seconds_in_interval);
+                if (interval >= 1) {
+                    return `Il y a ${interval} ${name}${interval > 1 && name !== 'mois' ? 's' : ''}`;
+                }
+            }
+            return 'À l\'instant';
+        }
+
+        function getTypeLabel(type) {
+            const labels = {
+                collaboration: 'Collaboration',
+                sponsoring: 'Sponsoring',
+                ambassadeur: 'Ambassadeur',
+                evenement: 'Événement',
+                contenu: 'Contenu'
+            };
+            return labels[type] || type;
+        }
+
+        function getSecteurLabel(secteur) {
+            const labels = {
+                tech: 'Tech',
+                fashion: 'Mode',
+                beauty: 'Beauté',
+                food: 'Food',
+                travel: 'Voyage',
+                sport: 'Sport',
+                finance: 'Finance',
+                education: 'Éducation'
+            };
+            return labels[secteur] || secteur;
+        }
+
+        function getNicheLabel(niche) {
+            const labels = {
+                lifestyle: 'Lifestyle',
+                tech: 'Tech',
+                beaute: 'Beauté',
+                sport: 'Sport',
+                food: 'Food',
+                travel: 'Voyage',
+                business: 'Business'
+            };
+            return labels[niche] || niche;
+        }
+
+        function getLocationLabel(location) {
+            const labels = {
+                remote: 'Remote',
+                paris: 'Île-de-France',
+                lyon: 'Lyon',
+                marseille: 'Marseille',
+                toulouse: 'Toulouse',
+                bordeaux: 'Bordeaux',
+                nantes: 'Nantes',
+                lille: 'Lille'
+            };
+            return labels[location] || location;
+        }
+
+        function logout() {
+            if (confirm('Voulez-vous vraiment vous déconnecter ?')) {
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>

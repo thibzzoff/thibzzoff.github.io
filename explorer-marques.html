@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explorer les Influenceurs - InfluConnect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .premium-card {
+            border: 2px solid transparent;
+            background: linear-gradient(#09090b, #09090b) padding-box,
+                        linear-gradient(135deg, #ffd700, #ffed4e, #ffd700) border-box;
+            position: relative;
+        }
+        .premium-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ffd700, #ffed4e, #ffd700);
+            border-radius: 12px 12px 0 0;
+        }
+        .premium-badge {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #000;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .influencer-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .influencer-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-[#09090b] text-white min-h-screen">
+    <!-- Navigation -->
+    <nav class="border-b border-gray-800 bg-[#09090b]/80 backdrop-blur-xl sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center space-x-2">
+                    <svg class="w-8 h-8 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 3.5a1.5 1.5 0 013 0V4a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-.5a1.5 1.5 0 000 3h.5a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-.5a1.5 1.5 0 00-3 0v.5a1 1 0 01-1 1H6a1 1 0 01-1-1v-3a1 1 0 00-1-1h-.5a1.5 1.5 0 010-3H4a1 1 0 001-1V6a1 1 0 011-1h3a1 1 0 001-1v-.5z"/>
+                    </svg>
+                    <span class="text-2xl font-bold gradient-text">InfluConnect</span>
+                </a>
+                <div class="flex items-center space-x-4">
+                    <a href="annonces.html" class="text-gray-400 hover:text-white transition">Annonces</a>
+                    <span class="text-gray-400">Espace Marque</span>
+                    <button onclick="logout()" class="text-gray-400 hover:text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <!-- En-tête -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold mb-2">Trouvez l'<span class="gradient-text">influenceur</span> parfait</h1>
+            <p class="text-gray-400 text-lg">Explorez notre base de créateurs vérifiés et collaborez avec les meilleurs</p>
+        </div>
+
+        <div class="grid lg:grid-cols-4 gap-8">
+            <!-- Filtres -->
+            <div class="lg:col-span-1">
+                <div class="bg-gray-900/50 border border-gray-800 rounded-2xl p-6 sticky top-24">
+                    <h2 class="text-xl font-bold mb-6 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                        </svg>
+                        Filtres
+                    </h2>
+
+                    <div class="space-y-6">
+                        <!-- Recherche par nom -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Rechercher</label>
+                            <input type="text" id="searchInput" placeholder="Nom, @pseudo..." 
+                                   class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-purple-500 transition"
+                                   oninput="filterInfluencers()">
+                        </div>
+
+                        <!-- Vérifiés uniquement -->
+                        <div>
+                            <label class="flex items-center cursor-pointer">
+                                <input type="checkbox" id="verifiedOnly" onchange="filterInfluencers()" 
+                                       class="w-4 h-4 text-purple-600 rounded focus:ring-purple-500">
+                                <span class="ml-2 text-sm">
+                                    <span class="verified-badge inline-flex items-center mr-1">
+                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                                        </svg>
+                                    </span>
+                                    Vérifiés uniquement
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Niche -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Niche</label>
+                            <select id="nicheFilter" onchange="filterInfluencers()"
+                                    class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-purple-500 transition">
+                                <option value="">Toutes les niches</option>
+                                <option value="lifestyle">Lifestyle</option>
+                                <option value="tech">Tech & Gaming</option>
+                                <option value="beaute">Beauté & Mode</option>
+                                <option value="sport">Sport & Fitness</option>
+                                <option value="food">Food & Cooking</option>
+                                <option value="travel">Voyage</option>
+                                <option value="business">Business & Finance</option>
+                                <option value="education">Éducation</option>
+                            </select>
+                        </div>
+
+                        <!-- Plateforme -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Plateforme</label>
+                            <select id="platformFilter" onchange="filterInfluencers()"
+                                    class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-purple-500 transition">
+                                <option value="">Toutes les plateformes</option>
+                                <option value="instagram">Instagram</option>
+                                <option value="tiktok">TikTok</option>
+                                <option value="youtube">YouTube</option>
+                                <option value="twitter">Twitter/X</option>
+                            </select>
+                        </div>
+
+                        <!-- Abonnés -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Abonnés minimum</label>
+                            <select id="followersFilter" onchange="filterInfluencers()"
+                                    class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-purple-500 transition">
+                                <option value="0">Tous</option>
+                                <option value="10000">10K+</option>
+                                <option value="50000">50K+</option>
+                                <option value="100000">100K+</option>
+                                <option value="500000">500K+</option>
+                                <option value="1000000">1M+</option>
+                            </select>
+                        </div>
+
+                        <!-- Taux d'engagement -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Engagement minimum</label>
+                            <select id="engagementFilter" onchange="filterInfluencers()"
+                                    class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-purple-500 transition">
+                                <option value="0">Tous</option>
+                                <option value="2">2%+</option>
+                                <option value="3">3%+</option>
+                                <option value="5">5%+</option>
+                                <option value="8">8%+</option>
+                            </select>
+                        </div>
+
+                        <button onclick="resetFilters()" class="w-full text-gray-400 hover:text-white text-sm py-2 border border-gray-700 rounded-lg transition">
+                            Réinitialiser les filtres
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Liste des influenceurs -->
+            <div class="lg:col-span-3">
+                <div class="mb-4 flex justify-between items-center">
+                    <p class="text-gray-400"><span id="resultsCount">0</span> influenceurs trouvés</p>
+                    <select id="sortFilter" onchange="filterInfluencers()"
+                            class="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-purple-500 transition">
+                        <option value="premium">Mise en avant (Premium d'abord)</option>
+                        <option value="followers">Abonnés (décroissant)</option>
+                        <option value="engagement">Engagement (décroissant)</option>
+                        <option value="price">Prix (croissant)</option>
+                    </select>
+                </div>
+
+                <div id="influencersGrid" class="grid md:grid-cols-2 gap-6">
+                    <!-- Les cartes d'influenceurs seront générées ici par JavaScript -->
+                </div>
+
+                <div id="noResults" class="hidden text-center py-16">
+                    <svg class="w-20 h-20 text-gray-700 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <h3 class="text-2xl font-bold mb-2">Aucun résultat</h3>
+                    <p class="text-gray-400">Essayez de modifier vos filtres de recherche</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Base de données simulée d'influenceurs (dans un vrai système, cela viendrait d'une API)
+        let influencersDatabase = [
+            {
+                id: 1,
+                name: 'Sophie Martin',
+                pseudo: '@sophiestyle',
+                niche: 'lifestyle',
+                platform: 'instagram',
+                followers: 125000,
+                engagement: 5.2,
+                price: 800,
+                verified: true,
+                premium: true,
+                bio: 'Créatrice de contenu lifestyle & mode. Collaborations authentiques uniquement.',
+                avatar: 'SM'
+            },
+            {
+                id: 2,
+                name: 'Thomas Dubois',
+                pseudo: '@thomastech',
+                niche: 'tech',
+                platform: 'youtube',
+                followers: 350000,
+                engagement: 6.8,
+                price: 1500,
+                verified: true,
+                premium: true,
+                bio: 'YouTubeur tech & gaming. Reviews et unboxings.',
+                avatar: 'TD'
+            },
+            {
+                id: 3,
+                name: 'Emma Laurent',
+                pseudo: '@emmabeauty',
+                niche: 'beaute',
+                platform: 'tiktok',
+                followers: 89000,
+                engagement: 8.3,
+                price: 600,
+                verified: true,
+                premium: false,
+                bio: 'Makeup artist professionnelle. Tutos beauté quotidiens.',
+                avatar: 'EL'
+            },
+            {
+                id: 4,
+                name: 'Lucas Fitness',
+                pseudo: '@lucasfit',
+                niche: 'sport',
+                platform: 'instagram',
+                followers: 210000,
+                engagement: 4.9,
+                price: 950,
+                verified: true,
+                premium: true,
+                bio: 'Coach sportif certifié. Programmes de transformation.',
+                avatar: 'LF'
+            },
+            {
+                id: 5,
+                name: 'Marie Cuisine',
+                pseudo: '@mariecooks',
+                niche: 'food',
+                platform: 'instagram',
+                followers: 67000,
+                engagement: 7.1,
+                price: 450,
+                verified: false,
+                premium: false,
+                bio: 'Cheffe à domicile. Recettes faciles et gourmandes.',
+                avatar: 'MC'
+            },
+            {
+                id: 6,
+                name: 'Alex Travel',
+                pseudo: '@alexwanders',
+                niche: 'travel',
+                platform: 'instagram',
+                followers: 180000,
+                engagement: 5.7,
+                price: 1200,
+                verified: true,
+                premium: false,
+                bio: 'Digital nomad. Découverte de destinations uniques.',
+                avatar: 'AT'
+            },
+            {
+                id: 7,
+                name: 'Julie Business',
+                pseudo: '@juliebiz',
+                niche: 'business',
+                platform: 'linkedin',
+                followers: 95000,
+                engagement: 3.8,
+                price: 700,
+                verified: true,
+                premium: true,
+                bio: 'Entrepreneure & coach business. Stratégies de croissance.',
+                avatar: 'JB'
+            },
+            {
+                id: 8,
+                name: 'Pierre Éducation',
+                pseudo: '@pierreedu',
+                niche: 'education',
+                platform: 'youtube',
+                followers: 145000,
+                engagement: 6.2,
+                price: 850,
+                verified: true,
+                premium: false,
+                bio: 'Professeur de sciences. Vulgarisation scientifique.',
+                avatar: 'PE'
+            }
+        ];
+
+        // Charger l'utilisateur actuel s'il existe
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (currentUser && currentUser.role === 'creator') {
+            // Ajouter l'utilisateur à la base de données
+            influencersDatabase.unshift({
+                id: currentUser.id,
+                name: currentUser.fullName,
+                pseudo: '@' + currentUser.fullName.toLowerCase().replace(' ', ''),
+                niche: currentUser.niche || 'lifestyle',
+                platform: currentUser.platform || 'instagram',
+                followers: parseInt(currentUser.followers) || 0,
+                engagement: parseFloat(currentUser.engagement) || 0,
+                price: parseInt(currentUser.price) || 0,
+                verified: currentUser.verified || false,
+                premium: currentUser.premium || false,
+                bio: currentUser.bio || 'Créateur de contenu passionné',
+                avatar: currentUser.fullName.charAt(0).toUpperCase()
+            });
+        }
+
+        // Afficher les influenceurs au chargement
+        window.onload = function() {
+            filterInfluencers();
+        };
+
+        function filterInfluencers() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const verifiedOnly = document.getElementById('verifiedOnly').checked;
+            const nicheFilter = document.getElementById('nicheFilter').value;
+            const platformFilter = document.getElementById('platformFilter').value;
+            const followersMin = parseInt(document.getElementById('followersFilter').value);
+            const engagementMin = parseFloat(document.getElementById('engagementFilter').value);
+            const sortBy = document.getElementById('sortFilter').value;
+
+            // Filtrer
+            let filtered = influencersDatabase.filter(influencer => {
+                const matchesSearch = influencer.name.toLowerCase().includes(searchTerm) || 
+                                     influencer.pseudo.toLowerCase().includes(searchTerm);
+                const matchesVerified = !verifiedOnly || influencer.verified;
+                const matchesNiche = !nicheFilter || influencer.niche === nicheFilter;
+                const matchesPlatform = !platformFilter || influencer.platform === platformFilter;
+                const matchesFollowers = influencer.followers >= followersMin;
+                const matchesEngagement = influencer.engagement >= engagementMin;
+
+                return matchesSearch && matchesVerified && matchesNiche && 
+                       matchesPlatform && matchesFollowers && matchesEngagement;
+            });
+
+            // Trier
+            filtered.sort((a, b) => {
+                if (sortBy === 'premium') {
+                    // Les premium d'abord, puis par abonnés
+                    if (a.premium && !b.premium) return -1;
+                    if (!a.premium && b.premium) return 1;
+                    return b.followers - a.followers;
+                } else if (sortBy === 'followers') {
+                    return b.followers - a.followers;
+                } else if (sortBy === 'engagement') {
+                    return b.engagement - a.engagement;
+                } else if (sortBy === 'price') {
+                    return a.price - b.price;
+                }
+                return 0;
+            });
+
+            // Afficher
+            displayInfluencers(filtered);
+        }
+
+        function displayInfluencers(influencers) {
+            const grid = document.getElementById('influencersGrid');
+            const noResults = document.getElementById('noResults');
+            const resultsCount = document.getElementById('resultsCount');
+
+            resultsCount.textContent = influencers.length;
+
+            if (influencers.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            noResults.classList.add('hidden');
+            grid.innerHTML = influencers.map(inf => createInfluencerCard(inf)).join('');
+        }
+
+        function createInfluencerCard(influencer) {
+            const cardClass = influencer.premium ? 'premium-card' : '';
+            const verifiedBadge = influencer.verified ? `
+                <span class="verified-badge">
+                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                    </svg>
+                </span>
+            ` : '';
+            const premiumBadge = influencer.premium ? '<span class="premium-badge">⭐ Premium</span>' : '';
+
+            return `
+                <div class="influencer-card ${cardClass} bg-gray-900/50 border border-gray-800 rounded-2xl p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-14 h-14 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full flex items-center justify-center text-xl font-bold">
+                                ${influencer.avatar}
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <h3 class="font-bold text-lg">${influencer.name}</h3>
+                                    ${verifiedBadge}
+                                </div>
+                                <p class="text-gray-400 text-sm">${influencer.pseudo}</p>
+                            </div>
+                        </div>
+                        ${premiumBadge}
+                    </div>
+
+                    <p class="text-gray-400 text-sm mb-4 line-clamp-2">${influencer.bio}</p>
+
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        <div class="bg-gray-800/50 rounded-lg p-3">
+                            <div class="text-xs text-gray-400 mb-1">Abonnés</div>
+                            <div class="font-bold">${formatNumber(influencer.followers)}</div>
+                        </div>
+                        <div class="bg-gray-800/50 rounded-lg p-3">
+                            <div class="text-xs text-gray-400 mb-1">Engagement</div>
+                            <div class="font-bold text-green-400">${influencer.engagement}%</div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-800">
+                        <div>
+                            <div class="text-xs text-gray-400">Tarif estimé</div>
+                            <div class="text-xl font-bold">${influencer.price}€</div>
+                        </div>
+                        <button onclick="contactInfluencer('${influencer.name}')" 
+                                class="bg-gradient-to-r from-purple-600 to-indigo-600 px-6 py-2 rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition">
+                            Contacter
+                        </button>
+                    </div>
+
+                    <div class="flex items-center gap-2 mt-3">
+                        <span class="text-xs bg-gray-800 px-2 py-1 rounded capitalize">${getNicheLabel(influencer.niche)}</span>
+                        <span class="text-xs bg-gray-800 px-2 py-1 rounded capitalize">${getPlatformLabel(influencer.platform)}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(0) + 'K';
+            }
+            return num.toString();
+        }
+
+        function getNicheLabel(niche) {
+            const labels = {
+                lifestyle: 'Lifestyle',
+                tech: 'Tech',
+                beaute: 'Beauté',
+                sport: 'Sport',
+                food: 'Food',
+                travel: 'Voyage',
+                business: 'Business',
+                education: 'Éducation'
+            };
+            return labels[niche] || niche;
+        }
+
+        function getPlatformLabel(platform) {
+            const labels = {
+                instagram: 'Instagram',
+                tiktok: 'TikTok',
+                youtube: 'YouTube',
+                twitter: 'Twitter',
+                linkedin: 'LinkedIn'
+            };
+            return labels[platform] || platform;
+        }
+
+        function contactInfluencer(name) {
+            alert(`Demande de collaboration envoyée à ${name} !\n\nDans une version complète, ceci ouvrirait une messagerie ou un formulaire de contact.`);
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('verifiedOnly').checked = false;
+            document.getElementById('nicheFilter').value = '';
+            document.getElementById('platformFilter').value = '';
+            document.getElementById('followersFilter').value = '0';
+            document.getElementById('engagementFilter').value = '0';
+            document.getElementById('sortFilter').value = 'premium';
+            filterInfluencers();
+        }
+
+        function logout() {
+            if (confirm('Voulez-vous vraiment vous déconnecter ?')) {
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>

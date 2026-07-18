@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Créateur - InfluConnect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .premium-border {
+            border: 2px solid transparent;
+            background: linear-gradient(#09090b, #09090b) padding-box,
+                        linear-gradient(135deg, #ffd700, #ffed4e, #ffd700) border-box;
+            animation: shimmer 3s linear infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+        .loading-spinner {
+            border: 3px solid rgba(102, 126, 234, 0.3);
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-[#09090b] text-white min-h-screen">
+    <!-- Navigation -->
+    <nav class="border-b border-gray-800 bg-[#09090b]/80 backdrop-blur-xl sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center space-x-2">
+                    <svg class="w-8 h-8 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 3.5a1.5 1.5 0 013 0V4a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-.5a1.5 1.5 0 000 3h.5a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-.5a1.5 1.5 0 00-3 0v.5a1 1 0 01-1 1H6a1 1 0 01-1-1v-3a1 1 0 00-1-1h-.5a1.5 1.5 0 010-3H4a1 1 0 001-1V6a1 1 0 011-1h3a1 1 0 001-1v-.5z"/>
+                    </svg>
+                    <span class="text-2xl font-bold gradient-text">InfluConnect</span>
+                </a>
+                <div class="flex items-center space-x-4">
+                    <a href="annonces.html" class="text-gray-400 hover:text-white transition">Annonces</a>
+                    <span class="text-gray-400" id="userNameNav">Créateur</span>
+                    <button onclick="logout()" class="text-gray-400 hover:text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <!-- En-tête du profil -->
+        <div class="bg-gray-900/50 border border-gray-800 rounded-2xl p-8 mb-8" id="profileHeader">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div class="flex items-center space-x-4">
+                    <div class="w-20 h-20 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full flex items-center justify-center text-3xl font-bold">
+                        <span id="userInitials">C</span>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-3 mb-1">
+                            <h1 class="text-3xl font-bold" id="userName">Créateur</h1>
+                            <span id="verifiedBadge" class="hidden verified-badge">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                                </svg>
+                                Vérifié
+                            </span>
+                            <span id="premiumBadge" class="hidden inline-flex items-center gap-1 bg-gradient-to-r from-yellow-600 to-yellow-500 px-3 py-1 rounded-full text-sm font-semibold">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                </svg>
+                                Premium
+                            </span>
+                        </div>
+                        <p class="text-gray-400" id="userNiche">Niche non définie</p>
+                    </div>
+                </div>
+                <button onclick="editProfile()" class="bg-gray-800 hover:bg-gray-700 px-6 py-2 rounded-lg font-semibold transition">
+                    Modifier le profil
+                </button>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- Colonne principale -->
+            <div class="md:col-span-2 space-y-8">
+                <!-- Statistiques -->
+                <div class="bg-gray-900/50 border border-gray-800 rounded-2xl p-8">
+                    <h2 class="text-2xl font-bold mb-6">📊 Mes Statistiques</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gray-800/50 p-4 rounded-xl">
+                            <div class="text-gray-400 text-sm mb-1">Abonnés</div>
+                            <input type="number" id="followersInput" placeholder="Ex: 50000" 
+                                   class="bg-transparent text-3xl font-bold w-full focus:outline-none"
+                                   onchange="saveStats()">
+                        </div>
+                        <div class="bg-gray-800/50 p-4 rounded-xl">
+                            <div class="text-gray-400 text-sm mb-1">Taux d'engagement</div>
+                            <div class="flex items-baseline">
+                                <input type="number" id="engagementInput" placeholder="5.2" step="0.1"
+                                       class="bg-transparent text-3xl font-bold w-20 focus:outline-none"
+                                       onchange="saveStats()">
+                                <span class="text-2xl font-bold ml-1">%</span>
+                            </div>
+                        </div>
+                        <div class="bg-gray-800/50 p-4 rounded-xl">
+                            <div class="text-gray-400 text-sm mb-1">Plateforme</div>
+                            <select id="platformSelect" class="bg-transparent text-xl font-bold w-full focus:outline-none" onchange="saveStats()">
+                                <option value="instagram">Instagram</option>
+                                <option value="tiktok">TikTok</option>
+                                <option value="youtube">YouTube</option>
+                                <option value="twitter">Twitter/X</option>
+                            </select>
+                        </div>
+                        <div class="bg-gray-800/50 p-4 rounded-xl">
+                            <div class="text-gray-400 text-sm mb-1">Tarif post sponsorisé</div>
+                            <div class="flex items-baseline">
+                                <input type="number" id="priceInput" placeholder="500" 
+                                       class="bg-transparent text-3xl font-bold w-24 focus:outline-none"
+                                       onchange="saveStats()">
+                                <span class="text-xl font-bold ml-1">€</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bio / Présentation -->
+                <div class="bg-gray-900/50 border border-gray-800 rounded-2xl p-8">
+                    <h2 class="text-2xl font-bold mb-4">✍️ Ma Bio</h2>
+                    <textarea id="bioInput" rows="4" placeholder="Présentez-vous aux marques..." 
+                              class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-purple-500 transition"
+                              onchange="saveStats()"></textarea>
+                </div>
+
+                <!-- Collaborations passées (simulé) -->
+                <div class="bg-gray-900/50 border border-gray-800 rounded-2xl p-8">
+                    <h2 class="text-2xl font-bold mb-4">🤝 Mes Collaborations</h2>
+                    <p class="text-gray-400">Aucune collaboration pour le moment. Les marques pourront bientôt vous contacter !</p>
+                </div>
+            </div>
+
+            <!-- Colonne latérale - Actions Premium -->
+            <div class="space-y-6">
+                <!-- Vérification du profil -->
+                <div class="bg-gray-900/50 border border-gray-800 rounded-2xl p-6">
+                    <div class="flex items-center mb-4">
+                        <svg class="w-6 h-6 text-purple-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                        </svg>
+                        <h3 class="text-xl font-bold">Vérification</h3>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">
+                        Obtenez le badge vérifié pour rassurer les marques et prouver l'authenticité de vos statistiques.
+                    </p>
+                    
+                    <!-- Zone de vérification -->
+                    <div id="verifySection">
+                        <button onclick="startVerification()" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition">
+                            Vérifier mon profil
+                        </button>
+                    </div>
+
+                    <!-- Zone de chargement (cachée au départ) -->
+                    <div id="loadingSection" class="hidden text-center">
+                        <div class="loading-spinner mx-auto mb-4"></div>
+                        <p class="text-sm text-gray-400">Vérification en cours...</p>
+                        <p class="text-xs text-gray-500 mt-2">Analyse de vos statistiques</p>
+                    </div>
+
+                    <!-- Zone de succès (cachée au départ) -->
+                    <div id="successSection" class="hidden">
+                        <div class="bg-green-500/20 border border-green-500 rounded-lg p-4 mb-4">
+                            <div class="flex items-center mb-2">
+                                <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                                </svg>
+                                <span class="font-semibold text-green-400">Profil vérifié !</span>
+                            </div>
+                            <p class="text-sm text-gray-300">Votre badge est maintenant visible par toutes les marques.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Boost Premium -->
+                <div class="bg-gray-900/50 border border-gray-800 rounded-2xl p-6">
+                    <div class="flex items-center mb-4">
+                        <svg class="w-6 h-6 text-yellow-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                        </svg>
+                        <h3 class="text-xl font-bold">Boost Premium</h3>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">
+                        Apparaissez en tête des résultats de recherche des marques et multipliez vos opportunités.
+                    </p>
+
+                    <!-- TARIF MODIFIABLE ICI -->
+                    <!-- Pour changer le prix de l'abonnement, modifiez la valeur ci-dessous -->
+                    <div class="bg-purple-600/10 border border-purple-500/30 rounded-lg p-4 mb-4">
+                        <div class="text-center mb-2">
+                            <span class="text-4xl font-bold">29€</span>
+                            <span class="text-gray-400">/mois</span>
+                        </div>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex items-center">
+                                <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                                </svg>
+                                Position #1 dans les recherches
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                                </svg>
+                                Badge Premium doré
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                                </svg>
+                                +300% de visibilité
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div id="boostSection">
+                        <button onclick="activateBoost()" class="w-full bg-gradient-to-r from-yellow-600 to-yellow-500 py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-yellow-500/50 transition">
+                            Activer le Boost
+                        </button>
+                    </div>
+
+                    <div id="boostActiveSection" class="hidden">
+                        <div class="bg-yellow-500/20 border border-yellow-500 rounded-lg p-4 text-center">
+                            <svg class="w-8 h-8 text-yellow-500 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                            </svg>
+                            <p class="font-semibold text-yellow-400 mb-1">Boost actif !</p>
+                            <p class="text-xs text-gray-400">Votre profil est mis en avant</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats rapides -->
+                <div class="bg-gray-900/50 border border-gray-800 rounded-2xl p-6">
+                    <h3 class="text-lg font-bold mb-4">📈 Cette semaine</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-gray-400">Vues du profil</span>
+                                <span class="font-semibold" id="profileViews">0</span>
+                            </div>
+                            <div class="bg-gray-800 rounded-full h-2">
+                                <div class="bg-purple-600 h-2 rounded-full" style="width: 0%" id="viewsBar"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-gray-400">Intérêt des marques</span>
+                                <span class="font-semibold" id="brandInterest">0</span>
+                            </div>
+                            <div class="bg-gray-800 rounded-full h-2">
+                                <div class="bg-indigo-600 h-2 rounded-full" style="width: 0%" id="interestBar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Charger les données utilisateur au démarrage
+        window.onload = function() {
+            loadUserData();
+            updateStats();
+        };
+
+        function loadUserData() {
+            const userData = JSON.parse(localStorage.getItem('currentUser'));
+            if (!userData) {
+                window.location.href = 'signup.html';
+                return;
+            }
+
+            // Afficher les informations de base
+            document.getElementById('userName').textContent = userData.fullName;
+            document.getElementById('userNameNav').textContent = userData.fullName;
+            document.getElementById('userNiche').textContent = userData.niche || 'Niche non définie';
+            document.getElementById('userInitials').textContent = userData.fullName.charAt(0).toUpperCase();
+
+            // Charger les stats
+            if (userData.followers) document.getElementById('followersInput').value = userData.followers;
+            if (userData.engagement) document.getElementById('engagementInput').value = userData.engagement;
+            if (userData.platform) document.getElementById('platformSelect').value = userData.platform;
+            if (userData.price) document.getElementById('priceInput').value = userData.price;
+            if (userData.bio) document.getElementById('bioInput').value = userData.bio;
+
+            // Afficher le badge vérifié si applicable
+            if (userData.verified) {
+                document.getElementById('verifiedBadge').classList.remove('hidden');
+                document.getElementById('verifySection').classList.add('hidden');
+                document.getElementById('successSection').classList.remove('hidden');
+            }
+
+            // Afficher le badge premium si applicable
+            if (userData.premium) {
+                document.getElementById('premiumBadge').classList.remove('hidden');
+                document.getElementById('boostSection').classList.add('hidden');
+                document.getElementById('boostActiveSection').classList.remove('hidden');
+                // Ajouter la bordure premium au header
+                document.getElementById('profileHeader').classList.add('premium-border');
+            }
+        }
+
+        function saveStats() {
+            const userData = JSON.parse(localStorage.getItem('currentUser'));
+            userData.followers = document.getElementById('followersInput').value;
+            userData.engagement = document.getElementById('engagementInput').value;
+            userData.platform = document.getElementById('platformSelect').value;
+            userData.price = document.getElementById('priceInput').value;
+            userData.bio = document.getElementById('bioInput').value;
+            
+            localStorage.setItem('currentUser', JSON.stringify(userData));
+            updateStats();
+        }
+
+        // Mise à jour des statistiques (simulation)
+        function updateStats() {
+            const userData = JSON.parse(localStorage.getItem('currentUser'));
+            let views = 45;
+            let interest = 12;
+
+            // Augmenter les stats si premium
+            if (userData.premium) {
+                views = 320;
+                interest = 87;
+            } else if (userData.verified) {
+                views = 120;
+                interest = 34;
+            }
+
+            document.getElementById('profileViews').textContent = views;
+            document.getElementById('brandInterest').textContent = interest;
+            document.getElementById('viewsBar').style.width = Math.min(views / 5, 100) + '%';
+            document.getElementById('interestBar').style.width = Math.min(interest * 1.15, 100) + '%';
+        }
+
+        // Démarrer le processus de vérification (simulation avec animation de 3 secondes)
+        function startVerification() {
+            // Cacher le bouton, afficher le loading
+            document.getElementById('verifySection').classList.add('hidden');
+            document.getElementById('loadingSection').classList.remove('hidden');
+
+            // Simuler une vérification de 3 secondes
+            setTimeout(() => {
+                // Cacher le loading, afficher le succès
+                document.getElementById('loadingSection').classList.add('hidden');
+                document.getElementById('successSection').classList.remove('hidden');
+                
+                // Afficher le badge sur le profil
+                document.getElementById('verifiedBadge').classList.remove('hidden');
+
+                // Sauvegarder dans localStorage
+                const userData = JSON.parse(localStorage.getItem('currentUser'));
+                userData.verified = true;
+                localStorage.setItem('currentUser', JSON.stringify(userData));
+
+                // Mettre à jour les stats
+                updateStats();
+            }, 3000);
+        }
+
+        // Activer le boost premium
+        function activateBoost() {
+            // Dans un vrai système, vous redirigeriez vers une page de paiement
+            // Ici, on simule l'activation immédiate
+            if (confirm('Activer le Boost Premium pour 29€/mois ?\n\nVotre profil sera mis en avant dans tous les résultats de recherche.')) {
+                const userData = JSON.parse(localStorage.getItem('currentUser'));
+                userData.premium = true;
+                localStorage.setItem('currentUser', JSON.stringify(userData));
+
+                // Afficher le badge premium
+                document.getElementById('premiumBadge').classList.remove('hidden');
+                document.getElementById('boostSection').classList.add('hidden');
+                document.getElementById('boostActiveSection').classList.remove('hidden');
+                document.getElementById('profileHeader').classList.add('premium-border');
+
+                // Mettre à jour les stats
+                updateStats();
+
+                alert('🎉 Boost Premium activé ! Votre profil est maintenant en tête des résultats.');
+            }
+        }
+
+        function editProfile() {
+            alert('Fonctionnalité de modification de profil - À développer');
+        }
+
+        function logout() {
+            if (confirm('Voulez-vous vraiment vous déconnecter ?')) {
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>

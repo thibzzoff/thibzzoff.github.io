@@ -1,0 +1,22 @@
+-Rajouter un system de limite max de DM par annonces
+EXEMPLE : Entreprise a besoin de 5 créateurs, elle décide de recevoir maximum 50 dossiers a analyser. Quand le nombre de dossiers MAX est atteints, l'annonces se grise. (rajouter donc une jauge dans l'annonce. Ex : 45/50 avec une barre de progression).
+
+-Rajouter un system qui permet de voir que l'on est connecté à notre compte.
+EXEMPLE : Une bulle en haut a droite montre notre photo de profil, celle ci est cliquable nous permettant d'accéder à notre compte. 
+
+-Rajouter un system de REPONSE/CHAT disponible uniquement par les marques si le dossier est accepter.
+EXEMPLE : La marque choisis un dossier, répond au créateur positivement via un chat, qui ne peux être démarrer que par la marque elle même. Un bouton en forme d'avion en papier à coté de la bulle compte permet d'accéder à la messagerie.  
+
+-Créer les pages : FAQ / A propos / BLOG / Carrières / CGU / Confidentialité / Mentions légales.
+(Pour que les boutons en bas de pages soient cliquable)
+
+-Ajouter les API RESEAUX pour check les vrais données créateurs sur les différents réseaux, à l'aide d'une IA.
+
+-Possibilité pour l'utilisateur de créer une annonce, qui va elle même créer une page cliquable dans les annonces (A POFFINER)
+(créer une page apparentière sera disponible uniquement lors de la version finale en ligne, pas maintenant)
+Il faut donc rajouter un system de création de page comme sur leboncoin quand un utilisateur créer une page, enfin pour qu'il puisse le faire quand il créer une annonce.
+La page possèdera un ID dans l'url, comme encore une fois sur leboncoin. 
+
+-Ajout de modification de l'abonnement : 
+ABONNEMENT GRATUIT : MAX 5-10 POSTULATION PAR MOIS 
+ABONNEMENT PREMIUM : POSTULATION INFINI

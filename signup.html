@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - InfluConnect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .role-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .role-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        }
+        .role-card.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+    </style>
+</head>
+<body class="bg-[#09090b] text-white min-h-screen">
+    <!-- Navigation simple -->
+    <nav class="border-b border-gray-800 bg-[#09090b]/80 backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center space-x-2">
+                    <svg class="w-8 h-8 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 3.5a1.5 1.5 0 013 0V4a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-.5a1.5 1.5 0 000 3h.5a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-.5a1.5 1.5 0 00-3 0v.5a1 1 0 01-1 1H6a1 1 0 01-1-1v-3a1 1 0 00-1-1h-.5a1.5 1.5 0 010-3H4a1 1 0 001-1V6a1 1 0 011-1h3a1 1 0 001-1v-.5z"/>
+                    </svg>
+                    <span class="text-2xl font-bold gradient-text">InfluConnect</span>
+                </a>
+                <div class="flex items-center space-x-4">
+                    <a href="annonces.html" class="text-gray-400 hover:text-white transition text-sm">Annonces</a>
+                    <a href="index.html" class="text-gray-400 hover:text-white transition">
+                        ← Retour
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto px-6 py-16">
+        <!-- En-tête -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">
+                Créez votre <span class="gradient-text">compte</span>
+            </h1>
+            <p class="text-xl text-gray-400">Choisissez votre rôle et commencez votre aventure</p>
+        </div>
+
+        <!-- Sélection du rôle -->
+        <div id="roleSelection" class="mb-12">
+            <h2 class="text-2xl font-bold text-center mb-8">Je suis...</h2>
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Créateur -->
+                <div class="role-card bg-gray-900/50 border-2 border-gray-800 rounded-2xl p-8" onclick="selectRole('creator')">
+                    <div class="flex justify-center mb-6">
+                        <div class="w-20 h-20 bg-purple-600/20 rounded-2xl flex items-center justify-center">
+                            <svg class="w-10 h-10 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-center mb-4">Créateur de contenu</h3>
+                    <p class="text-gray-400 text-center mb-6">
+                        Influenceur, YouTubeur, TikTokeur... Trouvez des marques qui correspondent à votre univers.
+                    </p>
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-center text-sm">
+                            <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                            </svg>
+                            Profil Media Kit gratuit
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                            </svg>
+                            Badge de vérification
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                            </svg>
+                            Option Boost Premium
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Marque -->
+                <div class="role-card bg-gray-900/50 border-2 border-gray-800 rounded-2xl p-8" onclick="selectRole('brand')">
+                    <div class="flex justify-center mb-6">
+                        <div class="w-20 h-20 bg-indigo-600/20 rounded-2xl flex items-center justify-center">
+                            <svg class="w-10 h-10 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-center mb-4">Marque / Entreprise</h3>
+                    <p class="text-gray-400 text-center mb-6">
+                        Trouvez les influenceurs parfaits pour vos campagnes marketing et collaborations.
+                    </p>
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-center text-sm">
+                            <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                            </svg>
+                            Recherche avancée d'influenceurs
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                            </svg>
+                            Filtres par vérification & engagement
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                            </svg>
+                            Gestion de campagnes
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulaire d'inscription (caché initialement) -->
+        <div id="signupForm" class="hidden max-w-md mx-auto">
+            <div class="bg-gray-900/50 border border-gray-800 rounded-2xl p-8">
+                <div class="flex items-center mb-6">
+                    <button onclick="backToRoleSelection()" class="text-gray-400 hover:text-white mr-4">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <h3 class="text-2xl font-bold" id="formTitle">Inscription</h3>
+                </div>
+
+                <form onsubmit="handleSignup(event)">
+                    <input type="hidden" id="userRole" value="">
+                    
+                    <div class="space-y-4">
+                        <!-- Nom complet -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2" id="nameLabel">Nom complet</label>
+                            <input type="text" id="fullName" required 
+                                   class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-purple-500 transition">
+                        </div>
+
+                        <!-- Email -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Email</label>
+                            <input type="email" id="email" required 
+                                   class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-purple-500 transition">
+                        </div>
+
+                        <!-- Mot de passe -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Mot de passe</label>
+                            <input type="password" id="password" required minlength="6"
+                                   class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-purple-500 transition">
+                            <p class="text-xs text-gray-400 mt-1">Minimum 6 caractères</p>
+                        </div>
+
+                        <!-- Champs spécifiques créateur -->
+                        <div id="creatorFields" class="hidden space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Niche / Catégorie</label>
+                                <select id="niche" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-purple-500 transition">
+                                    <option value="">Sélectionnez une niche</option>
+                                    <option value="lifestyle">Lifestyle</option>
+                                    <option value="tech">Tech & Gaming</option>
+                                    <option value="beaute">Beauté & Mode</option>
+                                    <option value="sport">Sport & Fitness</option>
+                                    <option value="food">Food & Cooking</option>
+                                    <option value="travel">Voyage</option>
+                                    <option value="business">Business & Finance</option>
+                                    <option value="education">Éducation</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Plateforme principale</label>
+                                <select id="platform" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-purple-500 transition">
+                                    <option value="instagram">Instagram</option>
+                                    <option value="tiktok">TikTok</option>
+                                    <option value="youtube">YouTube</option>
+                                    <option value="twitter">Twitter/X</option>
+                                    <option value="linkedin">LinkedIn</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Champs spécifiques marque -->
+                        <div id="brandFields" class="hidden space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Nom de l'entreprise</label>
+                                <input type="text" id="companyName" 
+                                       class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-purple-500 transition">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Secteur d'activité</label>
+                                <select id="industry" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-purple-500 transition">
+                                    <option value="">Sélectionnez un secteur</option>
+                                    <option value="tech">Technologie</option>
+                                    <option value="fashion">Mode & Luxe</option>
+                                    <option value="beauty">Beauté & Cosmétiques</option>
+                                    <option value="food">Alimentation & Boissons</option>
+                                    <option value="travel">Tourisme & Voyage</option>
+                                    <option value="sport">Sport & Fitness</option>
+                                    <option value="finance">Finance & Assurance</option>
+                                    <option value="education">Éducation</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- CGU -->
+                        <div class="flex items-start">
+                            <input type="checkbox" id="terms" required class="mt-1 mr-2">
+                            <label for="terms" class="text-sm text-gray-400">
+                                J'accepte les <a href="#" class="text-purple-500 hover:underline">conditions d'utilisation</a> et la <a href="#" class="text-purple-500 hover:underline">politique de confidentialité</a>
+                            </label>
+                        </div>
+
+                        <!-- Bouton de soumission -->
+                        <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition">
+                            Créer mon compte
+                        </button>
+                    </div>
+                </form>
+
+                <div class="mt-6 text-center text-sm text-gray-400">
+                    Vous avez déjà un compte ? <a href="#" class="text-purple-500 hover:underline">Se connecter</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedRole = null;
+
+        // Sélection du rôle
+        function selectRole(role) {
+            selectedRole = role;
+            
+            // Cacher la sélection des rôles
+            document.getElementById('roleSelection').style.display = 'none';
+            
+            // Afficher le formulaire
+            document.getElementById('signupForm').classList.remove('hidden');
+            document.getElementById('userRole').value = role;
+            
+            // Adapter le formulaire selon le rôle
+            if (role === 'creator') {
+                document.getElementById('formTitle').textContent = 'Inscription Créateur';
+                document.getElementById('nameLabel').textContent = 'Nom / Pseudo';
+                document.getElementById('creatorFields').classList.remove('hidden');
+                document.getElementById('brandFields').classList.add('hidden');
+            } else {
+                document.getElementById('formTitle').textContent = 'Inscription Marque';
+                document.getElementById('nameLabel').textContent = 'Nom du contact';
+                document.getElementById('brandFields').classList.remove('hidden');
+                document.getElementById('creatorFields').classList.add('hidden');
+            }
+        }
+
+        // Retour à la sélection des rôles
+        function backToRoleSelection() {
+            document.getElementById('signupForm').classList.add('hidden');
+            document.getElementById('roleSelection').style.display = 'block';
+            selectedRole = null;
+        }
+
+        // Gestion de l'inscription
+        function handleSignup(event) {
+            event.preventDefault();
+            
+            const userData = {
+                role: document.getElementById('userRole').value,
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                createdAt: new Date().toISOString(),
+                verified: false, // Par défaut, le profil n'est pas vérifié
+                premium: false // Par défaut, pas d'abonnement premium
+            };
+
+            // Ajouter les données spécifiques selon le rôle
+            if (userData.role === 'creator') {
+                userData.niche = document.getElementById('niche').value;
+                userData.platform = document.getElementById('platform').value;
+                userData.followers = 0; // À remplir plus tard dans le dashboard
+                userData.engagement = 0;
+            } else {
+                userData.companyName = document.getElementById('companyName').value;
+                userData.industry = document.getElementById('industry').value;
+            }
+
+            // IMPORTANT: Sauvegarder dans localStorage
+            // Pour un vrai système, vous utiliseriez une base de données
+            const userId = 'user_' + Date.now();
+            localStorage.setItem('currentUser', JSON.stringify({
+                id: userId,
+                ...userData
+            }));
+
+            // Redirection selon le rôle
+            if (userData.role === 'creator') {
+                window.location.href = 'dashboard-createur.html';
+            } else {
+                window.location.href = 'explorer-marques.html';
+            }
+        }
+    </script>
+</body>
+</html>
